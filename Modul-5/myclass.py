@@ -1,7 +1,6 @@
 class MyClass():
     def f(self):
-        return 155
-
+        return 100
 
 mc2 = MyClass()
 print("It's for test too", mc2.f())
