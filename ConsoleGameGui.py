@@ -1,16 +1,29 @@
+class Coordinates:
+    def __init__(self, coordinates=(0, 0)):
+        self.coordinates = coordinates
+
+    def set_coordinates(self, coordinates):
+        self.coordinates = coordinates
+
+    def get_coordinates(self):
+        return self.coordinates
+
+
 class GameDesk:
-    def __init__(self, w=6, h=6, logic=None):
+    def __init__(self, w=6, h=6, pos=None, ch="#"):
         self.width: int = w
         self.height: int = h
-        self.logic = logic
+        self.pos = pos
+        self.ch = ch
         self.game_desk = []
-        self.game_desk = [['O'] * self.width for _ in range(self.height)]
+        self.game_desk = [['-'] * self.width for _ in range(self.height)]
 
     def get_game_desk(self):
         return self.game_desk
 
-    def set_game_desk(self):
-        self.game_desk[self.logic.get_x() - 1][self.logic.get_y()] = self.logic.get_x()
+    def set_game_desk(self, pos, ch):
+        for i in pos:
+            self.game_desk[i[1]-1][i[0]-1] = ch
 
     def print_game_desk(self):
         s = []
@@ -22,54 +35,83 @@ class GameDesk:
 
 
 class Ship:
-    def __init__(self, x, y, len_ship, line_ship):
-        self.x = x
-        self.y = y
+    def __init__(self, pos, len_ship=0, line_ship=0):
+        self.x = 0
+        self.y = 0
+        self.set_pos(pos)
         self.len_ship = len_ship
+        self.ship_position = []
         self.line_ship = line_ship
+        self.shadow = []
 
-    # def set_ship(self):
-    #
-    # def get_ship(self):
+    def set_pos(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
+
+    def ship_coordinates(self):
+        self.ship_position = [(self.x, self.y)]
+        if self.len_ship == 0:
+            return self.ship_position
+        elif self.line_ship == 0:
+            for i in range(self.len_ship - 1):
+                self.ship_position.append(((self.x + 1 + i), self.y))
+        elif self.line_ship == 1:
+            for i in range(self.len_ship - 1):
+                self.ship_position.append((self.x, (self.y + 1 + i)))
+        return self.ship_position
+
+    def shadow_ship(self):
+        shadow = []
+        for i in self.ship_coordinates():
+            shadow += (i[0], i[1]), (i[0], i[1])
+            shadow += (i[0] - 1, i[1] - 1), (i[0] - 1, i[1] + 1)
+            shadow += (i[0] + 1, i[1] + 1), (i[0] + 1, i[1] + 1)
+            shadow += (i[0] - 1, i[1] + 1), (i[0] + 1, i[1] - 1)
+            shadow += (i[0], i[1] + 1), (i[0], i[1] - 1)
+            shadow += (i[0] + 1, i[1]), (i[0]+1, i[1])
+            shadow += (i[0] - 1, i[1]), (i[0], i[1] - 1)
+        return shadow
+
 
 def input_coor(w, h):                               # Ввод координат и проверка ввода
     x_y_str = input("Введите координаты поля через пробел (Y X)")
     x_y = x_y_str.split()
-    print(len(x_y))
+    list_coordinates = []
     if len(x_y) == 2:
         for i in x_y:
             if not i.isdigit():                     # если строка содержит что то кроме цифр повторяем ввод
                 print("Введите только цифры")
                 return input_coor(w, h)
             else:
-                x, y = map(int, x_y)
-                if (0 <= x < h) and (0 <= y < w):
-                    return x, y
+                if (0 < int(i) < h) and (0 < int(i) < w):
+                    list_coordinates.append(int(i))
                 else:
                     print("Координаты за пределами поля")
                     return input_coor(w, h)
     else:
         return input_coor(w, h)
-
-
-class Logic:
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
-
-    def get_x(self):
-        return self.x
-
-    def get_y(self):
-        return self.y
+    return list_coordinates
 
 
 h = 6
 w = 6
 print("Поле игрока")
 
-logic = Logic(3, 3)
-# print(logic.get_x())
-field = GameDesk(6, 6, logic)
-field.set_game_desk()
-field.print_game_desk()
+game = GameDesk()
+ship_1 = Ship([2, 3], 1, 0)
+#ship_3 = Ship([4, 3], 2, 1)
+#print(ship_1.shadow_ship())
+game.set_game_desk(ship_1.shadow_ship(), "o")
+game.set_game_desk(ship_1.ship_coordinates(), "#")
+
+
+#game.set_game_desk(ship_3.ship_coordinates(), "#")
+game.print_game_desk()
+print("")
+
+
+# print(ship_1.shadow_ship())
+#
+# s = set(ship_1.ship_coordinates())
+# s2 = set(ship_3.shadow_ship())
+# print(True) if s.intersection(s2) else print(False)
