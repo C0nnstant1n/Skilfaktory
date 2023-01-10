@@ -1,14 +1,14 @@
 def shadow_ship(x):
     shadow = []
-    for i in x:
-        shadow += (i[0], i[1]), (i[0], i[1])
-        shadow += (i[0] - 1, i[1] - 1), (i[0] - 1, i[1] + 1)
-        shadow += (i[0] + 1, i[1] + 1), (i[0] + 1, i[1] + 1)
-        shadow += (i[0] - 1, i[1] + 1), (i[0] + 1, i[1] - 1)
-        shadow += (i[0], i[1] + 1), (i[0], i[1] - 1)
-        shadow += (i[0] + 1, i[1]), (i[0] + 1, i[1])
-        shadow += (i[0] - 1, i[1]), (i[0], i[1] - 1)
-    return shadow
+    mask = (-1, -1), (-1, 0), (-1, 1), (0, -1),\
+        (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)
+    for j in x:
+        for i in mask:
+            c = map(sum, zip(i, j))
+            shadow.append(tuple(c))
+
+    shadow_set = set(shadow)
+    return shadow_set
 
 
-print(shadow_ship(((2, 3), (2, 4))))
+print(shadow_ship(([3, 1], [2, 1])))

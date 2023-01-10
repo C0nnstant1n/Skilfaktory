@@ -21,9 +21,10 @@ class GameDesk:
     def get_game_desk(self):
         return self.game_desk
 
-    def set_game_desk(self, pos, ch):
+    def set_game_desk(self, pos, ch):               # Записываем наш кораблик на игровое поле
         for i in pos:
-            self.game_desk[i[1]-1][i[0]-1] = ch
+            if i[0] != 7 and i[1] != 7:             # Проверка на выход за пределы поля
+                self.game_desk[i[1]-1][i[0]-1] = ch
 
     def print_game_desk(self):
         s = []
@@ -62,6 +63,7 @@ class Ship:
 
     def shadow_ship(self):
         shadow = []
+        shadow_exept = []
         for i in self.ship_coordinates():
             shadow += (i[0], i[1]), (i[0], i[1])
             shadow += (i[0] - 1, i[1] - 1), (i[0] - 1, i[1] + 1)
@@ -70,7 +72,14 @@ class Ship:
             shadow += (i[0], i[1] + 1), (i[0], i[1] - 1)
             shadow += (i[0] + 1, i[1]), (i[0]+1, i[1])
             shadow += (i[0] - 1, i[1]), (i[0], i[1] - 1)
-        return shadow
+            for j in range(7):
+                shadow_exept.append((0, j))
+            for i in range(7):
+                shadow_exept.append((i, 0))
+            s = set(shadow)
+            s_exept = set(shadow_exept)
+            s = s.difference(s_exept)
+        return s
 
 
 def input_coor(w, h):                               # Ввод координат и проверка ввода
@@ -98,17 +107,16 @@ w = 6
 print("Поле игрока")
 
 game = GameDesk()
-ship_1 = Ship([2, 3], 1, 0)
+ship_1 = Ship([3, 3], 2, 1)
 #ship_3 = Ship([4, 3], 2, 1)
 #print(ship_1.shadow_ship())
-game.set_game_desk(ship_1.shadow_ship(), "o")
-game.set_game_desk(ship_1.ship_coordinates(), "#")
 
+game.set_game_desk(ship_1.ship_coordinates(), "#")
+game.set_game_desk(ship_1.shadow_ship(), "o")
 
 #game.set_game_desk(ship_3.ship_coordinates(), "#")
 game.print_game_desk()
 print("")
-
 
 # print(ship_1.shadow_ship())
 #
