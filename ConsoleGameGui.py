@@ -23,13 +23,13 @@ class Coordinates:
 
 
 class GameDesk:
-    def __init__(self, w=6, h=6, pos=None, ch="# |"):
+    def __init__(self, w=6, h=6, pos=None, ch="  |"):
         self.width: int = w
         self.height: int = h
         self.pos = pos
         self.ch = ch
         self.game_desk = []
-        self.game_desk = [["- |"] * self.width for _ in range(self.height)]
+        self.game_desk = [["  |"] * self.width for _ in range(self.height)]
 
     def get_game_desk(self):
         return self.game_desk
@@ -74,7 +74,7 @@ class Ship:
                 self.ship_position.append((self.pos[0], (self.pos[1] + 1 + i)))
         return self.ship_position
 
-    def shadow_ship(self):
+    def shadow_ship(self):                      # тень нужна чтобы корабли создавались на расстоянии от текушего корабля
         mask = (-1, 0), (-1, 1), (0, -1), \
             (0, 0), (0, 1), (1, 0)
         for j in self.get_ship_coordinates():
@@ -118,26 +118,27 @@ class Ship:
             self.ships.append(ship_1d)
             shadows += ship_1d.shadow_ship()
 
+        for i in self.ships:
+            self.ship_position += i.ship_position
+
+    def get_ships(self):
+        return self.ship_position
+
 
 class GameLogic:
-    def __init__(self, w=6, h=6, ships=[], coordinates=[]):
+    def __init__(self, w=6, h=6, ships=None, coordinates=None):
         self.width = w
         self.height = h
         self.ships = ships
-        # self.coordinates = coordinates
+        self.coordinates = coordinates
         self.hit = False
 
     # Нахождение попадания
     def hit_ship(self, ships, coordinates):
-        targerts = []
-        for i in ships:
-            targerts += i.ship_position
-        if coordinates in targerts:
-            print("Попадание")
+        if coordinates in ships:
             self.hit = True
             return self.hit
         else:
-            print("Промах")
             return self.hit
 
     # Проверка уничтожкния корабля
@@ -146,8 +147,8 @@ class GameLogic:
 
 class GameEvent:
     def __init__(self):
-        #self.player = player
-        #self.comp = comp
+        self.player = player
+        self.comp = comp
         self.coordinates = Coordinates()
 
         # ход игрока
@@ -162,7 +163,7 @@ class GameEvent:
                     print("Введите только цифры")
                     return self.player_step()
                 else:
-                    if (0 < int(i) < h) and (0 < int(i) < w):
+                    if (0 < int(i) <= h) and (0 < int(i) <= w):
                         self.coordinates.append(int(i))
                     else:
                         print("Координаты за пределами поля")
@@ -173,66 +174,60 @@ class GameEvent:
 
         # ход компьютера
     def comp_step(self):
-        self.coordinates.rand_coordinates(1, 0)
+        self.coordinates = Coordinates()
+        self.coordinates = self.coordinates.rand_coordinates(0, 0)
         return self.coordinates
+
+    def player_turn(self):
+
+        if logic.hit_ship(comp.get_ships(), tuple(self.player_step())):
+            comp_desk.set_game_desk([event.coordinates], "X |")
+            print("HIT, player turn")
+            self.game_pass()
+            return True
+        else:
+            comp_desk.set_game_desk([event.coordinates], "T |")
+            print("False, comp turn")
+            self.game_pass()
+            return False
+
+    def comp_turn(self):
+        if logic.hit_ship(comp.get_ships(), tuple(self.comp_step())):
+            player_desk.set_game_desk([event.coordinates], "X |")
+            print("HIT, comp turn")
+            self.game_pass()
+            _ = input("for turn press Enter")
+            event.comp_turn()
+            return True
+        else:
+            player_desk.set_game_desk([event.coordinates], "T |")
+            print("False, player turn")
+            self.game_pass()
+            event.player_turn()
+            return False
+
+    def game_pass(self):
+        print("Player field")
+        player_desk.print_game_desk()
+        print("Comp field")
+        comp_desk.print_game_desk()
 
 
 player_desk = GameDesk()
 player = Ship()
 player.gen_ships()
+
 comp_desk = GameDesk()
-comp_virt_desk = GameDesk()
 comp = Ship()
 comp.gen_ships()
-event_player = GameEvent()
-logic_player = GameLogic()
-event_comp = GameEvent()
-logic_comp = GameLogic()
+
+event = GameEvent()
+logic = GameLogic()
+
+player_desk.set_game_desk(player.get_ships(), "# |")
 
 
-for ship in player.ships:
-    player_desk.set_game_desk(ship.get_ship_coordinates(), "# |")
-print("Поле Игрока")
-player_desk.print_game_desk()
-
-for ship in comp.ships:
-    comp_virt_desk.set_game_desk(ship.get_ship_coordinates(), "# |")
-print("\nПоле компьютера")
-comp_desk.print_game_desk()
-
-# Ход Игрока
-logic_player.hit_ship(comp.ships, event_player.player_step())
-if logic_player.hit:
-    comp_desk.set_game_desk([event_player.coordinates], "X |")
-else:
-    comp_desk.set_game_desk([event_player.coordinates], "T |")
-print("Поле Игрока")
-player_desk.print_game_desk()
-print("\nПоле компьютера")
-comp_desk.print_game_desk()
-
-# Ход Компа
-logic_comp.hit_ship(comp.ships, event_comp.comp_step())
-if logic_comp.hit:
-    player_desk.set_game_desk([event_comp.coordinates], "X |")
-else:
-    player_desk.set_game_desk([event_comp.coordinates], "T |")
-print("Поле Игрока")
-player_desk.print_game_desk()
-print("\nПоле компьютера")
-comp_desk.print_game_desk()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+while True:
+    event.game_pass()
+    event.player_turn()
+    event.comp_turn()
