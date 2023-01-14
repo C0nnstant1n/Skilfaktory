@@ -5,6 +5,7 @@ h, w = 6, 6
 class Coordinates:
     def __init__(self, coordinates=(0, 0)):
         self.coordinates = coordinates
+        self.possible_coordinates = []
 
     def set_coordinates(self, coordinates):
         self.coordinates = coordinates
@@ -20,6 +21,11 @@ class Coordinates:
         else:
             self.set_coordinates((rnd.randint(1, (w - self.len)), rnd.randint(1, h)))
         return self.get_coordinates()
+
+    def create_possble_coordinates(self):
+        for i in range(1, w + 1):
+            for k in range(1, h + 1):
+                self.possible_coordinates.append((i, k))
 
 
 class GameDesk:
@@ -131,18 +137,17 @@ class GameLogic:
         self.height = h
         self.ships = ships
         self.coordinates = coordinates
-        self.hit = False
 
     # Нахождение попадания
     def hit_ship(self, ships, coordinates):
         if coordinates in ships:
-            self.hit = True
-            return self.hit
+           return True
         else:
-            return self.hit
+            return False
 
     # Проверка уничтожкния корабля
-    # Проверка количества оставшихся кораблей
+    # def is_destroyed(self, ships, ):
+    # # Проверка количества оставшихся кораблей
 
 
 class GameEvent:
@@ -150,6 +155,8 @@ class GameEvent:
         self.player = player
         self.comp = comp
         self.coordinates = Coordinates()
+        self.coordinates.create_possble_coordinates()
+        self.possible_coordinates = self.coordinates.possible_coordinates.copy()
 
         # ход игрока
     def player_step(self):
@@ -174,36 +181,33 @@ class GameEvent:
 
         # ход компьютера
     def comp_step(self):
-        self.coordinates = Coordinates()
-        self.coordinates = self.coordinates.rand_coordinates(0, 0)
+        self.coordinates = self.possible_coordinates.pop(rnd.randint(0, len(self.possible_coordinates)))
         return self.coordinates
 
     def player_turn(self):
 
         if logic.hit_ship(comp.get_ships(), tuple(self.player_step())):
-            comp_desk.set_game_desk([event.coordinates], "X |")
+            comp_desk.set_game_desk([self.coordinates], "X |")
             print("HIT, player turn")
-            self.game_pass()
             return True
         else:
-            comp_desk.set_game_desk([event.coordinates], "T |")
+            comp_desk.set_game_desk([self.coordinates], "T |")
             print("False, comp turn")
             self.game_pass()
+            _ = input("for turn press Enter")
             return False
 
     def comp_turn(self):
-        if logic.hit_ship(comp.get_ships(), tuple(self.comp_step())):
-            player_desk.set_game_desk([event.coordinates], "X |")
+        coordinates = self.comp_step()
+        if logic.hit_ship(player.get_ships(), coordinates):
+            player_desk.set_game_desk([coordinates], "X |")
             print("HIT, comp turn")
-            self.game_pass()
             _ = input("for turn press Enter")
-            event.comp_turn()
             return True
         else:
-            player_desk.set_game_desk([event.coordinates], "T |")
+            player_desk.set_game_desk([coordinates], "T |")
             print("False, player turn")
             self.game_pass()
-            event.player_turn()
             return False
 
     def game_pass(self):
@@ -217,17 +221,25 @@ player_desk = GameDesk()
 player = Ship()
 player.gen_ships()
 
-comp_desk = GameDesk()
-comp = Ship()
-comp.gen_ships()
+player_ships = player.ships
+a = []
+for i in player_ships:
+    a.append(i.ship_position)
 
-event = GameEvent()
-logic = GameLogic()
+print(len(a))
 
-player_desk.set_game_desk(player.get_ships(), "# |")
-
-
-while True:
-    event.game_pass()
-    event.player_turn()
-    event.comp_turn()
+# comp_desk = GameDesk()
+# comp = Ship()
+# comp.gen_ships()
+#
+# event = GameEvent()
+# logic = GameLogic()
+#
+# player_desk.set_game_desk(player.get_ships(), "# |")
+#
+# event.game_pass()
+# while True:
+#     while event.player_turn():
+#         event.game_pass()
+#     while event.comp_turn():
+#         event.game_pass()
