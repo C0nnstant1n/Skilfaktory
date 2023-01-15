@@ -192,7 +192,7 @@ class GameEvent:
 
         # ход компьютера
     def comp_step(self):
-        self.coordinates = self.possible_coordinates.pop(rnd.randint(0, len(self.possible_coordinates)))
+        self.coordinates = self.possible_coordinates.pop(rnd.randint(1, len(self.possible_coordinates) + 1))
         return self.coordinates
 
     def player_turn(self):
@@ -201,7 +201,10 @@ class GameEvent:
             self.game_pass()
             if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
                 print("Корабль уничтожен, ход игрока")
-                player.destroyed_ship += 1
+                player.destroyed_ship = 7
+                if player.destroyed_ship == 7:
+                    raise Win("Игрок выиграл")
+
             else:
                 print("Попадание, ход игрока")
             return True
@@ -220,6 +223,8 @@ class GameEvent:
             if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
                 print("Корабль уничтожен,  ход компьютера")
                 comp.destroyed_ship += 1
+                if player.destroyed_ship == 7:
+                    raise Win("Компьютер выиграл")
                 _ = input("для продолжения нажмите Enter")
             else:
                 print("Попадание, ход компьютера")
@@ -244,6 +249,16 @@ class GameEvent:
         self.comp.print_game_desk()
 
 
+class GameException(Exception):
+    def __int__(self):
+        super().__init__(message)
+
+
+class Win(GameException):
+    def __int__(self,message):
+        super().__init__(message)
+
+
 class User(GameDesk, Ship):
     def __init__(self, w, h):
         super().__init__(w, h)
@@ -262,7 +277,15 @@ player.set_game_desk(player.get_position(), "# |")
 event.game_pass()
 
 while True:
-    while event.player_turn():
-        pass
-    while event.comp_turn():
-        pass
+    try:
+        while event.player_turn():
+            pass
+    except Win as e:
+        print("Компьютер выиграл выиграл")
+        break
+    try:
+        while event.comp_turn():
+            pass
+    except Win as e:
+        print("Компьютер выиграл выиграл")
+        break
