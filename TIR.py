@@ -54,7 +54,7 @@ class Square(Figure):
 class HitMark:
     def __init__(self, cost) -> None:
         self.setCost(cost)
-        #self.setState(HitMark.State_Normal)
+        self.setState(HitMark.State_Normal)
 
     def setCost(self, cost):
         self.cost = cost
@@ -143,7 +143,7 @@ class PyGameGui:
 
     def run(self):
         running = True
-        pygame.time.set_timer(pygame.USEREVENT + GameEvent.Event_Tick, 10000)
+        pygame.time.set_timer(pygame.USEREVENT + GameEvent.Event_Tick, 1000)
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
