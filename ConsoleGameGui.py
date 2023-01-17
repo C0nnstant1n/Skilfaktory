@@ -142,7 +142,7 @@ class GameLogic:
     # Нахождение попадания
     def hit_ship(self, ships, coordinates):
         if coordinates in ships:
-           return True
+            return True
         else:
             return False
 
@@ -151,9 +151,9 @@ class GameLogic:
         n = 0
         for i in user.ships:
             if coordinates in i.position:
-                user.ships[n].position.remove(coordinates)
+                i.position.remove(coordinates)
             if not i.position:
-                user.ships[n].position.append(1)
+                user.ships.pop(n)
                 return True
             n += 1
         return False
@@ -192,20 +192,22 @@ class GameEvent:
 
         # ход компьютера
     def comp_step(self):
-        self.coordinates = self.possible_coordinates.pop(rnd.randint(1, len(self.possible_coordinates) + 1))
+        b = len(self.possible_coordinates) - 1
+        a = rnd.randint(0, b)
+        self.coordinates = self.possible_coordinates.pop(a)
         return self.coordinates
 
     def player_turn(self):
         if self.logic.hit_ship(self.comp.get_ships(), tuple(self.player_step())):
             self.comp.set_game_desk([self.coordinates], "X |")
-            self.game_pass()
             if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
+                comp.destroyed_ship += 1
+                self.game_pass()
                 print("Корабль уничтожен, ход игрока")
-                player.destroyed_ship = 7
-                if player.destroyed_ship == 7:
+                if not comp.ships:
                     raise Win("Игрок выиграл")
-
             else:
+                self.game_pass()
                 print("Попадание, ход игрока")
             return True
         else:
@@ -216,22 +218,20 @@ class GameEvent:
             return False
 
     def comp_turn(self):
-        coordinates = self.comp_step()
-        if self.logic.hit_ship(self.player.get_ships(), coordinates):
-            self.player.set_game_desk([coordinates], "X |")
-            self.game_pass()
-            if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
-                print("Корабль уничтожен,  ход компьютера")
-                comp.destroyed_ship += 1
-                if player.destroyed_ship == 7:
+        if self.logic.hit_ship(self.player.get_ships(), tuple(self.comp_step())):
+            self.player.set_game_desk([self.coordinates], "X |")
+            if self.logic.is_destroyed(self.player, tuple(self.coordinates)):
+                player.destroyed_ship += 1
+                self.game_pass()
+                print("Корабль уничтожен, ход компьютера")
+                if not player.ships:
                     raise Win("Компьютер выиграл")
-                _ = input("для продолжения нажмите Enter")
             else:
+                self.game_pass()
                 print("Попадание, ход компьютера")
-                _ = input("для продолжения нажмите Enter")
-                return True
+            return True
         else:
-            self.player.set_game_desk([coordinates], "T |")
+            self.player.set_game_desk([self.coordinates], "T |")
             self.game_pass()
             print("Промах, ход игрока")
             return False
@@ -243,20 +243,20 @@ class GameEvent:
             _ = system('clear')
         print("Игра \"Морской бой\"")
         print("-----------------------------------------")
-        print(f"Поле игрока, кораблей уничтожено - {comp.destroyed_ship}")
+        print(f"Поле игрока, кораблей уничтожено - {player.destroyed_ship}")
         self.player.print_game_desk()
-        print(f"Поле компьютера, кораблей уничтожено - {player.destroyed_ship}")
+        print(f"Поле компьютера, кораблей уничтожено - {comp.destroyed_ship}")
         self.comp.print_game_desk()
 
 
 class GameException(Exception):
     def __int__(self):
-        super().__init__(message)
+        super().__init__()
 
 
 class Win(GameException):
-    def __int__(self,message):
-        super().__init__(message)
+    def __int__(self, message):
+        super().__init__()
 
 
 class User(GameDesk, Ship):
@@ -281,11 +281,11 @@ while True:
         while event.player_turn():
             pass
     except Win as e:
-        print("Компьютер выиграл выиграл")
+        print(e)
         break
     try:
         while event.comp_turn():
             pass
     except Win as e:
-        print("Компьютер выиграл выиграл")
+        print(e)
         break
