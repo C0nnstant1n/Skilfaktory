@@ -61,15 +61,15 @@ class Ship:
         self.point = point  # Стартовые координаты
         self.deck = deck    # Количество палуб корабля
         self.position = []  # Список координат корабля
-        self.orientation = orientation # Ориентация корабля
+        self.orientation = orientation  # Ориентация корабля
         self.shadow = []    # Тень корабля (нужна чтобы отделить корабли друг от друга)
         self.ships = []     # Список координат множества кораблей
         self.lships = []
 
-    def set_pos(self, pos):
+    def set_pos(self):
         self.point = self.point
 
-    def set_position(self):
+    def set_position(self):     # Записываем координаты корабля в список для вывода на экран
         self.position.append(self.point)
         if self.deck == 0:
             return self.position
@@ -198,7 +198,11 @@ class GameEvent:
         return self.coordinates
 
     def player_turn(self):
-        if self.logic.hit_ship(self.comp.get_ships(), tuple(self.player_step())):
+        x_y = tuple(self.player_step())
+        if self.comp.game_desk[x_y[1] - 1][x_y[0] - 1] != "  |":
+            raise ErrorInput("Такой ход уже был")
+
+        if self.logic.hit_ship(self.comp.get_ships(), x_y):
             self.comp.set_game_desk([self.coordinates], "X |")
             if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
                 comp.destroyed_ship += 1
@@ -250,13 +254,18 @@ class GameEvent:
 
 
 class GameException(Exception):
-    def __int__(self):
-        super().__init__()
+    def __int__(self, message):
+        super().__init__(message)
 
 
 class Win(GameException):
     def __int__(self, message):
         super().__init__()
+
+
+class ErrorInput(GameException):
+    def __init__(self, message):
+        super().__init__(message)
 
 
 class User(GameDesk, Ship):
@@ -280,9 +289,12 @@ while True:
     try:
         while event.player_turn():
             pass
-    except Win as e:
+    except GameException as e:
         print(e)
-        break
+        if e is ErrorInput:
+            event.player_turn()
+        elif e is Win:
+            break
     try:
         while event.comp_turn():
             pass
