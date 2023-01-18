@@ -281,20 +281,9 @@ class User(GameDesk, Ship):
         Ship.gen_ships(self)
 
 
-<<<<<<<
-
-=======
-player = User(w, h)  # Создаём игрока и заодно список кораблей, в задании ничего не сказано
-# о том что игрок должен расставлять корабли вручную, хотя и это можно реализовать
-
-comp = User(w, h)
-event = GameEvent(player, comp)
-player.set_game_desk(player.get_position(), "# |")
-event.game_pass()
->>>>>>>
-
 if __name__ == '__main__':
-    player = User(w, h)
+    player = User(w, h)  # Создаём игрока и заодно список кораблей, в задании ничего не сказано
+    # о том что игрок должен расставлять корабли вручную, хотя и это можно реализовать
     comp = User(w, h)
     event = GameEvent(player, comp)
     player.set_game_desk(player.get_position(), "# |")
@@ -320,4 +309,4 @@ if __name__ == '__main__':
             print("Поражение")
             print(e)
             break
-            print("Промах")
+        print("Промах")
