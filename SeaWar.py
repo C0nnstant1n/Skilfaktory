@@ -1,5 +1,6 @@
 import random as rnd
 from os import system, name
+
 h, w = 6, 6
 
 
@@ -41,35 +42,40 @@ class GameDesk:
     def get_game_desk(self):
         return self.game_desk
 
-    def set_game_desk(self, pos, ch):               # Записываем наш кораблик на игровое поле
+    def set_game_desk(self, pos, ch):  # Записываем наш кораблик на игровое поле
         for i in pos:
-            self.game_desk[i[1]-1][i[0]-1] = ch
+            self.game_desk[i[1] - 1][i[0] - 1] = ch
 
-    def print_game_desk(self):
+    def print_game_desk(self, player, comp):
         s = []
+        print("Поле игрока,", " " * 26, "Поле компьютера")
+        print(f"кораблей уничтожено - {player.destroyed_ship}", " " * 15,
+              f"кораблей уничтожено - {comp.destroyed_ship}")
+        print()
         for i in range(self.width):
             s.append(i + 1)
             s.append("|")
-        print(" ", "|", *s)
+        print(" ", "|", *s, " " * 10, " ", "|", *s, )
         for i in range(self.height):
-            print("---------------------------")
-            print((i + 1), "|",  *GameDesk.get_game_desk(self)[i])
+            print("-" * 27, " " * 10, "-" * 27)
+            print((i + 1), "|", *player.game_desk[i], " " * 10, (i + 1), "|", *comp.game_desk[i])
+        print()
 
 
 class Ship:
     def __init__(self, point=None, deck=0, orientation=0):
         self.point = point  # Стартовые координаты
-        self.deck = deck    # Количество палуб корабля
+        self.deck = deck  # Количество палуб корабля
         self.position = []  # Список координат корабля
         self.orientation = orientation  # Ориентация корабля
-        self.shadow = []    # Тень корабля (нужна чтобы отделить корабли друг от друга)
-        self.ships = []     # Список координат множества кораблей
+        self.shadow = []  # Тень корабля (нужна чтобы отделить корабли друг от друга)
+        self.ships = []  # Список координат множества кораблей
         self.lships = []
 
     def set_pos(self):
         self.point = self.point
 
-    def set_position(self):     # Записываем координаты корабля в список для вывода на экран
+    def set_position(self):  # Записываем координаты корабля в список для вывода на экран
         self.position.append(self.point)
         if self.deck == 0:
             return self.position
@@ -80,7 +86,7 @@ class Ship:
             for i in range(self.deck - 1):
                 self.position.append((self.point[0], (self.point[1] + 1 + i)))
 
-    def shadow_ship(self):                      # тень нужна чтобы корабли создавались на расстоянии от текушего корабля
+    def shadow_ship(self):  # тень нужна чтобы корабли создавались на расстоянии от текушего корабля
         mask = (-1, 0), (-1, 1), (0, -1), \
             (0, 0), (0, 1), (1, 0)
         for j in self.get_position():
@@ -171,8 +177,9 @@ class GameEvent:
         self.logic = GameLogic()
 
         # ход игрока
+
     def player_step(self):
-        x_y_str = input("Введите координаты поля через пробел (Y X)")
+        x_y_str = input("Введите координаты поля через пробел (X Y)")
         x_y = x_y_str.split()
         self.coordinates = []
         if len(x_y) == 2:
@@ -191,6 +198,7 @@ class GameEvent:
         return self.coordinates
 
         # ход компьютера
+
     def comp_step(self):
         b = len(self.possible_coordinates) - 1
         a = rnd.randint(0, b)
@@ -198,11 +206,15 @@ class GameEvent:
         return self.coordinates
 
     def player_turn(self):
-        x_y = tuple(self.player_step())
-        if self.comp.game_desk[x_y[1] - 1][x_y[0] - 1] != "  |":
-            raise ErrorInput("Такой ход уже был")
+        try:
+            x_y = self.player_step()
+            if self.comp.game_desk[x_y[1] - 1][x_y[0] - 1] != "  |":
+                raise ErrorInput("Такой ход уже был")
+        except ErrorInput as e:
+            print(e)
+            self.player_turn()
 
-        if self.logic.hit_ship(self.comp.get_ships(), x_y):
+        if self.logic.hit_ship(self.comp.get_ships(), tuple(self.coordinates)):
             self.comp.set_game_desk([self.coordinates], "X |")
             if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):
                 comp.destroyed_ship += 1
@@ -212,32 +224,35 @@ class GameEvent:
                     raise Win("Игрок выиграл")
             else:
                 self.game_pass()
-                print("Попадание, ход игрока")
+                print("Попадание")
             return True
         else:
             self.comp.set_game_desk([self.coordinates], "T |")
             self.game_pass()
-            print("Промах, ход компьютера")
-            _ = input("для продолжения нажмите Enter")
+
+
             return False
 
     def comp_turn(self):
-        if self.logic.hit_ship(self.player.get_ships(), tuple(self.comp_step())):
+        hit = tuple(self.comp_step())
+        if self.logic.hit_ship(self.player.get_ships(), hit):
             self.player.set_game_desk([self.coordinates], "X |")
             if self.logic.is_destroyed(self.player, tuple(self.coordinates)):
                 player.destroyed_ship += 1
                 self.game_pass()
+                print("Компьютер стреляет по координатам - ", hit)
                 print("Корабль уничтожен, ход компьютера")
                 if not player.ships:
                     raise Win("Компьютер выиграл")
             else:
                 self.game_pass()
-                print("Попадание, ход компьютера")
+                print("Компьютер стреляет по координатам - ", hit)
+                print("Попадание")
             return True
         else:
             self.player.set_game_desk([self.coordinates], "T |")
             self.game_pass()
-            print("Промах, ход игрока")
+            print("Компьютер стреляет по координатам - ", hit)
             return False
 
     def game_pass(self):
@@ -245,12 +260,10 @@ class GameEvent:
             _ = system('cls')
         else:  # for mac and linux(here, os.name is 'posix')
             _ = system('clear')
+        print("-" * 66)
         print("Игра \"Морской бой\"")
-        print("-----------------------------------------")
-        print(f"Поле игрока, кораблей уничтожено - {player.destroyed_ship}")
-        self.player.print_game_desk()
-        print(f"Поле компьютера, кораблей уничтожено - {comp.destroyed_ship}")
-        self.comp.print_game_desk()
+        print("-" * 66, "\n")
+        self.player.print_game_desk(player, comp)
 
 
 class GameException(Exception):
@@ -276,8 +289,6 @@ class User(GameDesk, Ship):
         self.position = []
         Ship.gen_ships(self)
 
-        # self.ships = self.get_ships()
-
 
 player = User(w, h)
 comp = User(w, h)
@@ -289,15 +300,20 @@ while True:
     try:
         while event.player_turn():
             pass
-    except GameException as e:
-        print(e)
-        if e is ErrorInput:
-            event.player_turn()
-        elif e is Win:
-            break
-    try:
-        while event.comp_turn():
-            pass
     except Win as e:
+        print("ПОБЕДА !!!")
         print(e)
         break
+    print("Промах")
+    print("Ход компьютера")
+    _ = input("для продолжения нажмите Enter")
+
+    try:
+        while event.comp_turn():
+            print("Ход Компьютера")
+            _ = input("для продолжения нажмите Enter")
+    except Win as e:
+        print("Поражение")
+        print(e)
+        break
+    print("Промах")
