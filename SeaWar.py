@@ -290,30 +290,32 @@ class User(GameDesk, Ship):
         Ship.gen_ships(self)
 
 
-player = User(w, h)
-comp = User(w, h)
-event = GameEvent(player, comp)
-player.set_game_desk(player.get_position(), "# |")
-event.game_pass()
 
-while True:
-    try:
-        while event.player_turn():
-            pass
-    except Win as e:
-        print("ПОБЕДА !!!")
-        print(e)
-        break
-    print("Промах")
-    print("Ход компьютера")
-    _ = input("для продолжения нажмите Enter")
+if __name__ == '__main__':
+    player = User(w, h)
+    comp = User(w, h)
+    event = GameEvent(player, comp)
+    player.set_game_desk(player.get_position(), "# |")
+    event.game_pass()
 
-    try:
-        while event.comp_turn():
-            print("Ход Компьютера")
-            _ = input("для продолжения нажмите Enter")
-    except Win as e:
-        print("Поражение")
-        print(e)
-        break
-    print("Промах")
+    while True:
+        try:
+            while event.player_turn():
+                pass
+        except Win as e:
+            print("ПОБЕДА !!!")
+            print(e)
+            break
+        print("Промах")
+        print("Ход компьютера")
+        _ = input("для продолжения нажмите Enter")
+
+        try:
+            while event.comp_turn():
+                print("Ход Компьютера")
+                _ = input("для продолжения нажмите Enter")
+        except Win as e:
+            print("Поражение")
+            print(e)
+            break
+            print("Промах")
