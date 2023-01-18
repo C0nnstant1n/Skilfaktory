@@ -196,23 +196,23 @@ class GameEvent:
         self.coordinates = self.possible_coordinates.pop(a)
         return self.coordinates
 
-    def player_turn(self):      # Ход Игрока
+    def player_turn(self):  # Ход Игрока
         try:
             x_y = self.player_step()
             if self.comp.game_desk[x_y[1] - 1][x_y[0] - 1] != "  |":
-                raise ErrorInput("Такой ход уже был")       # исключением отлавливаем ходы которые уже были
+                raise ErrorInput("Такой ход уже был")  # исключением отлавливаем ходы которые уже были
         except ErrorInput as e:
             print(e)
             self.player_turn()
 
         if self.logic.hit_ship(self.comp.get_ships(), tuple(self.coordinates)):  # Проверка попадания выстрела в цель
             self.comp.set_game_desk([self.coordinates], "X |")
-            if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):      # Проверка уничтожения корабля
+            if self.logic.is_destroyed(self.comp, tuple(self.coordinates)):  # Проверка уничтожения корабля
                 comp.destroyed_ship += 1
                 self.game_pass()
                 print("Корабль уничтожен")
                 if not comp.ships:
-                    raise Win("Игрок выиграл")      # С помощью исключения отлавливаем победу
+                    raise Win("Игрок выиграл")  # С помощью исключения отлавливаем победу
             else:
                 self.game_pass()
                 print("Попадание")
@@ -223,7 +223,8 @@ class GameEvent:
 
             return False
 
-    def comp_turn(self):        # Полный аналог хода Игрока, отличается в некоторых моментах, в общем то надо сделать один блок для проверок
+    def comp_turn(self):  # Полный аналог хода Игрока, отличается в некоторых моментах,
+        # в общем то надо сделать один блок для проверок
         hit = tuple(self.comp_step())
         if self.logic.hit_ship(self.player.get_ships(), hit):
             self.player.set_game_desk([self.coordinates], "X |")
@@ -245,7 +246,7 @@ class GameEvent:
             print("Компьютер стреляет по координатам - ", hit)
             return False
 
-    def game_pass(self):    # Очистка экрана, печать заголовка, отрисовка игровых полей
+    def game_pass(self):  # Очистка экрана, печать заголовка, отрисовка игровых полей
         if name == 'nt':  # for windows
             _ = system('cls')
         else:  # for mac and linux(here, os.name is 'posix')
