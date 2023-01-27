@@ -8,10 +8,32 @@ class Queue:
         self.head = 0  # указатель на начало очереди
         self.tail = 0  # указатель на элемент следующий за концом очереди
 
-    def is_empty:
+    def is_empty(self):
+        return self.head == self.tail and self.tasks[self.head] == 0
 
-    # !!! Класс далее нужно дополнить методами !!!
+    def size(self):
+        if self.is_empty():
+            return 0
+        elif self.head == self.tail:
+            return self.max_size
+        elif self.head > self.tail:
+            return self.max_size - self.head + self.tail
+        else:
+            return self.tail - self.head
 
+    def add(self):
+        self.task_num += 1
+        self.tasks[self.tail] = self.task_num
+        print(f"Задача №{self.tasks[self.tail]} добавлена")
+        self.tail = (self.tail + 1) % self.max_size
+
+    def show(self):
+        print(f"Задача №{self.tasks[self.head]} в приоритете")
+
+    def do(self):
+        print(f"Задача №{self.tasks[self.head]} выполнена")
+        self.tasks[self.head] = 0
+        self.head = (self.head + 1) % self.max_size
 
 # Используем класс
 size = int(input("Определите размер очереди: "))
