@@ -1,11 +1,11 @@
-import requests  # импортируем наш знакомый модуль
 import lxml.html
+import requests  # импортируем наш знакомый модуль
 from lxml import etree
 
 html = requests.get('https://www.python.org/').content
 # получим html главной странички официального сайта python
 # создадим объект ElementTree. Он возвращается функцией parse()
-tree = etree.parse('Welcome to Python.org.html',lxml.html.HTMLParser())
+tree = etree.parse(html, lxml.html.HTMLParser())
 # попытаемся спарсить наш файл с помощью html-парсера.
 # Сам html - это то, что мы скачали и поместили в папку из браузера.
 
@@ -20,4 +20,6 @@ for li in ul:
     # чтобы перейти на страницу с новостью. (Гиперссылки в html это всегда тэг <a>)
     time = li.find("time")
     date = str(time.get("datetime"))
-    print(a.text, date[:10:])  # из этого тега забираем текст, это и будет нашим названием cnраницы
+    print(a.text, date[:10:])
+
+
