@@ -1,23 +1,10 @@
-import requests
-import json
 import telebot
-import redis
+from extensions import Currency
+from config import TOKEN
 
-***REMOVED***
+
 bot = telebot.TeleBot(TOKEN)
-red = redis.Redis("localhost", 6379)
-
-
-def update_currency():  # Обновляем данные по валютам с сайта
-    res = requests.get('https://www.cbr-xml-daily.ru/daily_json.js')
-    res = json.loads(res.content)
-    red.set("valutes", json.dumps(res))     # Записываем валюты в кэш
-
-
-def get_currency():     # Получаем данные по валютам из кэша
-    res = json.loads(red.get("valutes"))
-    valutes = res.get("Valute")
-    return valutes
+valutes = Currency()
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -29,35 +16,37 @@ def send_welcome(message):
                                       " в которой надо узнать цену первой валюты>"
                                       " <количество первой валюты>\n Чтобы узнать список доступных валют"
                                       " отправьте /exchange")
+    print("def send_welcome(message)")
 
 
 @bot.message_handler(commands=["exchange"])
 def exchange_list(message):
-    currency_dict = {}
-    valutes = get_currency()
-    date = json.loads(red.get("valutes")).get("Date")
 
-# При желании можем использовать все доступные валюты
-# Я же для упрощения возьму, только доллар, евро и японскую йену
-#     for i in valutes:
-#         currency_dict[valutes[i]['CharCode']] = valutes[i]['Name']
-#     bot.send_message(message.chat.id, "\n".join(currency_dict.values()))
+    available_currencies = {}
+    currency_dict = valutes.get_currency()
+    date = valutes.get_date()
 
-    currency_dict[valutes["USD"]['CharCode']] = valutes["USD"]['Name']
-    currency_dict[valutes["EUR"]['CharCode']] = valutes["EUR"]['Name']
-    currency_dict[valutes["JPY"]['CharCode']] = valutes["JPY"]['Name']
-    currency_dict["RUB"] = "Рубль"
-    bot.send_message(message.chat.id, f"Последнее обновление курсов\n{date[:10]}, {date[11:16]}\nвремя Московское")
+    available_currencies["USD"] = currency_dict.get("USD").get("Name")
+    available_currencies["EUR"] = currency_dict.get("EUR").get("Name")
+    available_currencies["JPY"] = currency_dict.get("JPY").get("Name")
+    available_currencies["RUB"] = "Рубль"
+    bot.send_message(message.chat.id, "\n".join(available_currencies.values()))
+    bot.send_message(message.chat.id, f"Последнее обновление курсов\n{date[:10]},"
+                                      f" {date[11:16]}\nвремя Московское")
+    print("def exchange_list(message)")
 
 
-@bot.message_handler(content_type=['text', ])
-def convert(message: telebot.types.Message):
-    pass
+@bot.message_handler(content_types=["text"])
+def convert(message):
+    quote, base, amount = message.text.split(' ')
+    bot.send_message(message.chat.id,
+                     f"{amount} {base} стоит {valutes.get_price(quote, base, amount)} {quote}")
 
 
 @bot.message_handler(content_types=["photo"])
 def get_photo(message):
     bot.reply_to(message, f"Прикольный мем")
+    print("def get_photo(message)")
 
 
-bot.polling(none_stop=True)
+bot.polling()

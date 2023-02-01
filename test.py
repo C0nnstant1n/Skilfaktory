@@ -1,26 +1,33 @@
 import requests
 import json
-import redis
-red = redis.Redis("localhost", 6379)
+import telebot
+from extensions import Currency
+from config import TOKEN
+from config import CACHE
+available_currencies = {}
+valutes = Currency()
+currency_dict = valutes.get_currency()
+date = valutes.resource.get("Date")
+amount = "22"
+quote = "Рубль"
+base = "Доллар США"
+print(f"{amount} {base} стоит {valutes.get_price(quote, base, amount)} {quote}")
 
-# res = requests.get('https://www.cbr-xml-daily.ru/daily_json.js')
-# res = json.loads(res.content)
-currency_dict = {}
+
+
+
+
+
+
+
+# print(currency_dict[quote]["Name"], currency_dict[quote]["Value"])
+# price_quote = round((currency_dict[quote]["Value"] / currency_dict[quote]["Nominal"]), 2)
+# print(price_quote)
 #
-# red.set("valutes", json.dumps(res))
-
-res = json.loads(red.get("valutes"))
-valutes = res.get("Valute")
-date = json.loads(red.get("valutes")).get("Date")
-print(f"Последнее обновление курсов  {date[:10]}, {date[11:16]}, время Московское")
-#print(valutes)
-currency_dict[valutes["USD"]['CharCode']] = valutes["USD"]['Name']
-currency_dict[valutes["EUR"]['CharCode']] = valutes["EUR"]['Name']
-currency_dict[valutes["JPY"]['CharCode']] = valutes["JPY"]['Name']
-currency_dict["RUB"] = "Рубль"
-print(currency_dict)
-# for i in valutes:
-#     print(valutes[i]["CharCode"], valutes[i]["Name"],
-#           round((valutes[i]["Value"] / valutes[i]["Nominal"]), 2))
-
-
+# base = "Евро"
+# print(currency_dict[base]["Name"], currency_dict[base]["Value"])
+# price_base = round((currency_dict[base]["Value"] / currency_dict[base]["Nominal"]), 2)
+# print(price_base)
+#
+# c = round((price_quote / price_base) * amount, 2)
+# print(c)
