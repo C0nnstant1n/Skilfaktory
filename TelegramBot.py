@@ -38,7 +38,7 @@ def exchange_list(message):
 
 @bot.message_handler(content_types=["text"])
 def convert(message):
-    quote, base, amount = message.text.split(' ')
+    base, quote, amount = message.text.split(' ')
     bot.send_message(message.chat.id,
                      f"{amount} {base} стоит {valutes.get_price(quote, base, amount)} {quote}")
 
