@@ -37,9 +37,16 @@ def exchange_list(message):
     valutes = get_currency()
     date = json.loads(red.get("valutes")).get("Date")
 
-    for i in valutes:
-        currency_dict[valutes[i]['CharCode']] = valutes[i]['Name']
-    bot.send_message(message.chat.id, "\n".join(currency_dict.values()))
+# При желании можем использовать все доступные валюты
+# Я же для упрощения возьму, только доллар, евро и японскую йену
+#     for i in valutes:
+#         currency_dict[valutes[i]['CharCode']] = valutes[i]['Name']
+#     bot.send_message(message.chat.id, "\n".join(currency_dict.values()))
+
+    currency_dict[valutes["USD"]['CharCode']] = valutes["USD"]['Name']
+    currency_dict[valutes["EUR"]['CharCode']] = valutes["EUR"]['Name']
+    currency_dict[valutes["JPY"]['CharCode']] = valutes["JPY"]['Name']
+    currency_dict["RUB"] = "Рубль"
     bot.send_message(message.chat.id, f"Последнее обновление курсов\n{date[:10]}, {date[11:16]}\nвремя Московское")
 
 
