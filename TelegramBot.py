@@ -1,52 +1,64 @@
 import telebot
-from extensions import Currency
+import extensions
 from config import TOKEN
 
-
+val = extensions.Currency()
 bot = telebot.TeleBot(TOKEN)
-valutes = Currency()
 
 
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start', 'help'])  # Справка по работе бота
 def send_welcome(message):
     bot.reply_to(message, f"Привет, {message.chat.username}")
     bot.send_message(message.chat.id, "Чтобы узнать обменный курс отправьте сообщение боту"
-                                      " в виде <имя валюты,"
-                                      " цену которой вы хотите узнать> <имя валюты,"
-                                      " в которой надо узнать цену первой валюты>"
-                                      " <количество первой валюты>\n Чтобы узнать список доступных валют"
-                                      " отправьте /exchange")
-    print("def send_welcome(message)")
+                                      " в виде\n<имя валюты, в которую будем переводить>,\n"
+                                      "<имя валюты, из которой переводим>>,\n"
+                                      "<количество переводимой валюты>\n Параметры следует указывать"
+                                      " через запятую с пробелом\n\nНапример: Доллар США, Евро, 150\n\n"
+                                      "Параметры критичны к регистру и склонению, указывать следует"
+                                      " так, как написано в справке\n\n"
+                                      "Основные валюты:\nРубль\nДоллар США\nЕвро\nКитайский юань\n\n"
+                                      "Курсы валют предоставлены Центральным Банком России\n\n"
+                                      "Чтобы узнать список доступных валют"
+                                      " отправьте /values\n\nДля обновления кэша отправьте /update")
 
 
-@bot.message_handler(commands=["exchange"])
+@bot.message_handler(commands=["values"])  # Список доступных валют
 def exchange_list(message):
+    available_currencies = {"RUB": "Рубль"}
+    currency_dict = val.get_currency()
+    date = val.get_date()
 
-    available_currencies = {}
-    currency_dict = valutes.get_currency()
-    date = valutes.get_date()
+    for i in currency_dict:
+        available_currencies[i] = currency_dict.get(i).get("Name")
 
-    available_currencies["USD"] = currency_dict.get("USD").get("Name")
-    available_currencies["EUR"] = currency_dict.get("EUR").get("Name")
-    available_currencies["JPY"] = currency_dict.get("JPY").get("Name")
-    available_currencies["RUB"] = "Рубль"
     bot.send_message(message.chat.id, "\n".join(available_currencies.values()))
     bot.send_message(message.chat.id, f"Последнее обновление курсов\n{date[:10]},"
                                       f" {date[11:16]}\nвремя Московское")
-    print("def exchange_list(message)")
 
 
-@bot.message_handler(content_types=["text"])
+@bot.message_handler(commands=["update"])  # Обновление кэша
+def exchange_list(message):
+    val.update_currency()
+    bot.reply_to(message, "Данные в кэше обновлены")
+
+
+@bot.message_handler(content_types=["text"])  # Обработка сообщений пользователя
 def convert(message):
-    base, quote, amount = message.text.split(' ')
-    bot.send_message(message.chat.id,
-                     f"{amount} {base} стоит {valutes.get_price(quote, base, amount)} {quote}")
+    try:
+        params = message.text.split(', ')  # Так как названия валют могут состоять из нескольких слов
+        # разделть будем по запятой с пробелом
+        if len(params) != 3:
+            raise extensions.ConvertException("Неверное количество параметров.")
 
-
-@bot.message_handler(content_types=["photo"])
-def get_photo(message):
-    bot.reply_to(message, f"Прикольный мем")
-    print("def get_photo(message)")
+        quote, base, amount = params
+        result_exchanges = extensions.Convert.get_price(quote, base, amount)
+    except extensions.ConvertException as e:
+        bot.reply_to(message, f"Ошибка пользователя\n{e}")
+    except Exception as e:
+        bot.reply_to(message, f"Не удалось обработать команду\n{e}")
+    else:
+        bot.send_message(message.chat.id, f"{amount} {base} стоит "
+                                          f"{result_exchanges} {quote}")
 
 
 bot.polling()
