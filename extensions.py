@@ -13,6 +13,9 @@ class Currency:
         self.update_currency()
 
     def update_currency(self):  # Обновляем данные по валютам с сайта
+        # это конечно не совсем API тем не менее данные получены в формате JSON
+        # работа с api сайта из примера мне понятна, но хотелось взять курсы из наших, отечественных источников
+        # кроме того этот метод не требует регистрации
         self.resource = requests.get('https://www.cbr-xml-daily.ru/daily_json.js')
         self.resource = json.loads(self.resource.content)
         CACHE.set("valutes", json.dumps(self.resource))  # Записываем валюты в кэш
