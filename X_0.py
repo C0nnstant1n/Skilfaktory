@@ -1,26 +1,6 @@
 from os import system, name             # import os module
-game_desk = [
-    ['-', '-', '-'],
-    ["-", "-", "-"],
-    ["-", "-", "-"]
-]
 
-
-def input_coor():       # Ввод координат и проверка ввода
-    x_y_str = input("Введите координаты поля через пробел (Y X)")
-    if x_y_str == "":   # Если строка пустая, повторяем ввод
-        input_coor()
-    x_y_list = x_y_str.split()
-    x_y_int = []
-    for i in x_y_list:
-        if i.isdigit() and len(x_y_list) == 2:  # Если строка содержит только цифры и её длина == 2
-            x_y_int.append(int(i))
-        else:
-            return input_coor()
-    for i in x_y_int:                           # Проверяем список координат на вмещение в игровое поле
-        if not (0 <= i <= 2):
-            return input_coor()
-    return x_y_int
+game_desk = [['-' for i in range(3)] for k in range(3)]
 
 
 def write_matrix(x_y, ch):      # Запись хода в матрицу
@@ -98,6 +78,23 @@ def clear():                            # Очистка экрана ( рабо
 
 
 number_moves = 0
+
+
+def input_coor():       # Ввод координат и проверка ввода
+    x_y_str = input("Введите координаты поля через пробел (Y X)")
+    if x_y_str == "":   # Если строка пустая, повторяем ввод
+        input_coor()
+    x_y_list = x_y_str.split()
+    x_y_int = []
+    for i in x_y_list:
+        if i.isdigit() and len(x_y_list) == 2:  # Если строка содержит только цифры и её длина == 2
+            x_y_int.append(int(i))
+        else:
+            return input_coor()
+    for i in x_y_int:                           # Проверяем список координат на вмещение в игровое поле
+        if not (0 <= i <= 2):
+            return input_coor()
+    return x_y_int
 
 
 while number_moves < 9:
