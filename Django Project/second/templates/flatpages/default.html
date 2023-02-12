@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ flatpage.title }}</title>
-</head>
-<body>
-    {{ flatpage.content }}
-</body>
+<html lang="ru">
+    <head>
+        {% load static%}
+        <link href="{% static 'in/style.css' %}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asul&display=swap">
+    </head>
+    <body>
+        <header>
+            <h1>{% block title %} {% endblock title %}</h1>
+        </header>
+        <img src="{% static 'in/logo.png' %}" width="200"/>
+        <main>
+            <h3>Привет</h3>
+            <hr>
+            <p>Django content</p>
+            {% block content %}
+            {% endblock content %}
+            <p></p>
+        </main>
+        <div class="slidebar">
+            <ul>
+                <li>
+                    <a class="nav-link" href="/authorized/">Для Авторизованных</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/admin/">Админка</a>
+                </li>
+            </ul>
+        </div>
+        <footer>
+            <div class="footer-data"><a class="nav-link2" href="/contacts/" style="text-decoration: none;">Контакты</a><a class="nav-link2" href="/about/" style="text-decoration: none;">Обо мне</a>
+                <data style="grid-area:1 / 5 / 2 / 6;">data</data>
+            </div>
+        </footer>
+    </body>
 </html>

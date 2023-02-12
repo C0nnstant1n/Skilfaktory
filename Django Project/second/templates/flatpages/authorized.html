@@ -1,12 +1,13 @@
 {% extends 'flatpages/default.html' %}
- 
+
 {% block title %}
 {{ flatpage.title }}
 {% endblock title %}
- 
+
 {% block content %}
-    <h2>{{ flatpage.title }}</h2>
-    <hr>
-    <h3>Мои контакты:</h3>
+<h3>Продолжаем изучать django and html</h3>
+<hr>
+{{ flatpage.content }}
+<hr>
 {{ flatpage.content }}
 {% endblock content %}
