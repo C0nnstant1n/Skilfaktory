@@ -1,0 +1,25 @@
+CREATE TABLE orders (
+    order_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    time_in DATETIME NOT NULL,
+    cost REAL NOT NULL,
+    pickup INTEGER NOT NULL);
+
+CREATE TABLE product (
+	product_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	name TEXT(255) NOT NULL,
+	price REAL NOT NULL
+);
+
+CREATE TABLE staff (
+    staff_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    full_name CHAR(255) NOT NULL,
+    position CHAR(255) NOT NULL,
+    labor_contract INTEGER NOT NULL);
+
+CREATE TABLE PRODUCTS_ORDERS (
+    product_order_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    product INTEGER NOT NULL,
+    in_order INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    FOREIGN KEY (product) REFERENCES product (product_id),
+    FOREIGN KEY (in_order) REFERENCES orders (order_id));
