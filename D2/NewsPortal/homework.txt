@@ -1,0 +1,62 @@
+1.  User.objects.create_user('Bonifaciy')
+    User.objects.create_user('Philosof')
+
+2.  Author.objects.create(user_id = '3')
+    Author.objects.create(user_id = '4')
+
+3.  Category.objects.create(category_name = 'Спорт')
+    Category.objects.create(category_name = 'Политика')
+    Category.objects.create(category_name = 'Экономика')
+    Category.objects.create(category_name = 'Наука')
+
+4.  at = Author.objects.get(id = 1)
+    Post.objects.create(type = 'article', title = 'Русские вратари — одни из лучших в НХЛ.', post_text = "Вратарь «Флориды» сравнялся по победам с глыбой российского вратарского цеха Евгением Набоковым. С появлением дочери стараюсь не нести хоккей в быт", author = at)
+    post1 = Post.objects.get(id = 1)
+    cat = Category.objects.all()[0]
+    post1.category.add(cat)
+    Post.objects.create(type = 'article', title = 'НХ', post_text = "Вратарь", author = at)
+    post2 = Post.objects.get(id = 2)
+    post2.category.add(cat)
+    at = Author.objects.get(id = 2)
+    Post.objects.create(type = 'news', title = 'Новость', post_text = "Новость ниочем", author = at)
+    post3 = Post.objects.get(id = 3)
+    cat = Category.objects.all()[1]
+    post3.category.add(cat)
+    cat = Category.objects.all()[2]
+
+6.  Comment.objects.create(text_comment = "example", post = post1, user_comment = User.objects.get(id=2))
+    Comment.objects.create(text_comment = "Проверка", post = post2, user_comment = User.objects.get(id=3))
+    Comment.objects.create(text_comment = "Правда?", post = Post.objects.get(id = 1), user_comment = User.objects.get(id
+=1))
+    Comment.objects.create(text_comment = "НЕ ВЕРЮ", post = Post.objects.get(id = 3), user_comment = User.objects.get(id
+=2))
+    Comment.objects.create(text_comment = "НЕ ВЕРЮ", post = Post.objects.get(id = 3), user_comment = User.objects.get(id
+=2))
+
+7.  post1.like()
+    post1.like()
+    post1.like()
+    Post.objects.get(id = 2).dislike()
+    post3.like()
+>>> Comment.objects.get(id = 1).dislike()
+>>> Comment.objects.get(id = 1).dislike()
+>>> Comment.objects.get(id = 1).dislike()
+>>> Comment.objects.get(id = 1).dislike()
+>>> Comment.objects.get(id = 1).dislike()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 4).like()
+>>> Comment.objects.get(id = 2).like()
+>>> Comment.objects.get(id = 2).like()
+>>> Comment.objects.get(id = 2).like()
+>>> Comment.objects.get(id = 2).like()
+>>> Comment.objects.get(id = 2).dislike()
+>>> Comment.objects.get(id = 2).dislike()
+>>> Comment.objects.get(id = 2).dislike()
+>>> Comment.objects.get(id = 2).dislike()
+
+8.
