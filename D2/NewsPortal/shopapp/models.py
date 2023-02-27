@@ -27,7 +27,6 @@ class Order(models.Model):
     pickup = models.BooleanField(default=False)
     complete = models.BooleanField(default=False)
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='ProductOrder')
 
     def finish_order(self):
         self.time_out = datetime.now()
