@@ -65,3 +65,6 @@ class Comment(models.Model):
     def dislike(self):
         self.rate_comment -= 1
         self.save()
+
+#
+# User.objects.create_user('Bivis')

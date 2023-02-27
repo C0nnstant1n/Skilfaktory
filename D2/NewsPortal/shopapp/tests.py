@@ -1,6 +1,10 @@
 from django.test import TestCase
-from models import Product
-# Create your tests here.
-keyboard = Product.objects.create(name='Клавиатура', price=1060)
-utf_cable = Product(name='витая пара (3 м.)', price=993)
-utf_cable.save()
+
+text = "sdfgsfgjijpiwuper sfdpoipoisdfglkjlw,fdgjp poipoertkj;i=[dfg sgfpsoi[sdf d d dlkijpsiusdfg dpoi[sdfgkjsdfglkj''," \
+       "opoiposdfg ojclkjbn' ijoijcvb09iertgklj 11 ;lkdfl;kgoipokfdg'kj 23 ';l jgfkhjldsfi jdkjslijoisudfg" \
+       "12 cxvjblkj;kjasdfiuijxcvkbnlkn nmnxckhl lkjaspidu pjlkjsboi jjhsgbiyhbsl hsdfogiwe h od oiergj " \
+       "13 jlkjsdfg'i[ b' lkjdsfgj opdslkdsf jdsflgiuewrlkj jviupiuwertlkj opisdf jkjsvoistrgljkhsbosdfg " \
+       "14 sfsgsfgh"
+
+print(len(text))
+print(text[:124], "...")
