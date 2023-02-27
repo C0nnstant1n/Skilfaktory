@@ -59,4 +59,23 @@
 >>> Comment.objects.get(id = 2).dislike()
 >>> Comment.objects.get(id = 2).dislike()
 
-8.
+8.  at = Author.objects.get(id = 1)
+    at.update_rating()
+    at = Author.objects.get(id = 2)
+    at.update_rating()
+
+9.  Author.objects.all().order_by('-author_rate').values('user__username', 'author_rate')
+
+10. best_post = Post.objects.all().order_by('-post_rate')
+    from datetime import datetime
+    date = best_post.values('post_date')[0].get('post_date').strftime("%H:%M %d-%m-%y ")
+    name = best_post.values('author__user__username')[0].get('author__user__username')
+    rating = best_post.values('post_rate')[0].get('post_rate')
+    title = best_post.values('title')[0].get('title')
+    preview = best_post[0].preview()
+    print(f"  {date} Автор - {name}, рейтинг статьи - {rating}\n {title}\n {preview}")
+
+11. comments = Comment.objects.filter(post_id = best_post[0])
+    comments.all().values('time', 'user_comment__username', 'rate_comment', 'text_comment')
+
+

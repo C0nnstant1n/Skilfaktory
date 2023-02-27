@@ -8,14 +8,24 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
-        rating = 0
+        self.author_rate = 0
+        # Получаем рейтинг статьи
         posts = Post.objects.filter(author=self.id).values("post_rate")
         for _ in posts:
-            rating += _.get("post_rate")
-        rating *= 3
+            self.author_rate += _.get("post_rate")
+        self.author_rate *= 3
 
-        return rating
+        # получаем рейтинг комментариев к статьям, делаем отдельно, т.к. количество статей и коментариев
+        # к ним может различаться
+        posts = Post.objects.filter(author=self.id).values('comment__rate_comment')
+        for _i in posts:
+            self.author_rate += _i.get('comment__rate_comment')
 
+        # рейтинг комментариев автора
+        comments = Comment.objects.filter(user_comment=self.user.id).values('rate_comment')
+        for _k in comments:
+            self.author_rate += _k.get('rate_comment')
+        self.save()
 
 
 class Category(models.Model):
@@ -65,6 +75,3 @@ class Comment(models.Model):
     def dislike(self):
         self.rate_comment -= 1
         self.save()
-
-#
-# User.objects.create_user('Bivis')
