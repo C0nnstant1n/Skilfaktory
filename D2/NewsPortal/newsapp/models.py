@@ -1,44 +1,46 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
+
+
 # from datetime import datetime
 
 
 class Author(models.Model):
-    author_rate = models.IntegerField(default=0)
+    author_rate = models.SmallIntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def update_rating(self):
         self.author_rate = 0
         # Получаем рейтинг статьи
-        posts = Post.objects.filter(author=self.id).values("post_rate")
-        for _ in posts:
-            self.author_rate += _.get("post_rate")
-        self.author_rate *= 3
+        posts_rate = self.post_set.aggregate(post_raiting=Sum('post_rate'))
+        rating_posts = posts_rate.get('post_raiting')
 
-        # получаем рейтинг комментариев к статьям, делаем отдельно, т.к. количество статей и коментариев
-        # к ним может различаться
-        posts = Post.objects.filter(author=self.id).values('comment__rate_comment')
-        for _i in posts:
-            self.author_rate += _i.get('comment__rate_comment')
+        # получаем рейтинг комментариев автора
+        comments = self.user.comment_set.aggregate(comment_rate=Sum('rate_comment'))
+        rating_comments = comments.get('comment_rate')
 
-        # рейтинг комментариев автора
-        comments = Comment.objects.filter(user_comment=self.user.id).values('rate_comment')
-        for _k in comments:
-            self.author_rate += _k.get('rate_comment')
+        # получаем статьи автора и все коменнтарии к ним, считаем рейтинг всех комментариев
+        comments_posts_rates = (
+            Comment.objects.filter(post__author__user=self.user).aggregate(rate_comments_posts=Sum('rate_comment'))
+        )
+        rating_comments_posts = comments_posts_rates.get('rate_comments_posts')
+
+        self.author_rate = rating_posts * 3 + rating_comments + rating_comments_posts
         self.save()
 
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=15, unique=True)
+    category_name = models.CharField(max_length=16, unique=True)
 
 
 class Post(models.Model):
     article = 'AR'
     news = 'NE'
-    TYPE = [(article, 'Статья'), (news, 'Новость')]
+    TYPE = ((article, 'Статья'), (news, 'Новость'))
     type = models.CharField(max_length=2, choices=TYPE, default=news)
     post_date = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=128)
     post_text = models.TextField()
     post_rate = models.IntegerField(default=0)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -53,7 +55,7 @@ class Post(models.Model):
         self.save()
 
     def preview(self):
-        return self.post_text[:124] + '...'
+        return f"{self.post_text[:124]}..."
 
 
 class PostCategory(models.Model):
