@@ -36,49 +36,49 @@ post3.category.add(cat)
 5
 
 Comment.objects.create(text_comment = "example", post = post1, user_comment = User.objects.get(username = 'Bonifaciy'))
-Comment.objects.create(text_comment = "Проверка", post = post2, user_comment = User.objects.get(id=2))
-Comment.objects.create(text_comment = "Правда?", post = Post.objects.get(id = 5), user_comment = User.objects.get(id=1))
-Comment.objects.create(text_comment = "НЕ ВЕРЮ", post = Post.objects.get(id = 6), user_comment = User.objects.get(username = 'Philosof'))
-Comment.objects.create(text_comment = "НЕ ВЕРЮ", post = Post.objects.get(id = 6), user_comment = User.objects.get(username = 'Philosof'))
+Comment.objects.create(text_comment = "Проверка", post = post2, user_comment = User.objects.get(id=1))
+Comment.objects.create(text_comment = "Правда?", post = Post.objects.get(id = 3), user_comment = User.objects.get(id=2))
+Comment.objects.create(text_comment = "НЕ ВЕРЮ", post = Post.objects.get(id = 3), user_comment = User.objects.get(username = 'Philosof'))
 
 6
 
 post1.like()
 post1.like()
 post1.like()
-Post.objects.get(id = 6).dislike()
+Post.objects.get(id = 2).dislike()
+post2.like()
 post3.like()
-Comment.objects.get(id = 5).dislike()
-Comment.objects.get(id = 5).dislike()
-Comment.objects.get(id = 5).dislike()
-Comment.objects.get(id = 5).dislike()
-Comment.objects.get(id = 10).dislike()
-Comment.objects.get(id = 5).like()
-Comment.objects.get(id = 5).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 6).like()
-Comment.objects.get(id = 7).like()
-Comment.objects.get(id = 7).like()
-Comment.objects.get(id = 8).like()
-Comment.objects.get(id = 8).dislike()
-Comment.objects.get(id = 8).dislike()
-Comment.objects.get(id = 9).dislike()
-Comment.objects.get(id = 6).dislike()
+Comment.objects.get(id = 1).dislike()
+Comment.objects.get(id = 2).dislike()
+Comment.objects.get(id = 3).dislike()
+Comment.objects.get(id = 1).dislike()
+Comment.objects.get(id = 2).dislike()
+Comment.objects.get(id = 3).like()
+Comment.objects.get(id = 1).like()
+Comment.objects.get(id = 2).like()
+Comment.objects.get(id = 3).like()
+Comment.objects.get(id = 1).like()
+Comment.objects.get(id = 2).like()
+Comment.objects.get(id = 3).like()
+Comment.objects.get(id = 1).like()
+Comment.objects.get(id = 2).like()
+Comment.objects.get(id = 3).like()
+Comment.objects.get(id = 1).like()
+Comment.objects.get(id = 2).dislike()
+Comment.objects.get(id = 3).dislike()
+Comment.objects.get(id = 1).dislike()
+Comment.objects.get(id = 2).dislike()
 
 7
 
 at = Author.objects.get(user = User.objects.get(username = 'Bonifaciy'))
 at.update_rating()
-at = Author.objects.get(id = 4)
+at = Author.objects.get(id = 2)
 at.update_rating()
 
 8
 
-Author.objects.all().order_by('-author_rate').values('user__username', 'author_rate')[0]
+Author.objects.order_by('-author_rate').values('user__username', 'author_rate')[0]
 
 9
 
