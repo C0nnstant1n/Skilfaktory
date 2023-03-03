@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # add flatpages
     'django.contrib.sites',
     'django.contrib.flatpages',
     'newsapp',

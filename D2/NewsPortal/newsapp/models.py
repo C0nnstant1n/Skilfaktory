@@ -2,9 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 
+
 class Author(models.Model):
     author_rate = models.SmallIntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user}"
 
     def update_rating(self):
         self.author_rate = 0
@@ -42,6 +46,9 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     category = models.ManyToManyField(Category, through='PostCategory')
 
+    def __str__(self):
+        return f"{self.author.user} - {self.title}"
+
     def like(self):
         self.post_rate += 1
         self.save()
@@ -65,6 +72,9 @@ class Comment(models.Model):
     rate_comment = models.IntegerField(default=0)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user_comment = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user_comment} - {self.text_comment[:20]}"
 
     def like(self):
         self.rate_comment += 1
