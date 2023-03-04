@@ -37,7 +37,7 @@ class Category(models.Model):
 class Post(models.Model):
     article = 'AR'
     news = 'NE'
-    TYPE = ((article, 'Статья'), (news, 'Новость'))
+    TYPE = ((article, 'статья'), (news, 'новость'))
     type = models.CharField(max_length=2, choices=TYPE, default=news)
     post_date = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=128)
@@ -58,7 +58,7 @@ class Post(models.Model):
         self.save()
 
     def preview(self):
-        return f"{self.post_text[:124]}..."
+        return f"{self.post_text[:20]}..."
 
 
 class PostCategory(models.Model):

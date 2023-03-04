@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Hugo 0.108.0">
-        <title>News Portal</title>
+        <title>News Portal - {% block amount1 %} {% endblock amount1 %}</title>
         <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
         {% load static %}
         <link href="{% static '/assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -24,7 +24,7 @@
                         <a class="link-secondary" href="#">Подписаться</a>
                     </div>
                     <div class="col-4 text-center">
-                        <a class="blog-header-logo text-dark" href="#">News Portal</a>
+                        <a class="blog-header-logo text-dark" href="#">Новостной Портал</a>
                     </div>
                     <div class="col-4 d-flex justify-content-end align-items-center">
                         <a class="link-secondary" href="#" aria-label="Search"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24">
@@ -102,16 +102,9 @@
             <div class="row g-5">
                 <div class="col-md-8">
                     <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        На хвосте у птички </h3>
+        На хвосте у птички - {% block amount2 %} {% endblock amount2 %}</h3>
                     <article class="blog-post">
-                        <blockquote>
-</blockquote>
-                        <p></p>
-                    </article>
-                    <article class="blog-post">
-                        <h2 class="blog-post-title mb-1">{% block title %}{% endblock title %}</h2>
-                        <p class="blog-post-meta">December 14, 2020 by <a href="#">Chris</a></p>
-                        <p> {% block content %} {% endblock content %} </p>
+                        {% block content %} {% endblock content %}
                     </article>
                     <nav class="blog-pagination" aria-label="Pagination">
                         <a class="btn btn-outline-primary rounded-pill" href="#">Назад</a>
