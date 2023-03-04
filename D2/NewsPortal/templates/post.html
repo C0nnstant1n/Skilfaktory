@@ -15,6 +15,6 @@
 <!-- В контенте на странице мы выводим содержимое Post, идентификатор которого был передан в url -->
 {% block content %}
  <h2 class="blog-post-title mb-1">{{ post.title |censor }}</h2>
-        <p class="blog-post-meta">{{post.post_date }} Автор: <a href="#">{{post.author}}</a></p>
+        <p class="blog-post-meta">{{ post.post_date }} Автор: <a href="#">{{post.author}}</a></p>
         <p> {{post.post_text |censor }} </p>
 {% endblock content %}
