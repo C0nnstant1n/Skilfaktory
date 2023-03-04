@@ -1,6 +1,8 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+{% load custom_tags %}
 <!-- Название у нас будет products -->
 {% block title %}
 Products
@@ -9,7 +11,10 @@ Products
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
 <h1>Все товары</h1>
-<h3>{{ time_now |date:'d M Y' }}</h3>
+<!--<h3>{{ time_now |date:'d M Y' }}</h3>-->
+<!-- А вот так мы используем наш тег-->
+<h3>{% current_time %} {% current_time %}</h3>
+
 <h3>{{ next_sale |default_if_none:"О распродаже сообщим позже" }}</h3>
 {% if products %}
 <table>
@@ -26,7 +31,7 @@ Products
         <td>{{ product.name }}</td>
         <td>{{ product.description |truncatewords:1 }}</td>
         <td>{{ product.category.name }}</td>
-        <td>{{ product.price }}</td>
+        <td>{{ product.price  |currency:"usd" }}</td>
         <td>{{ product.quantity }}</td>
     </tr>
     {% endfor %}
