@@ -1,7 +1,8 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+<!--  наследуемся от шаблона default.html -->
 {% extends 'flatpages/default.html' %}
-
-<!-- Название у нас будет Product -->
+<!--загружаем фильтры-->
+{% load filters %}
+<!--получаем тип поста (новость/статья)-->
 {% block amount1 %}
     {{ post.get_type_display }}
 {% endblock amount1 %}
@@ -11,9 +12,9 @@
 {% endblock amount2 %}
 
 
-<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+<!-- В контенте на странице мы выводим содержимое Post, идентификатор которого был передан в url -->
 {% block content %}
- <h2 class="blog-post-title mb-1">{{post.title}}</h2>
-        <p class="blog-post-meta">{{post.post_date |date:'d M Y' }} Автор: <a href="#">{{post.author}}</a></p>
-        <p> {{post.post_text}} </p>
+ <h2 class="blog-post-title mb-1">{{post.title |censor }}</h2>
+        <p class="blog-post-meta">{{post.post_date }} Автор: <a href="#">{{post.author}}</a></p>
+        <p> {{post.post_text |censor }} </p>
 {% endblock content %}
