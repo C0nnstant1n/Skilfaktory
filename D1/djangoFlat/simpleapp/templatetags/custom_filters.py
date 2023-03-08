@@ -11,4 +11,4 @@ CURRENCY_SYMBOLS = {
 @register.filter()
 def currency(value, code='rub'):
     postfix = CURRENCY_SYMBOLS[code]
-    return f"{value} {postfix} р."
+    return f"{value} {postfix}."
