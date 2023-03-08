@@ -17,7 +17,7 @@ class ProductsList(ListView):
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'products'
-    paginate_by = 3  # вот так мы можем указать количество записей на странице
+    paginate_by = 6  # вот так мы можем указать количество записей на странице
 
     # Переопределяем функцию получения списка товаров
     def get_queryset(self):
@@ -36,7 +36,7 @@ class ProductsList(ListView):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.utcnow()
         context['filterset'] = self.filterset
-        context['next_sale'] = None
+        # context['next_sale'] = None
         return context
 
 

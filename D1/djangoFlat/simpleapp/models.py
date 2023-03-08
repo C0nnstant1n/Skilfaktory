@@ -23,7 +23,7 @@ class Product(models.Model):
     )
 
     def __str__(self):
-        return f'{self.name.title()}: {self.description[:20]}'
+        return f'{self.name}: {self.description[:20]}'
 
 
 # Категория, к которой будет привязываться товар
@@ -32,4 +32,4 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.name.title()
+        return self.name
