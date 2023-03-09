@@ -1,9 +1,12 @@
 from datetime import datetime
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView
 from .models import Product
 from .filters import ProductFilter
+from .forms import ProductForm
 
 
 class ProductsList(ListView):
@@ -44,3 +47,14 @@ class ProductDetail(DetailView):
     model = Product
     template_name = 'product.html'
     context_object_name = 'product'
+
+
+def create_product(request):
+    if request.method =='POST':
+        form = ProductForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/produсts')
+    form = ProductForm()
+    return render(request, 'product_edit.html', {'form': form})
