@@ -3,9 +3,31 @@
 {% block title %}
 {{ flatpage.title }}
 {% endblock title %}
+
+  {% block amount1 %}
+        Контакты
+    {% endblock amount1 %}
+
+    {% block amount2 %}
+        Контакты
+    {% endblock amount2 %}
  
 {% block content %}
-    <hr>
-    <h3>Наши контакты:</h3>
-{{ flatpage.content }}
+<div class="p-4 mb-3 bg-light rounded">
+    <h3>{{ flatpage.content }}</h3>
+    <li><a href="#">Телефон</a>
+    </li>
+    <li><a href="#">email</a>
+    </li>
+<hr>
+    <h4 class="fst-italic">Ещё</h4>
+    <ol class="list-unstyled">
+        <li><a href="#">GitHub</a>
+        </li>
+        <li><a href="#">VK</a>
+        </li>
+        <li><a href="#">Telegram</a>
+        </li>
+    </ol>
+</div>
 {% endblock content %}

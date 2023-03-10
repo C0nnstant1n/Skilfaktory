@@ -5,11 +5,11 @@
 {% if posts %}
 {# --определяем количество постов-- #}
     {% block amount1 %}
-        {{ posts |length }} новости
+        {{ page_obj.paginator.count }} новости
     {% endblock amount1 %}
 
     {% block amount2 %}
-        {{ posts |length }} новости
+        {{ page_obj.paginator.count }} новости
     {% endblock amount2 %}
 
 
@@ -17,7 +17,7 @@
     {% block content %}
         {% block search %}{% endblock search %}
         {% for post in posts %}
-        <h2 class="blog-post-title mb-1">{{post.title |censor }}</h2>
+        <a href="{{post.id}}"><h2 class="blog-post-title mb-1">{{post.title |censor }}</h2></a>
         <p class="blog-post-meta">{{post.post_date  |date:'d M Y'}}</p>
         <p> {{post.preview |censor }} </p>
         {% endfor %}
