@@ -30,10 +30,10 @@ Products
 
            {% for product in products %}
            <tr>
-               <td>{{ product.name }}</td>
+               <td><a href="{{ product.id }}">{{ product.name }}</a></td>
                <td>{{ product.description|truncatechars:15 }}</td>
                <td>{{ product.category.name }}</td>
-               <td>{{ product.price |currency:'usd' }}</td>
+               <td>{{ product.price |currency:'rub' }}</td>
                <td>{{ product.quantity }}</td>
            </tr>
            {% endfor %}
@@ -62,3 +62,5 @@ Products
        {% endif %}
    {% endif %}
 {% endblock content %}
+
+{% block data %} {{ time_now }} {% endblock data %}
