@@ -1,9 +1,10 @@
 from datetime import datetime
+from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Product
 from .filters import ProductFilter
 from .forms import ProductForm
@@ -37,7 +38,7 @@ class ProductsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['time_now'] = datetime.utcnow()
+        context['time_now'] = datetime.now()
         context['filterset'] = self.filterset
         # context['next_sale'] = None
         return context
@@ -49,12 +50,21 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
 
 
-def create_product(request):
-    if request.method =='POST':
-        form = ProductForm(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/produсts')
-    form = ProductForm()
-    return render(request, 'product_edit.html', {'form': form})
+class ProductCreate(CreateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'product_edit.html'
+
+
+# Добавляем представление для изменения товара.
+class ProductUpdate(UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'product_edit.html'
+
+
+# Представление удаляющее товар.
+class ProductDelete(DeleteView):
+    model = Product
+    template_name = 'product_delete.html'
+    success_url = reverse_lazy('product_list')
