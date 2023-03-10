@@ -102,14 +102,32 @@
 <!--            </div>-->
             <div class="row g-5">
                 <div class="col-md-8">
-                    <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        На хвосте у птички - {% block amount2 %} {% endblock amount2 %}</h3>
+                    <h3 class="pb-4 mb-4 fst-italic border-bottom"> На хвосте у птички - {% block amount2 %} {% endblock amount2 %}</h3>
                     <article class="blog-post">
                         {% block content %} {% endblock content %}
                     </article>
                     <nav class="blog-pagination" aria-label="Pagination">
-                        <a class="btn btn-outline-primary rounded-pill" href="#">Назад</a>
-                        <a class="btn btn-outline-secondary rounded-pill disabled">Вперед</a>
+                        {# Добавляем пагинацию на страницу #}
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        {# Информация о предыдущих страницах #}
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-primary rounded-pill" href="?page=1">1</a>
+                                {% if page_obj.previous_page_number != 1 %}
+                                    <a class="btn btn-outline-secondary rounded-pill" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                                {% endif %}
+                        {% endif %}
+
+                        {# Информация о текущей странице #}
+                        <p class="btn btn-outline-primary rounded-pill">{{ page_obj.number }}</p>
+
+                        {# Информация о следующих страницах #}
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-outline-secondary rounded-pill" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                                {% if paginator.num_pages != page_obj.next_page_number %}
+                                    <a class="btn btn-outline-primary rounded-pill" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                                {% endif %}
+                        {% endif %}
+                    {% endif %}
                     </nav>
                 </div>
                 <div class="col-md-4">
