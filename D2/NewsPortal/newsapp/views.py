@@ -1,8 +1,10 @@
 # from django.shortcuts import render
-
-from django.views.generic import ListView, DetailView
+from django.core.exceptions import ValidationError
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .filters import PostFilter
+from .forms import NewsForm, ArticleForm
+from django.urls import reverse_lazy
 
 
 class PostsList(ListView):
@@ -26,7 +28,6 @@ class PostsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
-        print(context)
         return context
 
 
@@ -39,3 +40,56 @@ class PostDetail(DetailView):
 class Search(PostsList):
     template_name = 'search.html'
 
+
+class CreatePost(CreateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.type = 'NE'
+        return super().form_valid(form)
+
+
+class EditPost(UpdateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        if post.type != 'NE':
+            raise ValidationError('you can`t change type of news')
+        post.type = 'NE'
+        return super().form_valid(form)
+
+
+class CreateArticle(CreateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.type = 'AR'
+        return super().form_valid(form)
+
+
+class EditArticle(UpdateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        if post.type != 'AR':
+            raise ValidationError('you can`t change type of articles')
+        post.type = 'AR'
+        return super().form_valid(form)
+
+
+class DeletePost(DeleteView):
+    model = Post
+    template_name = 'delete.html'
+    success_url = reverse_lazy('posts')

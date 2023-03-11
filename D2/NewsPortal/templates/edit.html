@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+
+{% block amount1 %}
+    Редактирование
+{% endblock amount1 %}
+
+{% block top %}
+{% endblock top %}
+
+{% block amount2 %}
+    Редактирование
+{% endblock amount2 %}
+
+{% block content %}
+
+    <hr>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}
