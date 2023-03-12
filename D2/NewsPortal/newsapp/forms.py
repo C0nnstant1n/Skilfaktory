@@ -13,9 +13,11 @@ class NewsForm(forms.ModelForm):
             'category',
         ]
 
-        def clean(self):
-            cleaned_data = super().clean()
-            return cleaned_data
+    def clean(self):
+
+        cleaned_data = super().clean()
+        print(cleaned_data.get('type'))
+        return cleaned_data
 
 
 class ArticleForm(forms.ModelForm):
@@ -28,6 +30,6 @@ class ArticleForm(forms.ModelForm):
             'category',
         ]
 
-        def clean(self):
-            cleaned_data = super().clean()
-            return cleaned_data
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
