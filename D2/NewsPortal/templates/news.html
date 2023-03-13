@@ -5,11 +5,13 @@
 {% if posts %}
 {# --определяем количество постов-- #}
     {% block amount1 %}
-        {{ page_obj.paginator.count }} новости
+        {{ page_obj.paginator.count }} News
     {% endblock amount1 %}
 
     {% block amount2 %}
-        {{ page_obj.paginator.count }} новости
+        <h1 class="fst-italic h1 me-auto">Welcome to my learning project</h1>
+                    <p class="lead my-3">This is Hot News))</p>
+                    <p class="lead mb-0"><a href="#" class="text-white fw-bold">more detailed...</a></p>
     {% endblock amount2 %}
 
 
@@ -23,7 +25,7 @@
         {% endfor %}
     {% endblock content %}
 {% else %}
-    <h2>Нет статей</h2>
+    <h2>Not a News</h2>
 {% endif %}
 
 
