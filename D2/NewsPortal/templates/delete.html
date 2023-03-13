@@ -1,21 +1,17 @@
 {% extends 'flatpages/default.html' %}
 
 {% block amount1 %}
-    Удаление
+    Delete
 {% endblock amount1 %}
 
-{% block top %}
-  Вы уверены в своих действиях ???
-{% endblock top %}
-
 {% block amount2 %}
-    Удаление
+    <h1 class="fst-italic h1 me-auto">Delete</h1>
 {% endblock amount2 %}
 
 {% block content %}
   <form action="" method="post">
     {% csrf_token %}
-    <p>Удаляем "{{ object.title }}"?</p>
+    <p>Delete "{{ object.title }}"?</p>
     <input type="submit" value="Delete" />
   </form>
 {% endblock content  %}
