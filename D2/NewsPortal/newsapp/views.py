@@ -23,6 +23,7 @@ class PostsList(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
+
         return self.filterset.qs
 
     def get_context_data(self, **kwargs):

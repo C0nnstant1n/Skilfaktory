@@ -112,12 +112,15 @@
                     </article>
                     <nav class="blog-pagination" aria-label="Pagination">
                         {# Добавляем пагинацию на страницу #}
+                        {% load custom_tags %}
                     {% if page_obj.paginator.num_pages > 1 %}
                         {# Информация о предыдущих страницах #}
                         {% if page_obj.has_previous %}
-                            <a class="btn btn-outline-primary rounded-pill" href="?page=1">1</a>
+                            <a class="btn btn-outline-primary rounded-pill" href="?{% url_replace page=1 %}">1</a>
                                 {% if page_obj.previous_page_number != 1 %}
-                                    <a class="btn btn-outline-secondary rounded-pill" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                                    <a class="btn btn-outline-secondary rounded-pill"
+                                       href="?{% url_replace page=page_obj.previous_page_number %}">
+                                        {{ page_obj.previous_page_number }}</a>
                                 {% endif %}
                         {% endif %}
 
@@ -126,9 +129,13 @@
 
                         {# Информация о следующих страницах #}
                         {% if page_obj.has_next %}
-                            <a class="btn btn-outline-secondary rounded-pill" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                            <a class="btn btn-outline-secondary rounded-pill"
+                               href="?{% url_replace page=page_obj.next_page_number %}">
+                                {{ page_obj.next_page_number }}</a>
                                 {% if paginator.num_pages != page_obj.next_page_number %}
-                                    <a class="btn btn-outline-primary rounded-pill" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                                    <a class="btn btn-outline-primary rounded-pill"
+                                       href="?{% url_replace page=page_obj.paginator.num_pages %}">
+                                        {{ page_obj.paginator.num_pages }}</a>
                                 {% endif %}
                         {% endif %}
                     {% endif %}
