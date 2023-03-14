@@ -2,10 +2,9 @@ from django import template
 from datetime import datetime
 register = template.Library()
 
+# добавляем тег для подстановки url в пагинацию страниц
 
-# @register.simple_tag()
-# def current_time(format_string='%b %d %Y'):
-#     return datetime.utcnow().strftime(format_string)
+
 @register.simple_tag(takes_context=True)
 def url_replace(context, **kwargs):
     d = context['request'].GET.copy()

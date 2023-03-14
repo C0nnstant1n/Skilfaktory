@@ -1,6 +1,9 @@
 from django import forms
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from .models import Post
+
+# следует добавить проверку на количество знаков, но в учебном проекте
+# этого делать не стоит - замучаешься еще и посты придумывать или копипастить )))
 
 
 class NewsForm(forms.ModelForm):
@@ -13,12 +16,6 @@ class NewsForm(forms.ModelForm):
             'category',
         ]
 
-    def clean(self):
-
-        cleaned_data = super().clean()
-        print(cleaned_data.get('type'))
-        return cleaned_data
-
 
 class ArticleForm(forms.ModelForm):
     class Meta:
@@ -29,7 +26,3 @@ class ArticleForm(forms.ModelForm):
             'author',
             'category',
         ]
-
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data

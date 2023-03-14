@@ -18,7 +18,7 @@ class PostsList(ListView):
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -60,8 +60,6 @@ class EditPost(UpdateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        if post.type != 'NE':
-            raise ValidationError('you can`t change type of news')
         post.type = 'NE'
         return super().form_valid(form)
 
@@ -84,8 +82,6 @@ class EditArticle(UpdateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        if post.type != 'AR':
-            raise ValidationError('you can`t change type of articles')
         post.type = 'AR'
         return super().form_valid(form)
 
