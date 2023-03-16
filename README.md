@@ -1,6 +1,6 @@
 # Skillfaktory
 Учебные проекты
 
-D1:  Учебный проект - сайт на django с помощью flatpages
+main:  Educational project - NewsPortal (homeworks)
 
-D2:  Учебный проект - изучаем модели django
+D1-D(n):  Educational project - shop (working draft)
