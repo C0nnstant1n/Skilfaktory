@@ -1,0 +1,21 @@
+{% extends 'flatpages/default.html' %}
+
+{% block amount1 %}
+    Create
+{% endblock amount1 %}
+
+{% block top %}
+{% block amount2 %}
+    <h1 class="fst-italic h1 me-auto">Create</h1>
+{% endblock amount2 %}
+{% endblock top %}
+
+{% block content %}
+
+    <hr>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}

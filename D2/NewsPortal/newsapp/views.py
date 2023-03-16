@@ -5,6 +5,7 @@ from .models import Post
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class PostsList(ListView):
@@ -18,7 +19,7 @@ class PostsList(ListView):
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'posts'
-    paginate_by = 10
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -42,10 +43,11 @@ class Search(PostsList):
     template_name = 'search.html'
 
 
-class CreatePost(CreateView):
+class CreatePost(LoginRequiredMixin, CreateView):
+    raise_exception = True
     form_class = NewsForm
     model = Post
-    template_name = 'edit.html'
+    template_name = 'create.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -53,7 +55,8 @@ class CreatePost(CreateView):
         return super().form_valid(form)
 
 
-class EditPost(UpdateView):
+class EditPost(LoginRequiredMixin, UpdateView):
+    raise_exception = True
     form_class = NewsForm
     model = Post
     template_name = 'edit.html'
