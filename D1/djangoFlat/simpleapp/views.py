@@ -8,6 +8,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Product
 from .filters import ProductFilter
 from .forms import ProductForm
+# миксин LoginRequiredMixin используется чтобы указать классу о том что клас может использоватья только
+# зарегистрированным пользователем
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class ProductsList(ListView):
@@ -21,7 +25,7 @@ class ProductsList(ListView):
     # Это имя списка, в котором будут лежать все объекты.
     # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'products'
-    paginate_by = 6  # вот так мы можем указать количество записей на странице
+    paginate_by = 10  # вот так мы можем указать количество записей на странице
 
     # Переопределяем функцию получения списка товаров
     def get_queryset(self):
@@ -39,8 +43,9 @@ class ProductsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.now()
+        context['username'] = '123'
         context['filterset'] = self.filterset
-        # context['next_sale'] = None
+        # print(context)
         return context
 
 
@@ -50,21 +55,24 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
 
 
-class ProductCreate(CreateView):
+class ProductCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_product',)
     form_class = ProductForm
     model = Product
     template_name = 'product_edit.html'
 
 
 # Добавляем представление для изменения товара.
-class ProductUpdate(UpdateView):
+class ProductUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('simpleapp.change_product',)
     form_class = ProductForm
     model = Product
     template_name = 'product_edit.html'
 
 
 # Представление удаляющее товар.
-class ProductDelete(DeleteView):
+class ProductDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('simpleapp.delete_product',)
     model = Product
     template_name = 'product_delete.html'
     success_url = reverse_lazy('product_list')

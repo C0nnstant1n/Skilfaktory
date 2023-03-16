@@ -9,7 +9,11 @@
 <h1>{{ product.name }}</h1>
 <p>{{ product.description }} </p>
 <p>Стоимость: {{ product.price |currency:'rub' }} </p>
-<a href="{{ product.id }}/update"><input type="submit" value="Редактировать" /></a>
-<a href="{{ product.id }}/delete"><input type="submit" value="Удалить" /></a>
+{% if perms.simpleapp.change_product %}
+    <a href="{{ product.id }}/update"><input type="submit" value="Редактировать" /></a>
+{% endif %}
+{% if perms.simpleapp.delete_product%}
+    <a href="{{ product.id }}/delete"><input type="submit" value="Удалить" /></a>
+{% endif %}
 {% endblock content %}
 
