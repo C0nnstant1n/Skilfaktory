@@ -7,13 +7,6 @@
 Products
 {% endblock title %}
 
-{% block auth %}
-    {% if user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link" href="/accounts/login/">login</a></li>
-    {% else %}
-        <li class="nav-item"><a class="nav-link" href="/accounts/logout/">logout</a></li>
-    {% endif %}
-{% endblock auth %}
 
 {% block content %}
    <h1>Все товары</h1>
