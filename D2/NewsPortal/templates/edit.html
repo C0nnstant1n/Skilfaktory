@@ -10,12 +10,15 @@
 {% endblock amount2 %}
 {% endblock top %}
 
+{% block preview %}
+{% endblock %}
+
 {% block content %}
 
     <hr>
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save" />
+        <input class="btn btn-outline-primary rounded-pill" type="submit" value="Save" />
     </form>
 {% endblock content %}

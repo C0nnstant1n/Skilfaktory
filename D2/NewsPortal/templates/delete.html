@@ -8,10 +8,13 @@
     <h1 class="fst-italic h1 me-auto">Delete</h1>
 {% endblock amount2 %}
 
+{% block preview %}
+{% endblock %}
+
 {% block content %}
   <form action="" method="post">
     {% csrf_token %}
     <p>Delete "{{ object.title }}"?</p>
-    <input type="submit" value="Delete" />
+    <input class="btn btn-outline-primary rounded-pill" type="submit" value="Delete" />
   </form>
 {% endblock content  %}

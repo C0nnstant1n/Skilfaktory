@@ -14,7 +14,8 @@
                     <p class="lead mb-0"><a href="#" class="text-white fw-bold">more detailed...</a></p>
     {% endblock amount2 %}
 
-
+{% block preview %}
+{% endblock %}
 <!--выводим список постов-->
     {% block content %}
         {% block search %}{% endblock search %}
@@ -23,9 +24,8 @@
         <p class="blog-post-meta">{{post.post_date  |date:'d M Y'}}</p>
         <p> {{post.preview |censor }} </p>
         {% endfor %}
-    {% endblock content %}
+
+        {% endblock content %}
 {% else %}
     <h2>Not a News</h2>
 {% endif %}
-
-

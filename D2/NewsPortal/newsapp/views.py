@@ -5,7 +5,7 @@ from .models import Post
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class PostsList(ListView):
@@ -43,7 +43,8 @@ class Search(PostsList):
     template_name = 'search.html'
 
 
-class CreatePost(LoginRequiredMixin, CreateView):
+class CreatePost(PermissionRequiredMixin, CreateView):
+    permission_required = ('newsapp.add_post',)
     raise_exception = True
     form_class = NewsForm
     model = Post
@@ -55,7 +56,8 @@ class CreatePost(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class EditPost(LoginRequiredMixin, UpdateView):
+class EditPost(PermissionRequiredMixin, UpdateView):
+    permission_required = ('newsapp.change_post',)
     raise_exception = True
     form_class = NewsForm
     model = Post
@@ -67,7 +69,8 @@ class EditPost(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class CreateArticle(CreateView):
+class CreateArticle(PermissionRequiredMixin, CreateView):
+    permission_required = ('newsapp.add_post',)
     form_class = ArticleForm
     model = Post
     template_name = 'edit.html'
@@ -78,7 +81,8 @@ class CreateArticle(CreateView):
         return super().form_valid(form)
 
 
-class EditArticle(UpdateView):
+class EditArticle(PermissionRequiredMixin, UpdateView):
+    permission_required = ('newsapp.change_post',)
     form_class = ArticleForm
     model = Post
     template_name = 'edit.html'
@@ -89,7 +93,8 @@ class EditArticle(UpdateView):
         return super().form_valid(form)
 
 
-class DeletePost(DeleteView):
+class DeletePost(PermissionRequiredMixin, DeleteView):
+    permission_required = ('newsapp.delete_post',)
     model = Post
     template_name = 'delete.html'
     success_url = reverse_lazy('posts')
