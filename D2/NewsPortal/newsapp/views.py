@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Author
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
@@ -53,6 +53,10 @@ class CreatePost(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
+        author = Author
+        author.name = self.request.username
+        post.author = author
+        print(self.request.user.id, self.request.user, self.request.username)
         return super().form_valid(form)
 
 
