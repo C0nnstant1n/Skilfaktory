@@ -1,5 +1,6 @@
 from django import template
-from datetime import datetime
+from ..models import Post, Comment
+from django.db.models import Max
 
 register = template.Library()
 
@@ -18,9 +19,24 @@ def url_replace(context, **kwargs):
 # тег для тестирования переменных в шаблоне
 
 
-@register.simple_tag(takes_context=True)
-def type_func(context, author):
-    print(type(author))
-    print(type(author.user.username))
-    print(author.user.username)
+@register.simple_tag()
+def type_func(var):
+    print(type(var))
+    print(type(var.user.username))
+    print(var.user.username)
     return 'test'
+
+
+@register.simple_tag()
+def best_post():
+    best = Post.objects.all().order_by('-post_rate')
+    best_p = best[0]
+    return best_p
+
+
+# Получаем самый обсуждаемый пост
+@register.simple_tag()
+def most_commented():
+    max_commited = Post.objects.get(id=Comment.objects.all().aggregate(Max('post')).get('post__max'))
+    print(max_commited)
+    return max_commited

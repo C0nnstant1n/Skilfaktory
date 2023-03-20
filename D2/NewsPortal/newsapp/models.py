@@ -65,7 +65,7 @@ class Post(models.Model):
         self.save()
 
     def preview(self):
-        return f"{self.post_text[:20]}..."
+        return f"{self.post_text[:200]}..."
 
 
 class PostCategory(models.Model):
@@ -80,7 +80,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     text_comment = models.CharField(max_length=255)
     rate_comment = models.IntegerField(default=0)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="posts")
     user_comment = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

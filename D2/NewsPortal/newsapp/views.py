@@ -1,5 +1,4 @@
 # from django.shortcuts import render
-from django.core.exceptions import ValidationError
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author
 from .filters import PostFilter
@@ -76,7 +75,7 @@ class CreateArticle(PermissionRequiredMixin, CreateView):
     permission_required = ('newsapp.add_post',)
     form_class = ArticleForm
     model = Post
-    template_name = 'edit.html'
+    template_name = 'create.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)

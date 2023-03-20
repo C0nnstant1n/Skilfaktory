@@ -1,6 +1,7 @@
 <!--  наследуемся от шаблона default.html -->
 {% extends 'flatpages/default.html' %}
 {% load filters %}
+{% load custom_tags %}
 <!--проверяем на наличие постов, в дальнейшем будем проверять свежие посты за день-->
 {% if posts %}
 {# --определяем количество постов-- #}
@@ -14,13 +15,11 @@
                     <p class="lead mb-0"><a href="#" class="text-white fw-bold">more detailed...</a></p>
     {% endblock amount2 %}
 
-{% block preview %}
-{% endblock %}
 <!--выводим список постов-->
     {% block content %}
         {% block search %}{% endblock search %}
         {% for post in posts %}
-        <a href="{{post.id}}"><h2 class="blog-post-title mb-1">{{post.title |censor }}</h2></a>
+        <a href="{{post.id}}"> <h5 class="blog-post-title mb-1">{{post.title |censor }}</h5></a>
         <p class="blog-post-meta">{{post.post_date  |date:'d M Y'}}</p>
         <p> {{post.preview |censor }} </p>
         {% endfor %}
