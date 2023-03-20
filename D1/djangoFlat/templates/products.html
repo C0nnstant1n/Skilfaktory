@@ -7,6 +7,14 @@
 Products
 {% endblock title %}
 
+{% block auth %}
+    {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="/accounts/logout/">logout</a></li>
+    {% else %}
+        <li class="nav-item"><a class="nav-link" href="/accounts/login/">login</a></li>
+
+    {% endif %}
+{% endblock auth %}
 
 {% block content %}
    <h1>Все товары</h1>
@@ -58,7 +66,7 @@ Products
        <a href="?{% url_replace page=1 %}">1</a>
        {% if page_obj.previous_page_number != 1 %}
            ...
-           <a href="?{%url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
        {% endif %}
    {% endif %}
 
