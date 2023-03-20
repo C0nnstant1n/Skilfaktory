@@ -20,7 +20,13 @@
         <p class="blog-post-meta">{{ post.post_date }} Author: <a href="#">{{post.author}}</a></p>
         <p> {{post.post_text |censor }} </p>
 {% if perms.newsapp.change_post or perms.newsapp.delete_post %}
-<a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/edit">Edit</a>
-<a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/delete">Delete</a>
+        {# добавляем проверку что пользователь является автором этого поста #}
+        {# когда пояятся модераторы и редакторы прийдется сделать проверку и для них #}
+        {% if user.username == post.author.user.username %}
+            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/edit">Edit</a>
+            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/delete">Delete</a>
+        {% else %}
+
+        {% endif %}
 {% endif %}
 {% endblock content %}

@@ -147,8 +147,11 @@
                 <div class="col-md-4">
                     <div class="position-sticky" style="top: 2rem;">
                         <div class="p-4 mb-3 bg-light rounded">
+                            {# проверяем права на создание постов #}
                             {% if perms.newsapp.add_post %}
-                             <a class="btn btn-outline-primary rounded-pill" href="create">Create Post</a>
+                                <a class="btn btn-outline-primary rounded-pill" href="/news/create">Create News</a>
+                                <p> </p>
+                                <a class="btn btn-outline-primary rounded-pill" href="/articles/create">Create Article</a>
                             {% endif %}
                             <hr>
                             <h4 class="fst-italic">Arhive</h4>

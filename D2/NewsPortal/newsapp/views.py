@@ -5,6 +5,7 @@ from .models import Post, Author
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
@@ -53,10 +54,8 @@ class CreatePost(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
-        author = Author
-        author.name = self.request.username
+        author = Author.objects.get(user=self.request.user)
         post.author = author
-        print(self.request.user.id, self.request.user, self.request.username)
         return super().form_valid(form)
 
 
@@ -82,6 +81,8 @@ class CreateArticle(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'AR'
+        author = Author.objects.get(user=self.request.user)
+        post.author = author
         return super().form_valid(form)
 
 
