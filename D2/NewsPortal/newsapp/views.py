@@ -4,7 +4,6 @@ from .models import Post, Author
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
@@ -24,7 +23,6 @@ class PostsList(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
-
         return self.filterset.qs
 
     def get_context_data(self, **kwargs):
@@ -53,8 +51,8 @@ class CreatePost(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
-        author = Author.objects.get(user=self.request.user)
-        post.author = author
+        author = Author.objects.get(user=self.request.user)     # сохраняем пользователя как Автора
+        post.author = author                                    # Добавляем автора к создаваемому посту
         return super().form_valid(form)
 
 

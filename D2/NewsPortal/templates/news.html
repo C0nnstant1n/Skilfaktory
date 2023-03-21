@@ -19,7 +19,7 @@
     {% block content %}
         {% block search %}{% endblock search %}
         {% for post in posts %}
-        <a href="{{post.id}}"> <h5 class="blog-post-title mb-1">{{post.title |censor }}</h5></a>
+        <a href="{{post.id}}" class="blog-post-title mb-1"><i>{{post.title |censor }}</i></a>
         <p class="blog-post-meta">{{post.post_date  |date:'d M Y'}}</p>
         <p> {{post.preview |censor }} </p>
         {% endfor %}
