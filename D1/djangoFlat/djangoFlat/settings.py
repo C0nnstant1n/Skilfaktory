@@ -155,17 +155,8 @@ ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 # Настройки рассылки email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
-EMAIL_HOST_USER = "connstantino@yandex.ru"
-EMAIL_HOST_PASSWORD = "cvctiudiequioawa"
-
-
-DEFAULT_FROM_EMAIL = "connstantino@yandex.ru"
-
-SERVER_EMAIL = "connstantino@yandex.ru"
 EMAIL_SUBJECT_PREFIX = ''
 MANAGERS = (
-    ('Constantin', ''),
     ('Татьяна', '123@123.ru'),
 )
 
