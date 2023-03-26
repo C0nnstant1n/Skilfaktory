@@ -1,11 +1,20 @@
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
-from .models import Post, Category
+from .models import Post, Category, PostCategory
 
 
+# @receiver(post_save, sender=Post)
+# def post_created(instance,  **kwargs):
+#     l = PostCategory.objects.filter(post_id__gt=instance.id-2)
+#     print(l)
+#     print(instance.id)
+#     print("request")
+
+
+# My first variant
 @receiver(m2m_changed, sender=Post.category.through)
 def post_created(instance, action, **kwargs):
     if action == 'pre_add':
@@ -26,7 +35,6 @@ def post_created(instance, action, **kwargs):
         )
 
         for _ in email:
-
             msg = EmailMultiAlternatives(subject, text_content, None, [_])
             msg.attach_alternative(html_content, "text/html")
             msg.send()

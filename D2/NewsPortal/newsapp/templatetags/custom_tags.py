@@ -38,5 +38,4 @@ def best_post():
 @register.simple_tag()
 def most_commented():
     max_commited = Post.objects.get(id=Comment.objects.all().aggregate(Max('post')).get('post__max'))
-    print(max_commited)
     return max_commited
