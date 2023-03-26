@@ -1,5 +1,4 @@
 # Skillfaktory
-Учебные проекты
 
 main:  Educational project - NewsPortal (homeworks)
 
