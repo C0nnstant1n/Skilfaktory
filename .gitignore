@@ -2,5 +2,4 @@
 .idea/
 __pycache__/
 venv/
-/D2/NewsPortal/NewsPortal/secrets.py
 secrets.py
