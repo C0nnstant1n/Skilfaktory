@@ -31,6 +31,7 @@ class PostsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+
         return context
 
 
@@ -55,7 +56,8 @@ class CreatePost(PermissionRequiredMixin, CreateView):
         post = form.save(commit=False)
         post.type = 'NE'
         author = Author.objects.get(user=self.request.user)     # сохраняем пользователя как Автора
-        post.author = author                                    # Добавляем автора к создаваемому посту
+        post.author = author
+        print(self.model.category.get_attname())   # Добавляем автора к создаваемому посту
         return super().form_valid(form)
 
 

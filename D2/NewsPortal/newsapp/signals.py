@@ -7,11 +7,11 @@ from .models import Post, Category, PostCategory
 
 
 # @receiver(post_save, sender=Post)
-# def post_created(instance,  **kwargs):
+# def post_created(instance, **kwargs):
 #     l = PostCategory.objects.filter(post_id__gt=instance.id-2)
 #     print(l)
 #     print(instance.id)
-#     print("request")
+#     print('sdf')
 
 
 # My first variant
@@ -21,16 +21,15 @@ def post_created(instance, action, **kwargs):
         return
     categories = Category.objects.filter(post=instance.id)
     for i in categories:
-        print(i.category_name)
         email = User.objects.filter(subscriptions__category=i).values_list('email', flat=True)
         subject = f'New Post in {i.category_name}'
         text_content = (
             f'Post: {instance.title}\n'
-            f'The post is available at the: http://127.0.0.1{instance.get_absolute_url()}'
+            f'The post is available at the: http://127.0.0.1:8000{instance.get_absolute_url()}'
         )
         html_content = (
             f'Post: {instance.title}<br>'
-            f'<a href="http://127.0.0.1{instance.get_absolute_url()}">'
+            f'<a href="http://127.0.0.1:8000{instance.get_absolute_url()}">'
             f'Link to post</a>'
         )
 

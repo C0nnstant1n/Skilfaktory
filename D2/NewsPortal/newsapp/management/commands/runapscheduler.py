@@ -9,15 +9,34 @@ from django_apscheduler import util
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from D2.NewsPortal.newsapp.models import Post, Subscriber
+from newsapp.models import Post, Category, User
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
 
 def my_job():
     date = datetime.date.today() - datetime.timedelta(days=7)
-    posts_week = Post.objects.filter(post_date__gt=date)
-    print(posts_week)
+    categories = Category.objects.all()
+    for category in categories:
+        emails = User.objects.filter(subscriptions__category=category).values_list('email', flat=True)
+        posts_category = Post.objects.filter(post_date__gt=date, category=category)
+        if posts_category:
+            subject = f'New Post in {category.category_name}'
+            for email in emails:
+                text_content = ''
+                for post in posts_category:
+                    text_content += (
+                        f'Post: {post.title}\n'
+                        f'The post is available at the: http://127.0.0.1:8000{post.get_absolute_url()}\n\n'
+                    )
+            print(email)
+            send_mail(
+                subject=subject,
+                message=text_content,
+                from_email=None,
+                recipient_list=[email]
+            )
 
 
 @util.close_old_connections
@@ -34,7 +53,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(minute="20", hour="10"),
+            trigger=CronTrigger(minute="*/5"),
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
