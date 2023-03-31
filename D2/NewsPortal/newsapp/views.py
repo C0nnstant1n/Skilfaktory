@@ -57,7 +57,7 @@ class CreatePost(PermissionRequiredMixin, CreateView):
         post.type = 'NE'
         author = Author.objects.get(user=self.request.user)     # сохраняем пользователя как Автора
         post.author = author
-        print(self.model.category.get_attname())   # Добавляем автора к создаваемому посту
+        # Добавляем автора к создаваемому посту
         return super().form_valid(form)
 
 

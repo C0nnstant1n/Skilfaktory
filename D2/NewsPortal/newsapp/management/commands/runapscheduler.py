@@ -5,38 +5,47 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.template.loader import render_to_string
 from django_apscheduler import util
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from newsapp.models import Post, Category, User
-from django.core.mail import send_mail
+from django.shortcuts import render
+from newsapp.models import Post, Category
+from django.core.mail import EmailMultiAlternatives
 
 logger = logging.getLogger(__name__)
 
 
 def my_job():
+    # Определяем дату (в нашем случае 7 дней назад)
     date = datetime.date.today() - datetime.timedelta(days=7)
-    categories = Category.objects.all()
-    for category in categories:
-        emails = User.objects.filter(subscriptions__category=category).values_list('email', flat=True)
-        posts_category = Post.objects.filter(post_date__gt=date, category=category)
-        if posts_category:
-            subject = f'New Post in {category.category_name}'
-            for email in emails:
-                text_content = ''
-                for post in posts_category:
-                    text_content += (
-                        f'Post: {post.title}\n'
-                        f'The post is available at the: http://127.0.0.1:8000{post.get_absolute_url()}\n\n'
-                    )
-            print(email)
-            send_mail(
-                subject=subject,
-                message=text_content,
-                from_email=None,
-                recipient_list=[email]
-            )
+    # Получаем список статей за прошедшую неделю
+    posts = Post.objects.filter(post_date__gte=date)
+    categories = set(posts.values_list('category__category_name', flat=True))
+    subscribers = set(Category.objects.filter(
+        category_name__in=categories).values_list('subscriptions__user__email', flat=True))
+    subject = f'Latest news this week on News Portal'
+    for email in subscribers:
+        text_content = ''
+        for post in posts:
+            text_content += f'{post.category}\n' \
+                            f'<a href="http://127.0.0.1:8000{post.get_absolute_url()}">{post.title}</a>\n'
+        html_content = render_to_string(
+            'weekly_posts.html',
+            {
+                'link': 'http://127.0.0.1:8000',
+                'posts': posts
+            }
+        )
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=None,
+            to=[email]
+        )
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
 
 
 @util.close_old_connections
@@ -53,7 +62,9 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(minute="*/5"),
+            trigger=CronTrigger(
+                day_of_week="fri", hour="18", minute="00"
+            ),
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
@@ -63,7 +74,7 @@ class Command(BaseCommand):
         scheduler.add_job(
             delete_old_job_executions,
             trigger=CronTrigger(
-                day_of_week="mon", hour="00", minute="00"
+                day_of_week="sun", hour="00", minute="00"
             ),
             id="delete_old_job_executions",
             max_instances=1,
