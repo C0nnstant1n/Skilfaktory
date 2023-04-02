@@ -5,13 +5,23 @@ from django.http import HttpResponseRedirect
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Product
+from .models import Product, Subscription, Category
 from .filters import ProductFilter
 from .forms import ProductForm
-# миксин LoginRequiredMixin используется чтобы указать классу о том что клас может использоватья только
-# зарегистрированным пользователем
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Exists, OuterRef
+from django.http import HttpResponse
+from django.views import View
+from .tasks import hello, printer
+
+
+class IndexView(View):
+    def get(self, request):
+        hello.delay()
+        printer.apply_async([10], countdown=5)
+        return HttpResponse('Hello!')
 
 
 class ProductsList(ListView):
@@ -76,3 +86,34 @@ class ProductDelete(PermissionRequiredMixin, DeleteView):
     model = Product
     template_name = 'product_delete.html'
     success_url = reverse_lazy('product_list')
+
+
+@login_required
+@csrf_protect
+def subscriptions(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        category = Category.objects.get(id=category_id)
+        action = request.POST.get('action')
+
+        if action == 'subscribe':
+            Subscription.objects.create(user=request.user, category=category)
+        elif action == 'unsubscribe':
+            Subscription.objects.filter(
+                user=request.user,
+                category=category,
+            ).delete()
+
+    categories_with_subscriptions = Category.objects.annotate(
+        user_subscribed=Exists(
+            Subscription.objects.filter(
+                user=request.user,
+                category=OuterRef('pk'),
+            )
+        )
+    ).order_by('name')
+    return render(
+        request,
+        'subscriptions.html',
+        {'categories': categories_with_subscriptions},
+    )
