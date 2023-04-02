@@ -13,11 +13,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
-from django.views import View
+from django.views.generic import View
 from .tasks import hello, printer
 
 
 class IndexView(View):
+    model = Product
+    template_name = 'index.html'
+
     def get(self, request):
         hello.delay()
         printer.apply_async([10], countdown=5)
