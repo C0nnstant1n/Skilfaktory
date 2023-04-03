@@ -1,2 +1,5 @@
 # Skilfaktory
-Учебные проекты
+
+Educational projects
+
+Game Sea War
