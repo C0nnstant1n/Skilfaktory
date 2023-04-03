@@ -1,30 +1,11 @@
-from django.contrib.auth.models import User
-from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
-from .models import Post, Category
+from .models import Post
+from .tasks import mail_on_created
 
 
 @receiver(m2m_changed, sender=Post.category.through)
-def post_created(instance, action, **kwargs):
-    if action == 'pre_add':
-        return
-    categories = Category.objects.filter(post=instance.id)
-    for i in categories:
-        email = User.objects.filter(subscriptions__category=i).values_list('email', flat=True)
-        subject = f'New Post in {i.category_name}'
-        text_content = (
-            f'Post: {instance.title}\n'
-            f'The post is available at the: http://127.0.0.1:8000{instance.get_absolute_url()}'
-        )
-        html_content = (
-            f'Post: {instance.title}<br>'
-            f'<a href="http://127.0.0.1:8000{instance.get_absolute_url()}">'
-            f'Link to post</a>'
-        )
-
-        for _ in email:
-            msg = EmailMultiAlternatives(subject, text_content, None, [_])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+def post_created(instance, **kwargs):
+    if kwargs['action'] == 'post_add':
+        mail_on_created.delay(instance.id)      # passing the task to Celery tasks
