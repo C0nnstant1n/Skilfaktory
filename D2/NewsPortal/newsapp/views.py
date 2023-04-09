@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Author, Category, Subscriber
+from .models import Post, Author, Category, Subscriber, Comment
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm
 from django.urls import reverse_lazy
@@ -41,6 +41,7 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
     queryset = Post.objects.all()
+    comments = Comment.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
         obj = cache.get(f'product-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
@@ -51,6 +52,9 @@ class PostDetail(DetailView):
             obj = super().get_object(queryset=self.queryset)
             cache.set(f'product-{self.kwargs["pk"]}', obj)
         return obj
+
+    def get_comments(self):
+        return self.comments
 
 
 class Search(PostsList):
@@ -83,11 +87,15 @@ class EditPost(PermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
+
+        # if self.request.user.username == post.author.user.username:
         return super().form_valid(form)
+        # return redirect(post.get_absolute_url())
 
 
 class CreateArticle(PermissionRequiredMixin, CreateView):
     permission_required = ('newsapp.add_post',)
+    raise_exception = True
     form_class = ArticleForm
     model = Post
     template_name = 'create.html'

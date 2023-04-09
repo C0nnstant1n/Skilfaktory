@@ -18,14 +18,14 @@ def url_replace(context, **kwargs):
 
 # тег для тестирования переменных в шаблоне
 
-
-@register.simple_tag()
-def type_func(var):
-    print(type(var))
-    print(type(var.user.username))
-    print(var.user.username)
-    return 'test'
-
+#
+# @register.simple_tag()
+# def type_func(var):
+#     print(type(var))
+#     print(type(var.user.username))
+#     print(var.user.username)
+#     return 'test'
+#
 
 @register.simple_tag()
 def best_post():
@@ -39,3 +39,9 @@ def best_post():
 def most_commented():
     max_commited = Post.objects.get(id=Comment.objects.all().aggregate(Max('post')).get('post__max'))
     return max_commited
+
+
+@register.simple_tag()
+def comments(id):
+    comments = Comment.objects.filter(post=id)
+    return comments

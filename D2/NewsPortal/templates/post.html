@@ -2,6 +2,7 @@
 {% extends 'flatpages/default.html' %}
 <!--загружаем фильтры-->
 {% load filters %}
+{% load custom_tags %}
 <!--получаем тип поста (новость/статья)-->
 {% block amount1 %}
     {{ post.get_type_display }}
@@ -19,14 +20,21 @@
  <h2 class="blog-post-title mb-1">{{ post.title |censor }}</h2>
         <p class="blog-post-meta">{{ post.post_date }} Author: <a href="#">{{post.author}}</a></p>
         <p> {{post.post_text |censor }} </p>
+{% comments post.id as coms %}
+{% if coms %}
+        <hr>
+        <h5>Comments:</h5>
+        {% for comment in coms %}
+        <p align = right ><i><b>{{ comment.user_comment }}</b></i></p>
+        <p align = right >{{ comment.text_comment }}</p>
+        {% endfor %}
+{% endif %}
 {% if perms.newsapp.change_post or perms.newsapp.delete_post %}
         {# добавляем проверку что пользователь является автором этого поста #}
         {# когда появятся модераторы и редакторы прийдется сделать проверку и для них #}
         {% if user.username == post.author.user.username %}
             <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/edit">Edit</a>
             <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/delete">Delete</a>
-        {% else %}
-
         {% endif %}
 {% endif %}
 {% endblock content %}
