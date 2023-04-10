@@ -1,6 +1,6 @@
 from django import template
-from ..models import Post, Comment
-from django.db.models import Max
+from ..models import Post
+from django.db.models import Count
 
 register = template.Library()
 
@@ -30,18 +30,17 @@ def url_replace(context, **kwargs):
 @register.simple_tag()
 def best_post():
     best = Post.objects.all().order_by('-post_rate')
-    best_p = best[0]
-    return best_p
+    return best[0]
 
 
 # Получаем самый обсуждаемый пост
 @register.simple_tag()
 def most_commented():
-    max_commited = Post.objects.get(id=Comment.objects.all().aggregate(Max('post')).get('post__max'))
-    return max_commited
+    max_commited = Post.objects.annotate(Count('comment')).order_by('-comment__count')
+    return max_commited[0]
 
 
-@register.simple_tag()
-def comments(id):
-    comments = Comment.objects.filter(post=id)
-    return comments
+# @register.simple_tag()
+# def comments(id):
+#     comments = Comment.objects.filter(post=id)
+#     return comments
