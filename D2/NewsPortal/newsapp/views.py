@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author, Category, Subscriber, Comment
 from .filters import PostFilter
@@ -41,7 +41,6 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
     queryset = Post.objects.all()
-    comments = Comment.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
         obj = cache.get(f'product-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
@@ -53,8 +52,10 @@ class PostDetail(DetailView):
             cache.set(f'product-{self.kwargs["pk"]}', obj)
         return obj
 
-    def get_comments(self):
-        return self.comments
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
+        return context
 
 
 class Search(PostsList):
