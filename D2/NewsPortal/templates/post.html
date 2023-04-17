@@ -5,7 +5,7 @@
 {% load custom_tags %}
 <!--получаем тип поста (новость/статья)-->
 {% block amount1 %}
-    {{ post.get_type_display }}
+    {{ post.title }}
 {% endblock amount1 %}
 
 {% block amount2 %}
@@ -24,8 +24,9 @@
 {% if coms %}
         <hr>
         <h5>Comments:</h5>
+
         {% for comment in coms %}
-        <p align = right ><i><b>{{ comment.user_comment }}</b></i></p>
+        <p align = right ><i>{{ comment.time }}<b>{{ comment.user_comment }}</b></i></p>
         <p align = right >{{ comment.text_comment }}</p>
         {% endfor %}
 {% endif %}
