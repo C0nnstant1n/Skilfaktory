@@ -1,6 +1,6 @@
 from django import forms
 # from django.core.exceptions import ValidationError
-from .models import Post
+from .models import Post, Comment
 
 # следует добавить проверку на количество знаков, но в учебном проекте
 # этого делать не стоит - замучаешься еще и посты придумывать или копипастить )))
@@ -24,3 +24,11 @@ class ArticleForm(forms.ModelForm):
             'post_text',
             'category',
         ]
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = {
+            'text',
+        }

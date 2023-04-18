@@ -66,7 +66,7 @@ class Post(models.Model):
         self.save()
 
     def preview(self):
-        return f"{self.post_text[:200]}..."
+        return f"{self.post_text[:20]}..."
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
@@ -83,20 +83,23 @@ class PostCategory(models.Model):
 
 class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True)
-    text_comment = models.CharField(max_length=255)
-    rate_comment = models.IntegerField(default=0)
+    text = models.CharField(max_length=255)
+    rate = models.IntegerField(default=0)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user_comment = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user_comment} - {self.text_comment[:20]}"
+        return f"{self.user} - {self.text[:20]}"
+
+    def get_absolute_url(self, **kwargs):
+        return reverse('post', args=[self.post.id])
 
     def like(self):
-        self.rate_comment += 1
+        self.rate += 1
         self.save()
 
     def dislike(self):
-        self.rate_comment -= 1
+        self.rate -= 1
         self.save()
 
 

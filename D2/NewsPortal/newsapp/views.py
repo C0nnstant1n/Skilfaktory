@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Author, Category, Subscriber, Comment
 from .filters import PostFilter
-from .forms import NewsForm, ArticleForm
+from .forms import NewsForm, ArticleForm, CommentForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -36,6 +36,20 @@ class PostsList(ListView):
         return context
 
 
+class CommentCreate(CreateView):
+    raise_exception = True
+    form_class = CommentForm
+    model = Comment
+    template_name = 'create.html'
+
+    def form_valid(self, form):
+        # Добавляем автора к создаваемому посту
+        form.instance.user = self.request.user  # сохраняем пользователя как Автора
+        # Определяем для какой статьти пишется комментарий
+        form.instance.post = Post.objects.get(id=int(self.kwargs['pk']))
+        return super().form_valid(form)
+
+
 class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
@@ -43,18 +57,20 @@ class PostDetail(DetailView):
     queryset = Post.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
-        obj = cache.get(f'product-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
         # и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
 
         # если объекта нет в кэше, то получаем его и записываем в кэш
         if not obj:
             obj = super().get_object(queryset=self.queryset)
-            cache.set(f'product-{self.kwargs["pk"]}', obj)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
         return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
+        context['number_comments'] = len(context['comments'])
+        # print(context)
         return context
 
 
@@ -72,7 +88,7 @@ class CreatePost(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
-        author = Author.objects.get(user=self.request.user)     # сохраняем пользователя как Автора
+        author = Author.objects.get(user=self.request.user)  # сохраняем пользователя как Автора
         post.author = author
         # Добавляем автора к создаваемому посту
         return super().form_valid(form)
@@ -88,10 +104,7 @@ class EditPost(PermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NE'
-
-        # if self.request.user.username == post.author.user.username:
         return super().form_valid(form)
-        # return redirect(post.get_absolute_url())
 
 
 class CreateArticle(PermissionRequiredMixin, CreateView):
