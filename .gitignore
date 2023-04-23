@@ -5,3 +5,4 @@ venv/
 secrets.py
 config.py
 cache_files/
+mybase.json
