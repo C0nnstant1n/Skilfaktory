@@ -52,3 +52,6 @@ class Subscription(models.Model):
         on_delete=models.CASCADE,
         related_name='subscriptions',
     )
+
+    def __str__(self):
+        return f'User "{self.user}" subscribed on "{self.category}"'
