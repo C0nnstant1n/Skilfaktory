@@ -98,10 +98,10 @@
                         <div class="col p-4 d-flex flex-column position-static">
                             <strong class="d-inline-block mb-2 text-primary">Best Post</strong>
                             {% best_post as best_p %}
-                            <h4 class="mb-0">{{ best_p.title |censor }}</h4>
-                            <div class="mb-1 text-muted">{{ best_p.post_date }}</div>
-                            <p class="card-text mb-auto">{{ best_p.preview |censor }}</p>
-                            <a href="{{best_p.id}}" class="stretched-link">Continue reading</a>
+                                <h4 class="mb-0">{{ best_p.title |censor }}</h4>
+                                <div class="mb-1 text-muted">{{ best_p.post_date }}</div>
+                                <p class="card-text mb-auto">{{ best_p.preview |censor }}</p>
+                                <a href="{{best_p.id}}" class="stretched-link">Continue reading</a>
                         </div>
                         <div class="col-auto d-none d-lg-block">
                             <IMG src= "{% static 'assets/logo/loginlogo.png' %}" width="200">

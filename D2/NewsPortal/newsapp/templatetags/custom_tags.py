@@ -2,6 +2,8 @@ from django import template
 from ..models import Post
 from django.db.models import Count
 from datetime import datetime
+import logging
+
 register = template.Library()
 
 
@@ -19,6 +21,8 @@ def url_replace(context, **kwargs):
 @register.simple_tag()
 def best_post():
     best = Post.objects.all().order_by('-post_rate')
+    if not best:
+        return best
     return best[0]
 
 
@@ -26,6 +30,8 @@ def best_post():
 @register.simple_tag()
 def most_commented():
     max_commited = Post.objects.annotate(Count('comment')).order_by('-comment__count')
+    if not max_commited:
+        return max_commited
     return max_commited[0]
 
 
