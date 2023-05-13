@@ -6,3 +6,5 @@ secrets.py
 config.py
 cache_files/
 mybase.json
+backup_database.json
+debug.log

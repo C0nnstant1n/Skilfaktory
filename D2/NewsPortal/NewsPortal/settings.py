@@ -136,6 +136,59 @@ USE_I18N = True
 
 USE_TZ = False
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_logger': False,
+    'loggers': {
+        'django': {
+            'handlers': ['console_errors'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'NewsPortal_warnings': {
+            'handlers': ['console_warning'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'NewsPortal_info': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'debug',
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'formatter': 'warning',
+        },
+        'console_errors': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'error',
+        }
+    },
+    'formatters': {
+        'debug': {
+            'format': '{asctime} {levelname}:  {message}',
+            'style': '{',
+        },
+        'warning': {
+            'format': '[{asctime}] {levelname}:  {message}\n{pathname}',
+            'style': '{',
+        },
+        'error': {
+            'format': '[{asctime}] {levelname}:  {message}\n{pathname}\n{exc_info}',
+            'style': '{',
+        },
+    }
+
+    }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
