@@ -8,3 +8,6 @@ cache_files/
 mybase.json
 backup_database.json
 debug.log
+error.log
+general.log
+security.log

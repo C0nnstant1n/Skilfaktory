@@ -17,7 +17,6 @@ import django.core.mail.backends.console
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -25,10 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -83,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -105,7 +102,6 @@ DATABASES = {
     # },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -124,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -138,57 +133,146 @@ USE_TZ = False
 
 LOGGING = {
     'version': 1,
-    'disable_existing_logger': False,
-    'loggers': {
-        'django': {
-            'handlers': ['console_errors'],
-            'level': 'INFO',
-            'propagate': False,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'info_formatter': {
+            'format': '[{asctime}] {levelname} {message}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
         },
-        'NewsPortal_warnings': {
-            'handlers': ['console_warning'],
-            'level': 'WARNING',
-            'propagate': False,
+        'error_formatter': {
+            'format': '[{asctime}] {levelname} : {message} : File - {pathname} : Exception tuple: {exc_info} : Stack '
+                      'frame information: {stack_info}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
         },
-        'NewsPortal_info': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'warning_formatter': {
+            'format': '[{asctime}] {levelname} : {message} : File - {pathname}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
+        },
+        'general_log': {
+            'format': '[{asctime}] {levelname} : Module - {module} : {message}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
+        },
+        'errors_log': {
+            'format': '[{asctime}] {levelname} :  {message} : File - {pathname} : {exc_info}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
+        },
+        'mail_admins': {
+            'format': '[{asctime}] {levelname} :  {message} : File - {pathname}',
+            'datefmt': '%d-%m-%Y %H:%M',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+
+        'filter_info_level': {
+            '()': 'newsapp.log_filter.FilterLevels',
+            'filter_levels': [
+                "INFO"
+            ]
+        },
+        'filter_error_level': {
+            '()': 'newsapp.log_filter.FilterLevels',
+            'filter_levels': [
+                "ERROR"
+            ]
+        },
+        'filter_warning_level': {
+            '()': 'newsapp.log_filter.FilterLevels',
+            'filter_levels': [
+                "WARNING"
+            ]
         },
     },
     'handlers': {
-        'console': {
-            'level': 'INFO',
+        'info': {
+            'filters': ['filter_info_level', 'require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'debug',
-        },
-        'console_warning': {
-            'level': 'WARNING',
-            'class': 'logging.StreamHandler',
-            'formatter': 'warning',
-        },
-        'console_errors': {
-            'level': 'ERROR',
-            'class': 'logging.StreamHandler',
-            'formatter': 'error',
-        }
-    },
-    'formatters': {
-        'debug': {
-            'format': '{asctime} {levelname}:  {message}',
-            'style': '{',
+            'formatter': 'info_formatter',
         },
         'warning': {
-            'format': '[{asctime}] {levelname}:  {message}\n{pathname}',
-            'style': '{',
+            'filters': ['filter_warning_level', 'require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'warning_formatter'
         },
         'error': {
-            'format': '[{asctime}] {levelname}:  {message}\n{pathname}\n{exc_info}',
-            'style': '{',
+            'filters': ['filter_error_level', 'require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'error_formatter'
         },
-    }
+        'general': {
+            'filters': ['require_debug_false'],
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'general_log'
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'error.log',
+            'formatter': 'errors_log'
+        },
+        'security_file': {
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+            'formatter': 'general_log'
+        },
+        'mail_admins': {
+            'filters': ['require_debug_false'],
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'mail_admins'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['info', 'warning', 'error', 'general'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django.server': {
+            'handlers': ['error_file', 'mail_admins'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
+        'django.request': {
+            'handlers': ['error_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
 
+        # 'newsapp': {
+        #     'handlers': ['info', 'warning', 'error'],
+        #     'level': 'WARNING',
+        # }
     }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -197,7 +281,6 @@ STATIC_URL = 'static/'
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

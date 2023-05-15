@@ -60,8 +60,7 @@ class PostDetail(DetailView):
     queryset = Post.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
-        # logger.error('test logger')
-        logger.warning('dfgfgdfgfdg')
+        # logger.error('error logger')
 
         obj = cache.get(f'post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
         # и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
@@ -74,7 +73,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['commentss'] = Comment.objects.filter(post=self.kwargs['pk'])
+        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
         context['number_comments'] = len(context['comments'])
         return context
 
