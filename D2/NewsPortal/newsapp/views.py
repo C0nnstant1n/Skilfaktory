@@ -9,9 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
 from django.core.cache import cache
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 class PostsList(ListView):
@@ -48,7 +45,7 @@ class CommentCreate(CreateView):
     def form_valid(self, form):
         # Добавляем автора к создаваемому посту
         form.instance.user = self.request.user  # сохраняем пользователя как Автора
-        # Определяем для какой статьти пишется комментарий
+        # Определяем для какой статьи пишется комментарий
         form.instance.post = Post.objects.get(id=int(self.kwargs['pk']))
         return super().form_valid(form)
 
@@ -60,8 +57,6 @@ class PostDetail(DetailView):
     queryset = Post.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
-        # logger.error('error logger')
-
         obj = cache.get(f'post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
         # и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
 

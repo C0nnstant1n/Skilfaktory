@@ -24,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+ADMINS = [('Konstantin', 'admin@123.ru')]
+
 
 # Application definition
 
@@ -131,6 +133,56 @@ USE_I18N = True
 
 USE_TZ = False
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+STATIC_URL = 'static/'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+LOGIN_REDIRECT_URL = "/news"
+LOGOUT_REDIRECT_URL = "/news"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+# celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# cache by files
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),  # Указываем, куда будем сохранять
+        # кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -232,6 +284,8 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': False,
+            'reporter_class': 'newsapp.error_reporter.CustomErrorReporter',
             'formatter': 'mail_admins'
         },
     },
@@ -239,87 +293,32 @@ LOGGING = {
         'django': {
             'handlers': ['info', 'warning', 'error', 'general'],
             'propagate': True,
-            'level': 'DEBUG',
+            # 'level': 'DEBUG',
         },
         'django.server': {
             'handlers': ['error_file', 'mail_admins'],
             'propagate': True,
-            'level': 'ERROR',
+            # 'level': 'DEBUG',
         },
         'django.request': {
             'handlers': ['error_file', 'mail_admins'],
-            'level': 'ERROR',
+            # 'level': 'ERROR',
             'propagate': True,
         },
         'django.template': {
             'handlers': ['error_file'],
-            'level': 'ERROR',
+            # 'level': 'ERROR',
             'propagate': True,
         },
         'django.db.backends': {
             'handlers': ['error_file'],
-            'level': 'ERROR',
+            # 'level': 'ERROR',
             'propagate': True,
         },
         'django.security': {
             'handlers': ['security_file'],
-            'level': 'INFO',
+            # 'level': 'INFO',
             'propagate': True,
         },
-
-        # 'newsapp': {
-        #     'handlers': ['info', 'warning', 'error'],
-        #     'level': 'WARNING',
-        # }
-    }
-}
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATICFILES_DIRS = [BASE_DIR / "static"]
-LOGIN_REDIRECT_URL = "/news"
-LOGOUT_REDIRECT_URL = "/news"
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-APSCHEDULER_RUN_NOW_TIMEOUT = 25
-APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
-
-# celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-# cache by files
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),  # Указываем, куда будем сохранять
-        # кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
     }
 }
