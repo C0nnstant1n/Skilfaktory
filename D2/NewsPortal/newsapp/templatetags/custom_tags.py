@@ -2,7 +2,7 @@ from django import template
 from ..models import Post
 from django.db.models import Count
 from datetime import datetime
-import logging
+import pytz
 
 register = template.Library()
 
@@ -37,12 +37,18 @@ def most_commented():
 
 @register.simple_tag()
 def publish_time(date):
-    delta = datetime.utcnow() - date
+    # приводим объекты datetime к одному часовому поясу
+    utc_tz = pytz.timezone('utc')
+    date_now = datetime.utcnow().astimezone(utc_tz)
+    date_writing = date.astimezone(utc_tz)
+    delta = date_now - date_writing
+
     minutes = round(delta.total_seconds() / 60)
     hours = round(minutes / 60)
     days = round(hours / 24)
     month = round(days / 30)
     years = round(month / 12)
+
     if minutes < 60:
         return f"{minutes} minutes ago"
     if hours <= 24:

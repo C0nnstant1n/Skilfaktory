@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-18 15:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: templates/account/email/email_confirmation_message.txt:5
+#, python-format
+msgid ""
+"Вы получили это сообщение, потому что пользователь %(user_display)s указал "
+"этот email при регистрации на сайте %(site_domain)s.\n"
+"\n"
+"Для подтверждения регистрации пройдите по ссылке %(activate_url)s\n"
+"\n"
+"Хорошего дня!\n"
+msgstr ""
+
+#: templates/flatpages/default.html:42
+msgid "Subscribe"
+msgstr "Подписаться"
+
+#: templates/flatpages/default.html:45
+msgid "News Portal"
+msgstr "Наши Новости"
+
+#: templates/flatpages/default.html:52
+msgid "Find"
+msgstr "Поиск"
+
+#: templates/flatpages/default.html:71
+msgid "set"
+msgstr "Установить"
+
+#: templates/flatpages/default.html:75
+msgid "Logout"
+msgstr "Выход"
+
+#: templates/flatpages/default.html:77
+msgid "Login"
+msgstr "Войти"
+
+#: templates/flatpages/default.html:119
+msgid "Best Post"
+msgstr "Лучшая Новость"
+
+#: templates/flatpages/default.html:124 templates/flatpages/default.html:139
+msgid "Continue reading"
+msgstr "Читать"
+
+#: templates/flatpages/default.html:134
+msgid "Most commited"
+msgstr "Самая обсуждаемая"
+
+#: templates/flatpages/default.html:194
+msgid "Create News"
+msgstr "Написать Новость"
+
+#: templates/flatpages/default.html:196
+msgid "Create Article"
+msgstr "Написать Статью"
+
+#: templates/flatpages/default.html:201
+msgid "Arhive"
+msgstr "Архив"
+
+#: templates/flatpages/default.html:208
+msgid "Contacts"
+msgstr "Контакты"
+
+#: templates/flatpages/default.html:209
+msgid "About"
+msgstr "О нас"
+
+#: templates/flatpages/default.html:219
+msgid "Blog template built for"
+msgstr "Шаблон написан для"
+
+#: templates/flatpages/default.html:219
+msgid "by"
+msgstr "автор"
+
+#: templates/flatpages/default.html:220
+msgid "Back to top"
+msgstr "В начало"
+
+#: templates/news.html:13
+msgid "Welcome to my learning project"
+msgstr "Добро пожаловать на мой учебный проект"
+
+#: templates/news.html:14
+msgid "This is Hot News))"
+msgstr "Здесь должна быть 'горячая' новость"
+
+#: templates/news.html:15
+msgid "more detailed..."
+msgstr "читать"
+
+#: templates/news.html:29
+msgid "Not a News"
+msgstr "Нет Новостей"

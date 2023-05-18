@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
 from django.core.cache import cache
+from django.utils.translation import gettext as _ # функция для перевода
 
 
 class PostsList(ListView):
@@ -68,6 +69,7 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
         context['number_comments'] = len(context['comments'])
         return context

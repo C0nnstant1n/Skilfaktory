@@ -1,5 +1,6 @@
 <!--  наследуемся от шаблона default.html -->
 {% extends 'flatpages/default.html' %}
+{% load i18n %}
 {% load filters %}
 {% load custom_tags %}
 <!--проверяем на наличие постов, в дальнейшем будем проверять свежие посты за день-->
@@ -9,9 +10,9 @@
         News Portal - {{ page_obj.paginator.count }} Posts
     {% endblock amount1 %}
     {% block amount2 %}
-        <h1 class="fst-italic h1 me-auto">Welcome to my learning project</h1>
-                    <p class="lead my-3">This is Hot News))</p>
-                    <p class="lead mb-0"><a href="#" class="text-white fw-bold">more detailed...</a></p>
+        <h1 class="fst-italic h1 me-auto">{% trans "Welcome to my learning project" %}</h1>
+                    <p class="lead my-3">{% trans "This is Hot News))" %}</p>
+                    <p class="lead mb-0"><a href="#" class="text-white fw-bold">{% trans "more detailed..." %}</a></p>
     {% endblock amount2 %}
 
 <!--выводим список постов-->
@@ -25,5 +26,5 @@
 
         {% endblock content %}
 {% else %}
-    <h2>Not a News</h2>
+    <h2>{% trans "Not a News" %}</h2>
 {% endif %}
