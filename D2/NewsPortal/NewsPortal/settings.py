@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'newsapp.middlewares.TimezoneMiddleware',
 ]
 
 SITE_ID = 1
@@ -227,7 +228,7 @@ LOGGING = {
             'style': '{',
         },
         'message': {
-            'format': '[{message}]',
+            'format': '[{levelname} {module} {message}]',
             'style': '{'
         }
     },
@@ -265,12 +266,12 @@ LOGGING = {
             'formatter': 'info_formatter',
         },
         'warning': {
-            'filters': ['filter_warning_level', 'require_debug_true'],
+            'filters': ['filter_warning_level', 'require_debug_false'],
             'class': 'logging.StreamHandler',
             'formatter': 'warning_formatter'
         },
         'error': {
-            'filters': ['filter_error_level', 'require_debug_true'],
+            'filters': ['filter_error_level', 'require_debug_false'],
             'class': 'logging.StreamHandler',
             'formatter': 'error_formatter'
         },
@@ -301,10 +302,10 @@ LOGGING = {
             'formatter': 'mail_admins'
         },
         'newsapp': {
-            'filters': ['filter_warning_level', 'require_debug_true'],
-            'class': 'logging.FileHandler',
-            'filename': 'general.log',
-            'formatter': 'message'
+            'filters': ['filter_info_level', 'require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'message',
+            'level': 'INFO',
         },
     },
     'loggers': {
@@ -340,8 +341,7 @@ LOGGING = {
         },
             'newsapp': {
                 'handlers': ['newsapp'],
-                # 'propagate': True,
-                 # 'level': 'DEBUG',
+                 'level': 'INFO',
             },
     }
 }

@@ -1,15 +1,16 @@
 {% extends 'flatpages/default.html' %}
- 
+ {% load i18n %}
+
 {% block title %}
 {{ flatpage.title }}
 {% endblock title %}
 
 {% block amount1 %}
-     Contacts
+     {% trans Contacts %}
 {% endblock amount1 %}
 
 {% block amount2 %}
-<h1 class="fst-italic h1 me-auto">Contacts</h1>
+<h1 class="fst-italic h1 me-auto">{% trans "Contacts" %}</h1>
 {% endblock amount2 %}
 
 {% block preview %}
@@ -18,18 +19,18 @@
 {% block content %}
 <div class="p-4 mb-3 bg-light rounded">
     <h3>{{ flatpage.content }}</h3>
-    <li><a href="#">Phone</a>
+    <li><a href="#">{% trans "Phone" %}</a>
     </li>
-    <li><a href="#">email</a>
+    <li><a href="#">{% trans "email" noop %}</a>
     </li>
 <hr>
-    <h4 class="fst-italic">Elseware</h4>
+    <h4 class="fst-italic">{% trans "Elseware" %}</h4>
     <ol class="list-unstyled">
-        <li><a href="#">GitHub</a>
+        <li><a href="#">{% trans "GitHub" noop %}</a>
         </li>
-        <li><a href="#">VK</a>
+        <li><a href="#">{% trans "VK" %}</a>
         </li>
-        <li><a href="#">Telegram</a>
+        <li><a href="#">{% trans "Telegram" noop %}</a>
         </li>
     </ol>
 </div>

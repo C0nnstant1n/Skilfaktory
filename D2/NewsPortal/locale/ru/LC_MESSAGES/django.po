@@ -3,22 +3,33 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Django translate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 15:51+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-05-23 05:50+0000\n"
+"PO-Revision-Date: 2023-05-23 12:58+0700\n"
+"Last-Translator: C0nstant1n <C0nnstant1n.cs@gmal.com>\n"
+"Language-Team: C0nstant1n\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: templates/403.html:7
+msgid "Error 403"
+msgstr ""
+
+#: templates/403.html:10
+msgid "Page not found"
+msgstr ""
+
+#: templates/403.html:13
+msgid "It seems that you do not have access to this page..."
+msgstr ""
 
 #: templates/account/email/email_confirmation_message.txt:5
 #, python-format
@@ -31,86 +42,172 @@ msgid ""
 "Хорошего дня!\n"
 msgstr ""
 
-#: templates/flatpages/default.html:42
+#: templates/create.html:4 templates/create.html:9
+msgid "Create"
+msgstr ""
+
+#: templates/create.html:22 templates/edit.html:22
+msgid "Save"
+msgstr ""
+
+#: templates/delete.html:4 templates/delete.html:17 templates/delete.html:18
+#: templates/post.html:31
+msgid "Delete"
+msgstr ""
+
+#: templates/delete.html:8
+msgid "Are You sure you want to DELETE ?"
+msgstr ""
+
+#: templates/edit.html:4 templates/edit.html:9 templates/post.html:30
+msgid "Edit"
+msgstr ""
+
+#: templates/flatpages/about.html:5
+msgid "About us"
+msgstr ""
+
+#: templates/flatpages/about.html:9 templates/flatpages/default.html:227
+msgid "About"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:13
+#: templates/flatpages/default.html:226
+msgid "Contacts"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:22
+msgid "Phone"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:24
+msgid "email"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:27
+msgid "Elseware"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:29
+msgid "GitHub"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:31
+msgid "VK"
+msgstr ""
+
+#: templates/flatpages/contact_page.html:33
+msgid "Telegram"
+msgstr ""
+
+#: templates/flatpages/default.html:44 templates/subscriptions.html:23
 msgid "Subscribe"
-msgstr "Подписаться"
+msgstr ""
 
-#: templates/flatpages/default.html:45
+#: templates/flatpages/default.html:48
 msgid "News Portal"
-msgstr "Наши Новости"
+msgstr ""
 
-#: templates/flatpages/default.html:52
+#: templates/flatpages/default.html:55
 msgid "Find"
-msgstr "Поиск"
-
-#: templates/flatpages/default.html:71
-msgid "set"
-msgstr "Установить"
+msgstr ""
 
 #: templates/flatpages/default.html:75
+msgid "set"
+msgstr ""
+
+#: templates/flatpages/default.html:79
 msgid "Logout"
-msgstr "Выход"
+msgstr ""
 
-#: templates/flatpages/default.html:77
+#: templates/flatpages/default.html:81
 msgid "Login"
-msgstr "Войти"
+msgstr ""
 
-#: templates/flatpages/default.html:119
+#: templates/flatpages/default.html:137
 msgid "Best Post"
-msgstr "Лучшая Новость"
+msgstr ""
 
-#: templates/flatpages/default.html:124 templates/flatpages/default.html:139
+#: templates/flatpages/default.html:142 templates/flatpages/default.html:157
 msgid "Continue reading"
-msgstr "Читать"
+msgstr ""
 
-#: templates/flatpages/default.html:134
+#: templates/flatpages/default.html:152
 msgid "Most commited"
-msgstr "Самая обсуждаемая"
+msgstr ""
 
-#: templates/flatpages/default.html:194
+#: templates/flatpages/default.html:212
 msgid "Create News"
-msgstr "Написать Новость"
+msgstr ""
 
-#: templates/flatpages/default.html:196
+#: templates/flatpages/default.html:214
 msgid "Create Article"
-msgstr "Написать Статью"
+msgstr ""
 
-#: templates/flatpages/default.html:201
+#: templates/flatpages/default.html:219
 msgid "Arhive"
-msgstr "Архив"
+msgstr ""
 
-#: templates/flatpages/default.html:208
-msgid "Contacts"
-msgstr "Контакты"
-
-#: templates/flatpages/default.html:209
-msgid "About"
-msgstr "О нас"
-
-#: templates/flatpages/default.html:219
+#: templates/flatpages/default.html:237
 msgid "Blog template built for"
-msgstr "Шаблон написан для"
+msgstr ""
 
-#: templates/flatpages/default.html:219
+#: templates/flatpages/default.html:237
 msgid "by"
-msgstr "автор"
+msgstr ""
 
-#: templates/flatpages/default.html:220
+#: templates/flatpages/default.html:238
 msgid "Back to top"
-msgstr "В начало"
+msgstr ""
 
 #: templates/news.html:13
 msgid "Welcome to my learning project"
-msgstr "Добро пожаловать на мой учебный проект"
+msgstr ""
 
 #: templates/news.html:14
 msgid "This is Hot News))"
-msgstr "Здесь должна быть 'горячая' новость"
+msgstr ""
 
 #: templates/news.html:15
 msgid "more detailed..."
-msgstr "читать"
+msgstr ""
 
 #: templates/news.html:29
 msgid "Not a News"
-msgstr "Нет Новостей"
+msgstr ""
+
+#: templates/post.html:22
+msgid "Author:"
+msgstr ""
+
+#: templates/post.html:38
+#, python-format
+msgid ""
+""
+"%(counter)d comment:\n"
+msgid_plural ""
+""
+"%(counter)d comments:\n"
+msgstr[0] "%(counter)d коментарий\n"
+msgstr[1] "%(counter)d коментария\n"
+msgstr[2] "%(counter)d коментариев\n"
+
+#: templates/search.html:6 templates/search.html:18
+msgid "Filter"
+msgstr ""
+
+#: templates/subscriptions.html:5
+msgid "Subscriptions"
+msgstr ""
+
+#: templates/subscriptions.html:21 templates/subscriptions.html:24
+msgid "Unsubscribe"
+msgstr ""
+
+#: templates/weekly_posts.html:6
+msgid "Title"
+msgstr ""
+
+#: templates/weekly_posts.html:9
+msgid "Articles for the week on News Portal:"
+msgstr ""

@@ -1,11 +1,11 @@
 {% extends 'flatpages/default.html' %}
-
+{% load i18n %}
 {% block amount1 %}
-    Delete
+    {% trans "Delete"%}
 {% endblock amount1 %}
 
 {% block amount2 %}
-    <h1 class="fst-italic h1 me-auto">Are You sure you want to DELETE</h1>
+    <h1 class="fst-italic h1 me-auto">{% trans "Are You sure you want to DELETE ?" %}</h1>
 {% endblock amount2 %}
 
 {% block preview %}
@@ -14,7 +14,7 @@
 {% block content %}
   <form action="" method="post">
     {% csrf_token %}
-    <p>Delete "{{ object.title }}"?</p>
-        <input class="btn btn-outline-primary rounded-pill" type="submit" value="Delete" />
+    <p>{% trans "Delete" %} "{{ object.title }}"?</p>
+        <input class="btn btn-outline-primary rounded-pill" type="submit" value={% trans "Delete" %} />
   </form>
 {% endblock content  %}

@@ -9,7 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
 from django.core.cache import cache
-from django.utils.translation import gettext as _ # функция для перевода
+from django.utils import timezone
+import pytz     # импортируем стандартный модуль для работы с часовыми поясами
+from django.shortcuts import redirect
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class PostsList(ListView):
@@ -31,10 +36,19 @@ class PostsList(ListView):
         return self.filterset.qs
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
+        context['current_time'] = timezone.localtime()
+        context['timezones'] = pytz.common_timezones  # добавляем в контекст все доступные часовые пояса
         context['filterset'] = self.filterset
 
         return context
+
+    #  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться
+    #  написанным нами ранее middleware
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/news')
 
 
 class CommentCreate(CreateView):
@@ -171,3 +185,9 @@ def subscriptions(request):
         'subscriptions.html',
         {'categories': categories_with_subscriptions},
     )
+
+
+def clear_cache(request):
+    logger.info(f"Redirect to - {request.headers['Referer']}")
+    cache.clear()
+    return redirect(request.headers['Referer'])

@@ -1,8 +1,9 @@
 {# наследуемся от шаблона news #}
 {% extends 'news.html' %}
+{% load i18n %}
 
 {% block top %}
-<h1 class="fst-italic h1 me-auto">Filter</h1>
+<h1 class="fst-italic h1 me-auto">{% trans "Filter" %}</h1>
 {% endblock top %}
 
 {% block preview %}
@@ -14,7 +15,7 @@
        {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
        {{ filterset.form.as_p }}
        {# Добавим кнопку отправки данных формы #}
-       <input type="submit" value="Filter" />
+       <input type="submit" value={% trans "Filter" %} />
 
    </form>
 <hr>

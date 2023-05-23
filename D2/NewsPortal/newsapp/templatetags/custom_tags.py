@@ -3,7 +3,6 @@ from ..models import Post
 from django.db.models import Count
 from datetime import datetime
 import pytz
-
 register = template.Library()
 
 

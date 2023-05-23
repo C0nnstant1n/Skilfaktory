@@ -1,5 +1,6 @@
 <!--  наследуемся от шаблона default.html -->
 {% extends 'flatpages/default.html' %}
+{% load i18n %}
 <!--загружаем фильтры-->
 {% load filters %}
 {% load custom_tags %}
@@ -18,7 +19,7 @@
 <!-- В контенте на странице мы выводим содержимое Post, идентификатор которого был передан в url -->
 {% block content %}
  <h2 class="blog-post-title mb-1">{{ post.title |censor }}</h2>
-        <p class="blog-post-meta">{{ post.post_date }} Author: <a href="#">{{post.author}}</a></p>
+        <p class="blog-post-meta">{{ post.post_date }} {% trans "Author:" %} <a href="#">{{post.author}}</a></p>
         <p> {{post.post_text |censor }} </p>
 
 
@@ -26,17 +27,21 @@
         {# добавляем проверку что пользователь является автором этого поста #}
         {# когда появятся модераторы и редакторы прийдется сделать проверку и для них #}
         {% if user.username == post.author.user.username %}
-            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/edit">Edit</a>
-            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/delete">Delete</a>
+            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/edit">{% trans "Edit" %}</a>
+            <a class="btn btn-outline-primary rounded-pill" href="{{ post.id }}/delete">{% trans "Delete" %}</a>
         {% endif %}
 {% endif %}
 
 {% if comments %}
         <hr>
-        <h5><i>{{number_comments}} comments:</i></h5>
-
-        {% for comment in comments %}
-
+        <h5><i>
+{% blocktrans count number_comments as counter%}
+{{counter}} comment:
+{% plural %}
+{{counter}} comments:
+{% endblocktrans %}
+{% for comment in comments %}
+        </i></h5>
                 <p align = right ><i> {% publish_time comment.time %} <b> {{ comment.user }} </b></i></p>
                 <p align = left > {{ comment.text }} </p>
 

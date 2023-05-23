@@ -1,12 +1,12 @@
 {% extends 'flatpages/default.html' %}
-
+{% load i18n %}
 {% block amount1 %}
-    Edit
+    {% trans "Edit" %}
 {% endblock amount1 %}
 
 {% block top %}
 {% block amount2 %}
-    <h1 class="fst-italic h1 me-auto">Edit</h1>
+    <h1 class="fst-italic h1 me-auto">{% trans "Edit" %}</h1>
 {% endblock amount2 %}
 {% endblock top %}
 
@@ -19,6 +19,6 @@
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="btn btn-outline-primary rounded-pill" type="submit" value="Save" />
+        <input class="btn btn-outline-primary rounded-pill" type="submit" value={% trans "Save" %} />
     </form>
 {% endblock content %}
