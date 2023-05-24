@@ -4,7 +4,7 @@ from .models import Post, Author, Category, Subscriber, Comment
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm, CommentForm
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
@@ -51,7 +51,7 @@ class PostsList(ListView):
         return redirect('/news')
 
 
-class CommentCreate(CreateView):
+class CommentCreate(LoginRequiredMixin, CreateView):
     raise_exception = True
     form_class = CommentForm
     model = Comment
@@ -81,10 +81,9 @@ class PostDetail(DetailView):
             cache.set(f'post-{self.kwargs["pk"]}', obj)
         return obj
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, date='-time', **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
+        context['comments'] = Comment.objects.order_by(date).filter(post=self.kwargs['pk'])
         context['number_comments'] = len(context['comments'])
         return context
 

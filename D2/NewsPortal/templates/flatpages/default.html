@@ -83,8 +83,10 @@
                 </div>
             </div>
         </header>
+            {% block time %}
             <div class="nav-scroller py-1 mb-2">
                 <nav class="nav d-flex justify-content-between">
+
                     {% get_current_timezone as TIME_ZONE %}
                 <form action="" method="POST">
                     {% csrf_token %}
@@ -96,6 +98,7 @@
                     </select>
                     <input type="submit" value="Set">
                 </form>
+                    {{ current_time.hour }}
                 {{ TIME_ZONE }}
                 {{ current_time }} <!-- Отображаем время в выбранном часовом поясе  -->
 
@@ -111,8 +114,10 @@
 <!--                    <a class="p-2 link-secondary" href="#">Health</a>-->
 <!--                    <a class="p-2 link-secondary" href="#">Style</a>-->
 <!--                    <a class="p-2 link-secondary" href="#">Travel</a>-->
+
                 </nav>
             </div>
+            {% endblock time %}
     </div>
 
     <main class="container">
