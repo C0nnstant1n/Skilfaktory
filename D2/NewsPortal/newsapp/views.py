@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Author, Category, Subscriber, Comment
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm, CommentForm
 from django.urls import reverse_lazy
@@ -8,13 +7,20 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
-from django.core.cache import cache
 from django.utils import timezone
 import pytz     # импортируем стандартный модуль для работы с часовыми поясами
 from django.shortcuts import redirect
 import logging
+from .serializers import *
+from rest_framework import viewsets
+from .models import *
 
 logger = logging.getLogger(__name__)
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 class PostsList(ListView):
@@ -30,6 +36,10 @@ class PostsList(ListView):
     context_object_name = 'posts'
     paginate_by = 3
 
+    def __init__(self):
+        super().__init__()
+        self.filterset = None
+
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
@@ -41,7 +51,6 @@ class PostsList(ListView):
         context['current_time'] = timezone.localtime()
         context['timezones'] = pytz.common_timezones  # добавляем в контекст все доступные часовые пояса
         context['filterset'] = self.filterset
-
         return context
 
     #  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться
@@ -72,8 +81,9 @@ class PostDetail(DetailView):
     queryset = Post.objects.all()
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
-        obj = cache.get(f'post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь,
-        # и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        # Кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу,
+        # если его нет, то забирает None.
 
         # если объекта нет в кэше, то получаем его и записываем в кэш
         if not obj:
@@ -100,10 +110,10 @@ class CreatePost(PermissionRequiredMixin, CreateView):
     template_name = 'create.html'
 
     def form_valid(self, form):
-        post = form.save(commit=False)
-        post.type = 'NE'
+        single_post = form.save(commit=False)
+        single_post.type = 'NE'
         author = Author.objects.get(user=self.request.user)  # сохраняем пользователя как Автора
-        post.author = author
+        single_post.author = author
         # Добавляем автора к создаваемому посту
         return super().form_valid(form)
 
@@ -116,8 +126,8 @@ class EditPost(PermissionRequiredMixin, UpdateView):
     template_name = 'edit.html'
 
     def form_valid(self, form):
-        post = form.save(commit=False)
-        post.type = 'NE'
+        single_post = form.save(commit=False)
+        single_post.type = 'NE'
         return super().form_valid(form)
 
 
@@ -129,10 +139,10 @@ class CreateArticle(PermissionRequiredMixin, CreateView):
     template_name = 'create.html'
 
     def form_valid(self, form):
-        post = form.save(commit=False)
-        post.type = 'AR'
+        single_post = form.save(commit=False)
+        single_post.type = 'AR'
         author = Author.objects.get(user=self.request.user)
-        post.author = author
+        single_post.author = author
         return super().form_valid(form)
 
 
@@ -143,8 +153,8 @@ class EditArticle(PermissionRequiredMixin, UpdateView):
     template_name = 'edit.html'
 
     def form_valid(self, form):
-        post = form.save(commit=False)
-        post.type = 'AR'
+        single_post = form.save(commit=False)
+        single_post.type = 'AR'
         return super().form_valid(form)
 
 

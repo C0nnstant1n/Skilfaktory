@@ -15,10 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
+from rest_framework import routers
+from newsapp.views import PostViewSet
+router = routers.DefaultRouter()
+router.register(r'post', PostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path('', include('newsapp.urls')),
+    path('api-auth/', include('rest_framework.urls'), name='rest_framework'),
     path('i18n/', include('django.conf.urls.i18n')),    # подключаем встроенные эндопинты для работы с локализацией
+    path('swagger/', TemplateView.as_view(
+        template_name='swagger.html', extra_context={'schema_url': 'openapi-schema'}), name='swagger'),
+    
 ]
