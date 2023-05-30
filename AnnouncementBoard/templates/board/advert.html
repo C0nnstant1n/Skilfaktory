@@ -1,0 +1,17 @@
+{% extends "board/index.html" %}
+{% load i18n %}
+
+{% block body %}
+    <h2>{{ advert.title }}</h2>
+        {{ form.media }}
+        <p>{{ advert.post_date }} {% trans "Author:" %} <a href="#">{{advert.author}}</a></p>
+        {% autoescape off %}
+        <p> {{ advert.text }} </p>
+        {% endautoescape %}
+        <hr>
+        {% if user.username == advert.author.user.username %}
+            <a href="{{ advert.id }}/edit">{% trans "Edit" %}</a>
+            <a href="{{ advert.id }}/delete">{% trans "Delete" %}</a>
+        {% endif %}
+
+{% endblock %}

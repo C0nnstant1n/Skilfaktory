@@ -2,7 +2,10 @@
 
 Branches:
 
-# main:  Educational project - NewsPortal (homeworks)
+# main Homeworks for verification
+    current project "Announcement Board"
+
+# NewsPortal (homeworks)
 
     06.04.2023
     Added caching

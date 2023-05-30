@@ -1,0 +1,14 @@
+{% extends "board/index.html" %}
+{% load i18n %}
+
+{% block body %}
+    {% if adverts %}
+    <!--выводим список объявлений-->
+        {% for advert in adverts %}
+        <a href="{{advert.id}}"> <i>{{ advert.title }}</i></a>
+        <p>{{ advert.date }}</p>
+        {% endfor %}
+    {% else %}
+        <h2>{% trans "Нет объявлений" %}</h2>
+    {% endif %}
+{% endblock %}
