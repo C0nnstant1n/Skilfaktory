@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
-from newsapp.views import PostViewSet
+from newsapp.views import PostViewSet, CategoryViewSet, AuthorViewSet
 router = routers.DefaultRouter()
 router.register(r'post', PostViewSet)
+router.register(r'category', CategoryViewSet)
+# router.register(r'author', AuthorViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path("accounts/", include("allauth.urls")),
     path('', include('newsapp.urls')),
     path('api-auth/', include('rest_framework.urls'), name='rest_framework'),

@@ -23,6 +23,16 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+
 class PostsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Post

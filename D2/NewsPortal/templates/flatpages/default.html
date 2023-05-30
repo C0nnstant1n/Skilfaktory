@@ -72,7 +72,7 @@
                                 </option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value= {% trans "set" %}>
+                        <input type="submit" value={% trans "set" %}>
                     </form>
                     <a class="link-secondary" href=# >{{ user }}</a>
                     {% if user.is_authenticated %}
@@ -98,7 +98,6 @@
                     </select>
                     <input type="submit" value="Set">
                 </form>
-                    {{ current_time.hour }}
                 {{ TIME_ZONE }}
                 {{ current_time }} <!-- Отображаем время в выбранном часовом поясе  -->
 
