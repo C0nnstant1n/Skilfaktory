@@ -7,6 +7,7 @@ from .filter import AdvertFilter
 from django.http import HttpResponse
 
 
+
 def index(request):
     return render(request, 'board/index.html')
 

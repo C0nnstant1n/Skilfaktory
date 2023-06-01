@@ -10,8 +10,8 @@
         {% endautoescape %}
         <hr>
         {% if user.username == advert.author.user.username %}
-            <a href="{{ advert.id }}/edit">{% trans "Edit" %}</a>
-            <a href="{{ advert.id }}/delete">{% trans "Delete" %}</a>
+            <a class="button" href="{{ advert.id }}/edit">{% trans "редактировать" %}</a>
+            <a href="{{ advert.id }}/delete">{% trans "удалить" %}</a>
         {% endif %}
-
+    <div class="b-example-divider"></div>
 {% endblock %}

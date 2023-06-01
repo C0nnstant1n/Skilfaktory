@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+  <head>
+    <meta charset="utf-8">
+    <title>{% trans "Вход" %}</title>
+    <link href={% static "/assets/css/bootstrap.min.css" %} rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href={% static "css/sign-in.css" %} rel="stylesheet">
+  </head>
+  <body class="text-center">
+
+    <main class="form-signin w-100 m-auto">
+
+      <form method="post" action="{% url 'account_login' %}">
+        {% csrf_token %}
+
+          {% if form.errors %}
+            <p>{% trans "Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру." %}</p>
+          {% endif %}
+        <img class="mb-4" src={% static "assets/logo/png-clipart-portal-3-round-blue-and-grey-decor.png" %} alt="" width="128" height="128">
+        <h1 class="h5 mb-3 fw-normal">{% trans "Войдите или зарегистрируйтесь" %}</h1>
+
+        <div class="form-floating">
+          <input type="text" name="username" class="form-control" id="id_username" placeholder="name@example.com">
+          <label for="id_username">{% trans "Ваш email" %}</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" name="password" class="form-control" id="id_password" placeholder="Password">
+          <label for="id_username">{% trans "Пароль" %}</label>
+        </div>
+
+          <button class="w-100 btn btn-lg btn-primary" type="submit" value="login">{% trans "Войти" %}</button>
+
+      </form>
+
+      <li class="btn btn-sm btn-outline-secondary"><a class="nav-link" href="{{ signup_url }}">{% trans "Зарегистрироваться" %}</a></li>
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+        Есть
+      <div class="socialaccount_ballot">
+        <ul class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </ul>
+      </div>
+      {% include "socialaccount/snippets/login_extra.html" %}
+      {% else %}
+        нет
+      <p>{% blocktrans %}If you have not created an account yet, then please
+      <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+    {% endif %}
+      <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+    </main>
+  </body>
+</html>

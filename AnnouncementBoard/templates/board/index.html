@@ -1,38 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load i18n %}
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Bare - Start Bootstrap Template</title>
+        {% block toptitle %}
+        <title>{% trans "Доска объявлений" %}</title>
+        {% endblock %}
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href={% static "assets/favicon.ico" %} />
+        <link rel="icon" type="image/x-icon" href={% static "assets/free-icon-quest-7139508.png" %} />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href={% static "css/styles.css" %} rel="stylesheet" />
+
+        <style>
+              .b-example-divider {
+        height: 2rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+        </style>
+
     </head>
     <body>
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <a class="navbar-brand" href="/">{% trans "Рога и копыта" %}</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/adverts">{% trans "объявления" %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/adverts">{{ user.username }}</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="btn btn-sm btn-outline-secondary"><a class="nav-link" href="/accounts/logout">{% trans "выйти" %}</a></li>
+                        {% else %}
+                        <li class="btn btn-sm btn-outline-secondary"><a class="nav-link" href="/accounts/login">{% trans "войти" %}</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="b-example-divider"></div>
         <!-- Page content-->
             {% block body %}
+            <div class="text-center mt-5">
+                <h3>{% trans "Добро пожаловать на наш сайт посвященный MMMORPG - Рога и копыта" %}</h3>
+            </div>
             {% endblock %}
+
+        {% block footer-end %}
         <div class="container">
             <div class="text-center mt-5">
-                <h3>Доска объявлений</h3>
+                <h3>@ 2023</h3>
             </div>
         </div>
+        {% endblock %}
     </body>
 </html>
