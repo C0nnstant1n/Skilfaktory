@@ -1,17 +1,18 @@
 {% extends "board/index.html" %}
 {% load i18n %}
-
+{% block buttons %}
+{% endblock buttons %}
 {% block body %}
     <h2>{{ advert.title }}</h2>
-        {{ form.media }}
+
         <p>{{ advert.post_date }} {% trans "Author:" %} <a href="#">{{advert.author}}</a></p>
         {% autoescape off %}
-        <p> {{ advert.text }} </p>
+        <p> {{ advert.content }} </p>
         {% endautoescape %}
         <hr>
-        {% if user.username == advert.author.user.username %}
+        {% if user.username == advert.author.username %}
             <a class="button" href="{{ advert.id }}/edit">{% trans "редактировать" %}</a>
             <a href="{{ advert.id }}/delete">{% trans "удалить" %}</a>
         {% endif %}
     <div class="b-example-divider"></div>
-{% endblock %}
+{% endblock body %}
