@@ -1,11 +1,15 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Category, Advert
-from django.utils import timezone
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+from .models import Advert, File
 from django.views.decorators.csrf import csrf_protect
-from .filter import AdvertFilter
 from django.http import HttpResponse
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AdvertForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -18,8 +22,6 @@ def index(request):
 class AdvertList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Advert
-    # Поле, которое будет использоваться для сортировки объектов
-    ordering = '-date'
     # Указываем имя шаблона, в котором будут все инструкции о том,
     # как именно пользователю должны быть показаны наши объекты
     template_name = 'board/adverts.html'
@@ -32,16 +34,15 @@ class AdvertList(ListView):
         super().__init__()
         self.filterset = None
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        self.filterset = AdvertFilter(self.request.GET, queryset)
-        return self.filterset.qs
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     # self.filterset = AdvertFilter(self.request.GET, queryset)
+    #     return self.filterset.qs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['current_time'] = timezone.localtime()
-        context['filterset'] = self.filterset
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context['filterset'] = self.filterset
+    #     return context
 
 
 class AdvertDetail(DetailView):
