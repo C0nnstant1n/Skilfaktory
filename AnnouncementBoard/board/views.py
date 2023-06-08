@@ -6,13 +6,15 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Advert, File
+from .models import Advert, Reply
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AdvertForm
+from .forms import AdvertForm, ReplyForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from .filters import ReplyFilter
+from django.db.models import Count, Exists
 
 
 def index(request):
@@ -30,26 +32,11 @@ class AdvertList(ListView):
     context_object_name = 'adverts'
     paginate_by = 5
 
-    def __init__(self):
-        super().__init__()
-        self.filterset = None
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     # self.filterset = AdvertFilter(self.request.GET, queryset)
-    #     return self.filterset.qs
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context['filterset'] = self.filterset
-    #     return context
-
 
 class AdvertDetail(DetailView):
     model = Advert
     template_name = 'board/advert.html'
     context_object_name = 'advert'
-    # queryset = Advert.objects.all()
 
     def get_context_data(self, date='-time', **kwargs):
         context = super().get_context_data(**kwargs)
@@ -67,14 +54,13 @@ class CreateAdvert(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         single_post = form.save(commit=False)
-        author = User.objects.get(username=self.request.user.username)  # сохраняем пользователя как Автора
+        author = User.objects.get(username=self.request.user)  # сохраняем пользователя как Автора
         single_post.author = author
         # Добавляем автора к создаваемому посту
         return super().form_valid(form)
 
 
 class EditAdvert(LoginRequiredMixin, UpdateView):
-    raise_exception = True
     form_class = AdvertForm
     model = Advert
     template_name = 'board/edit.html'
@@ -84,3 +70,39 @@ class DeleteAdvert(LoginRequiredMixin, DeleteView):
     model = Advert
     template_name = 'board/delete.html'
     success_url = reverse_lazy('adverts')
+
+
+class ReplyAdvert(LoginRequiredMixin, CreateView):
+    model = Reply
+    form_class = ReplyForm
+    template_name = 'board/reply.html'
+
+    def form_valid(self, form):
+        # Добавляем автора к создаваемому отклику
+        form.instance.author = self.request.user  # сохраняем пользователя как Автора
+        # Определяем для какой статьи пишется комментарий
+        form.instance.advert = Advert.objects.get(id=int(self.kwargs['pk']))
+        return super().form_valid(form)
+
+
+class RepliesList(LoginRequiredMixin, ListView):
+    model = Reply
+    template_name = 'board/replies.html'
+    context_object_name = 'replies'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        reply = Reply.objects.filter(advert__author=self.request.user)
+        context['object_list'] = reply
+        context['replies'] = reply
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = ReplyFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+
+class Search(RepliesList):
+    template_name = 'search.html'

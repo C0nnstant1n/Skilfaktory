@@ -1,0 +1,39 @@
+{% extends "board/index.html" %}
+{% load i18n %}
+
+{% block search %}
+   {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       <p>Filtr</p>
+       {{ adverts }}
+       {{ filterset.form }}
+       {{ filterset.form.as_p }}
+       <p>End Filter</p>
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value={% trans "Filter" %} />
+
+   </form>
+<hr>
+{% endblock search %}
+
+{% block body %}
+    {% if replies %}
+    <!--выводим список объявлений-->
+        {% for reply in replies %}
+        <a href="{{reply.id}}"> <i>{{ reply.text }}</i></a>
+        <p>{{ reply.author }}</p>
+        <div class="b-example-divider"></div>
+        {% endfor %}
+    {% else %}
+        <h2>{% trans "Нет откликов" %}</h2>
+    {% endif %}
+{% endblock %}
+
+{% block footer-end %}
+<div class="container">
+    <div class="text-center mt-5">
+        <h3>Доска объявлений</h3>
+    </div>
+</div>
+{% endblock %}

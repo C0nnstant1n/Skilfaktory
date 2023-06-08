@@ -1,6 +1,12 @@
+from django_summernote.admin import SummernoteModelAdmin
 from django.contrib import admin
-from .models import Advert, Reply, File
+from .models import Advert, Reply
+
+
+class AdvertAdmin(SummernoteModelAdmin):
+    summernote_fields = ('content',)
+
 
 admin.site.register(Reply)
-admin.site.register(Advert)
-admin.site.register(File)
+admin.site.register(Advert, AdvertAdmin)
+

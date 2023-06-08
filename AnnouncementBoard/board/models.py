@@ -18,7 +18,7 @@ class Advert(models.Model):
     )
     title = models.CharField(max_length=64)
     content = models.TextField()
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=16, choices=TYPE, default='dd')
 
     def __str__(self):
@@ -26,11 +26,6 @@ class Advert(models.Model):
 
     def get_absolute_url(self):
         return reverse('advert', args=[str(self.pk)])
-
-
-class File(models.Model):
-    upload = models.FileField(upload_to='uploads/')
-    advert = models.OneToOneField(Advert, on_delete=models.CASCADE)
 
 
 class Reply(models.Model):

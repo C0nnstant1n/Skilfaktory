@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
-    'tinymce'
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
@@ -121,10 +121,12 @@ SITE_ID = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, '')
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static"
+    "static",
 ]
+
 MEDIA_ROOT = 'media/'
 MEDIA_URL = '/django-media/'
 
