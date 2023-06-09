@@ -7,14 +7,12 @@ from django.views.generic import (
     DeleteView
 )
 from .models import Advert, Reply
-from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AdvertForm, ReplyForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from .filters import ReplyFilter
-from django.db.models import Count, Exists
 
 
 def index(request):
@@ -42,7 +40,7 @@ class AdvertDetail(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
-    def get_content(self,  **kwargs):
+    def get_content(self):
         return HttpResponse(self.model.content)
 
 
@@ -93,16 +91,12 @@ class RepliesList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        reply = Reply.objects.filter(advert__author=self.request.user)
-        context['object_list'] = reply
-        context['replies'] = reply
+        context['filter'] = self.filterset
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        # так как мы должны получать отклики только на свои объявления
+        # переопределим queryset
+        queryset = Reply.objects.filter(advert__author=self.request.user)
         self.filterset = ReplyFilter(self.request.GET, queryset)
         return self.filterset.qs
-
-
-class Search(RepliesList):
-    template_name = 'search.html'

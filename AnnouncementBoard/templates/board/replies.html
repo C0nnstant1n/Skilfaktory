@@ -2,14 +2,11 @@
 {% load i18n %}
 
 {% block search %}
+<h4> Отклики на объявления {{ user }} </h4>
    {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
    <form action="" method="get">
        {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
-       <p>Filtr</p>
-       {{ adverts }}
-       {{ filterset.form }}
-       {{ filterset.form.as_p }}
-       <p>End Filter</p>
+       {{ filter.form.as_p }}
        {# Добавим кнопку отправки данных формы #}
        <input type="submit" value={% trans "Filter" %} />
 
@@ -21,8 +18,8 @@
     {% if replies %}
     <!--выводим список объявлений-->
         {% for reply in replies %}
-        <a href="{{reply.id}}"> <i>{{ reply.text }}</i></a>
         <p>{{ reply.author }}</p>
+        <a href="{{reply.id}}"> <i>{{ reply.text }}</i></a>
         <div class="b-example-divider"></div>
         {% endfor %}
     {% else %}

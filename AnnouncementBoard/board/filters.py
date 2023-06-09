@@ -1,11 +1,21 @@
-from django_filters import FilterSet, ModelChoiceFilter, CharFilter, DateFilter
-from .models import Advert, Reply
-from django.forms.widgets import DateInput
+from .models import Reply
+from django.db import models
+from django.forms.widgets import CheckboxInput
+import  django_filters
 
 
-# фильтры по названию(заголовку), категории, дате
+class ReplyFilter(django_filters.FilterSet):
+    advert = Reply.objects.filter(advert__author=1)
 
-class ReplyFilter(FilterSet):
     class Meta:
-        model = Advert
-        fields = ['author']
+        model = Reply
+        fields = ['status', 'advert']
+
+        filter_overrides = {
+            models.BooleanField: {
+                'filter_class': django_filters.BooleanFilter,
+                'extra': lambda f: {
+                    'widget': CheckboxInput,
+                },
+            },
+        }
