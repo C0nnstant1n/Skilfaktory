@@ -1,11 +1,18 @@
-from .models import Reply
+from .models import Reply, Advert
 from django.db import models
 from django.forms.widgets import CheckboxInput
-import  django_filters
+import django_filters
+
+
+def user_adverts(request):
+    advert = Advert.objects.filter(author=request.user)
+    return advert
 
 
 class ReplyFilter(django_filters.FilterSet):
-    advert = Reply.objects.filter(advert__author=1)
+
+    advert = django_filters.ModelChoiceFilter(label='объявления', queryset=user_adverts, empty_label='по всем объявлениям')
+    status = django_filters.BooleanFilter(label='принято?', widget=CheckboxInput)
 
     class Meta:
         model = Reply
@@ -19,3 +26,9 @@ class ReplyFilter(django_filters.FilterSet):
                 },
             },
         }
+
+        @property
+        def qs(self):
+            parent = super(ReplyFilter, self).qs
+            author = getattr(self.request, 'user', None)
+            return parent.filter(advert__author=author)

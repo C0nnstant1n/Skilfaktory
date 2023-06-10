@@ -94,9 +94,10 @@ class RepliesList(LoginRequiredMixin, ListView):
         context['filter'] = self.filterset
         return context
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         # так как мы должны получать отклики только на свои объявления
         # переопределим queryset
         queryset = Reply.objects.filter(advert__author=self.request.user)
-        self.filterset = ReplyFilter(self.request.GET, queryset)
+        # отправляем request для определения текущего пользователя
+        self.filterset = ReplyFilter(self.request.GET, queryset, request=self.request)
         return self.filterset.qs
