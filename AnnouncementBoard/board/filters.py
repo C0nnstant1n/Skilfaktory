@@ -11,24 +11,18 @@ def user_adverts(request):
 
 class ReplyFilter(django_filters.FilterSet):
 
-    advert = django_filters.ModelChoiceFilter(label='объявления', queryset=user_adverts, empty_label='по всем объявлениям')
-    status = django_filters.BooleanFilter(label='принято?', widget=CheckboxInput)
+    advert = django_filters.ModelChoiceFilter(label='объявления', queryset=user_adverts,
+                                              empty_label='по всем объявлениям')
+    status = django_filters.BooleanFilter(label='принято?')
 
     class Meta:
         model = Reply
         fields = ['status', 'advert']
 
-        filter_overrides = {
-            models.BooleanField: {
-                'filter_class': django_filters.BooleanFilter,
-                'extra': lambda f: {
-                    'widget': CheckboxInput,
-                },
-            },
-        }
-
-        @property
-        def qs(self):
-            parent = super(ReplyFilter, self).qs
-            author = getattr(self.request, 'user', None)
-            return parent.filter(advert__author=author)
+    # так как мы должны получать отклики только на свои объявления
+    # переопределим qs
+    @property
+    def qs(self):
+        parent = super().qs
+        author = self.request.user
+        return parent.filter(advert__author=author)

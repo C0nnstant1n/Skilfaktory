@@ -20,9 +20,10 @@ class Advert(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=16, choices=TYPE, default='dd')
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title[:16]}"
+        return f"{self.title[:20]}"
 
     def get_absolute_url(self):
         return reverse('advert', args=[str(self.pk)])

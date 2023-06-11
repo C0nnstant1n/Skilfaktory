@@ -7,7 +7,9 @@ from .views import (
     EditAdvert,
     DeleteAdvert,
     ReplyAdvert,
-    RepliesList
+    RepliesList,
+    DeleteReply,
+    confirm_reply
 )
 
 urlpatterns = [
@@ -18,5 +20,7 @@ urlpatterns = [
     path('adverts/<int:pk>/reply', ReplyAdvert.as_view(), name='reply'),
     path('adverts/<int:pk>/edit', EditAdvert.as_view(), name='edit'),
     path('adverts/<int:pk>/delete', DeleteAdvert.as_view(), name='delete'),
-    path('replies', RepliesList.as_view(), name='replies')
+    path('replies/', RepliesList.as_view(), name='replies'),
+    path('replies/<int:pk>/delete', DeleteReply.as_view(), name='delete'),
+    path('replies/confirm', confirm_reply, name='confirm_reply'),
 ]

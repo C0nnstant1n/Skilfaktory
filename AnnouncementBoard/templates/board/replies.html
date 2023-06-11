@@ -9,7 +9,6 @@
        {{ filter.form.as_p }}
        {# Добавим кнопку отправки данных формы #}
        <input type="submit" value={% trans "Filter" %} />
-
    </form>
 <hr>
 {% endblock search %}
@@ -20,6 +19,18 @@
         {% for reply in replies %}
         <p>{{ reply.author }}</p>
         <a href="{{reply.id}}"> <i>{{ reply.text }}</i></a>
+        <hr>
+        <form action="{% url 'confirm_reply' %}" method="post">
+            {% csrf_token %}
+            {% if not reply.status %}
+            <input type="hidden" name="reply_id" value="{{ reply.id }}" />
+            <button class="btn btn-outline-primary rounded-pill"
+                    onclick="href={% url 'replies' %}"
+                    name="action" value="confirm">{% trans "принять" %}</button>
+            {% endif %}
+            <a class="btn btn-outline-primary rounded-pill" href="{{ reply.id }}/delete">{% trans "удалить" %}</a>
+        </form>
+        <hr>
         <div class="b-example-divider"></div>
         {% endfor %}
     {% else %}

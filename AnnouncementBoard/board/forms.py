@@ -1,6 +1,8 @@
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from django import forms
+from django.shortcuts import redirect
 from .models import Advert, Reply
+
 
 
 class AdvertForm(forms.ModelForm):

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
     'django_summernote',
+    'django_apscheduler'
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ MEDIA_URL = '/django-media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/adverts"
+LOGIN_REDIRECT_URL = "adverts"
 LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
