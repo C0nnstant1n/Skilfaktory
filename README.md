@@ -2,8 +2,13 @@
 
 Branches:
 
-# main Homeworks for verification
+# main - Homeworks for verification
     current project "Announcement Board"
+        Добавление изображений и видео реализовано с помощью  WYSIWYG редактора Summernote - 
+        https://github.com/summernote/django-summernote
+
+        Новостные рассылки реализованы с помощью [Apscheduler](https://pypi.org/project/django-apscheduler/)
+
 
 # NewsPortal (homeworks)
 

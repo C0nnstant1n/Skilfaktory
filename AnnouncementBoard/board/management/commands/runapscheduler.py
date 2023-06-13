@@ -58,7 +58,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(second='0'),
+            trigger=CronTrigger(minute='0'),
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
