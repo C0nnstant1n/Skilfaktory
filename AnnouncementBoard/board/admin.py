@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Advert, Reply
 
 
+# add summernote WYSIWYG editor to admin panel
 class AdvertAdmin(SummernoteModelAdmin):
     summernote_fields = ('content',)
 

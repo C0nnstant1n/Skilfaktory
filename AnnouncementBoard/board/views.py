@@ -16,7 +16,6 @@ from .filters import ReplyFilter
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import redirect
-from django.core.mail import send_mail
 
 
 def index(request):
@@ -82,15 +81,8 @@ class ReplyAdvert(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         # Добавляем автора к создаваемому отклику
         form.instance.author = self.request.user  # сохраняем пользователя как Автора
-        # Определяем для какой статьи пишется комментарий
+        # Определяем для какого объявления пишется отклик
         form.instance.advert = Advert.objects.get(id=int(self.kwargs['pk']))
-        user = form.instance.advert.author
-        send_mail(
-            subject=f'Новый отклик на ваше объявление',
-            message=f'Пользователь {self.request.user} откликнулся на ваше объявление "{form.instance.advert.title}"',
-            from_email=None,  # будет использовано значение DEFAULT_FROM_EMAIL
-            recipient_list=[user.email],
-        )
         return super().form_valid(form)
 
 
@@ -126,18 +118,10 @@ class DeleteReply(LoginRequiredMixin, DeleteView):
 @csrf_protect
 def confirm_reply(request):
     if request.method == 'POST':
-        reply_id = request.POST.get('reply_id')
-        reply = Reply.objects.get(id=reply_id)
+        reply = Reply.objects.get(id=request.POST.get('reply_id'))
         action = request.POST.get('action')
 
         if action == 'confirm':
             reply.status = True
             reply.save()
-            user = reply.author
-            send_mail(
-                subject=f'Новый отклик на ваше объявление',
-                message=f'Пользователь {request.user} принял ваш отклик "{reply.text[:20]}"',
-                from_email=None,  # будет использовано значение DEFAULT_FROM_EMAIL
-                recipient_list=[user.email],
-            )
     return redirect('replies')

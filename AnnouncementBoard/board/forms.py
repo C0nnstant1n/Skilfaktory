@@ -1,11 +1,11 @@
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+from django_summernote.widgets import SummernoteWidget
 from django import forms
-from django.shortcuts import redirect
 from .models import Advert, Reply
 
 
-
 class AdvertForm(forms.ModelForm):
+    # Добавляем виджет от Summernote, в котором можно вставлять рисунки
+    # и добавлять ссылки на видео или файлы
     content = forms.CharField(widget=SummernoteWidget())
 
     class Meta:

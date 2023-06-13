@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 
+# В модели объявлений не используются дополнительные поля для
+# файлов, за это отвечает модуль summernote
 class Advert(models.Model):
     TYPE = (
         ('tank', 'Танки'),

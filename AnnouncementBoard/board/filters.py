@@ -1,6 +1,4 @@
 from .models import Reply, Advert
-from django.db import models
-from django.forms.widgets import CheckboxInput
 import django_filters
 
 
@@ -10,7 +8,7 @@ def user_adverts(request):
 
 
 class ReplyFilter(django_filters.FilterSet):
-
+    # поле поиска в котором отображаются только статьи автора
     advert = django_filters.ModelChoiceFilter(label='объявления', queryset=user_adverts,
                                               empty_label='по всем объявлениям')
     status = django_filters.BooleanFilter(label='принято?')
