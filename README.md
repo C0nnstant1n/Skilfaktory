@@ -1,1 +1,2 @@
-# Skilfaktory
+# My Hobby
+Проект простого сайта на HTML+CSS (домашнее задание)
