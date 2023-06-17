@@ -12,3 +12,6 @@ error.log
 general.log
 security.log
 media/
+_pgbackup
+_pginfo
+pinegrow.json
