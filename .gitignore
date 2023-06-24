@@ -15,3 +15,5 @@ media/
 _pgbackup
 _pginfo
 pinegrow.json
+launch.json
+.vscode/
