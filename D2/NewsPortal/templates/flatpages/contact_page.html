@@ -9,8 +9,8 @@
      {% trans Contacts %}
 {% endblock amount1 %}
 
-{% block time %}
-{% endblock time %}
+{% block top-navigator %}
+{% endblock %}
 
 {% block amount2 %}
 <h1 class="fst-italic h1 me-auto">{% trans "Contacts" %}</h1>
@@ -22,12 +22,14 @@
 {% block content %}
 <div class="p-4 mb-3 bg-light rounded">
     <h3>{{ flatpage.content }}</h3>
-    <li><a href="#">{% trans "Phone" %}</a>
-    </li>
-    <li><a href="#">{% trans "email" noop %}</a>
-    </li>
+    <ul>
+        <li><a href="#">{% trans "Phone" %}</a>
+        </li>
+        <li><a href="#">{% trans "email" noop %}</a>
+        </li>
+    </ul>
 <hr>
-    <h4 class="fst-italic">{% trans "Elseware" %}</h4>
+    <h4 class="fst-italic">{% trans "Elsewhere" %}</h4>
     <ol class="list-unstyled">
         <li><a href="#">{% trans "GitHub" noop %}</a>
         </li>

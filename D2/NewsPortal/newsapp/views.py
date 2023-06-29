@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .filters import PostFilter
 from .forms import NewsForm, ArticleForm, CommentForm
 from django.urls import reverse_lazy
@@ -16,6 +16,10 @@ from rest_framework import viewsets
 from .models import *
 
 logger = logging.getLogger(__name__)
+
+
+class HomeView(TemplateView):
+    template_name = 'news.html'
 
 
 class PostViewSet(viewsets.ModelViewSet):

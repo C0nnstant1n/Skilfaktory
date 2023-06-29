@@ -1,7 +1,7 @@
 <!--bootstrap шаблон-->
 <!doctype html>
 {% load i18n %}
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 {% load static %}
 {% load custom_tags %}
 {% load filters %}
@@ -19,19 +19,17 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.108.0">
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
+<!--    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">-->
 
-    <link href="{% static '/assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet">
     <style>
-        .bd-placeholder-img { font-size: 1.125rem; text-anchor: middle; -webkit-user-select: none; -moz-user-select: none; user-select: none; } @media (min-width: 768px) { .bd-placeholder-img-lg {  font-size: 3.5rem; } } .b-example-divider { height: 3rem; background-color: rgba(0, 0, 0, .1); border: solid rgba(0, 0, 0, .15); border-width: 1px 0; box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15); } .b-example-vr { flex-shrink: 0; width: 1.5rem; height: 100vh; } .bi { vertical-align: -.125em; fill: currentColor; } .nav-scroller { position: relative; z-index: 2; height: 2.75rem; overflow-y: hidden; } .nav-scroller .nav { display: flex; flex-wrap: nowrap; padding-bottom: 1rem; margin-top: -1px; overflow-x: auto; text-align: center; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-
         body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} #E0E0E0 {% else %} white {% endif %};}
     </style>
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap"
           rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{% static 'blog.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/blog.css' %}" rel="stylesheet">
     {% endcache head %}
 </head>
 
@@ -43,7 +41,6 @@
                 <div class="col-4 pt-1">
                     <a class="link-secondary" href="/subscriptions">{% trans "Subscribe" %}</a>
                 </div>
-
                 <div class="col-4 text-center">
                     <a class="blog-header-logo text-dark" href="/news">{% trans "News Portal" %}</a>
                 </div>
@@ -57,10 +54,24 @@
                             <path d="M21 21l-5.2-5.2"/>
                         </svg> </a>
     {% endcache header %}
+
+                    {% if user.is_authenticated %}
+                    <a class="link-secondary" href=# >{{ user }}</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="/accounts/logout">{% trans "Logout" %}</a>
+                    {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="/accounts/login">{% trans "Login" %}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex justify-content-between">
+                    {% block top-navigator %}
                     <form action="{% url 'set_language' %}" method="POST"> {% csrf_token %} <!-- Не забываем по csrf_token для POST запросов -->
                         <input type="hidden" name="next" value="/clear{{ redirect_to }}">
 
-                            {% get_current_language as LANGUAGE_CODE %}
+                        {% get_current_language as LANGUAGE_CODE %}
 
                         <select name="language" id="">
                             {% get_available_languages as LANGUAGES %} <!-- получаем языки -->
@@ -68,39 +79,25 @@
 
                             {% for language in languages %} <!-- Итерируясь по списку, выводим их название на языке пользователя и код -->
                                 <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
-                                    {{ language.name_local }} - {{ language.code }}
+                                    {{ language.name_local }}
                                 </option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value={% trans "set" %}>
+                        <input type="submit" value="{% trans 'set' %}">
                     </form>
-                    <a class="link-secondary" href=# >{{ user }}</a>
-                    {% if user.is_authenticated %}
-                        <a class="btn btn-sm btn-outline-secondary" href="/accounts/logout">{% trans "Logout" %}</a>
-                    {% else %}
-                        <a class="btn btn-sm btn-outline-secondary" href="/accounts/login">{% trans "Login" %}</a>
-                    {% endif %}
-                </div>
-            </div>
-        </header>
-            {% block time %}
-            <div class="nav-scroller py-1 mb-2">
-                <nav class="nav d-flex justify-content-between">
 
                     {% get_current_timezone as TIME_ZONE %}
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <label for="timezone">Time zone:</label>
-                    <select name="timezone">
-                        {% for tz in timezones %}
-                        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected {% endif %}>{{ tz }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="submit" value="Set">
-                </form>
-                {{ TIME_ZONE }}
-                {{ current_time }} <!-- Отображаем время в выбранном часовом поясе  -->
-
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <select width="170" name="timezone">
+                            {% for tz in timezones %}
+                            <option value= "{{ tz }}" {% if tz == TIME_ZONE %} selected {% endif %}>{{ tz }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="{% trans 'Set' %}">
+                    </form>
+                    {{ current_time }} <!-- Отображаем время в выбранном часовом поясе  -->
+                    {% endblock top-navigator %}
 <!--                    <a class="p-2 link-secondary" href="#">Спорт</a>-->
 <!--                    <a class="p-2 link-secondary" href="#">U.S.</a>-->
 <!--                    <a class="p-2 link-secondary" href="#">Technology</a>-->
@@ -116,7 +113,6 @@
 
                 </nav>
             </div>
-            {% endblock time %}
     </div>
 
     <main class="container">
@@ -140,32 +136,28 @@
                     <div class="col p-4 d-flex flex-column position-static">
                         <strong class="d-inline-block mb-2 text-primary">{% trans "Best Post" %}</strong>
                         {% best_post as best_p %}
-                            <h4 class="mb-0">{{ best_p.title |censor }}</h4>
+                            <h5 class="mb-0">{{ best_p.title |censor }}</h5>
                             <div class="mb-1 text-muted">{{ best_p.post_date }}</div>
                             <p class="card-text mb-auto">{{ best_p.preview |censor }}</p>
                             <a href="{{best_p.id}}" class="stretched-link">{% trans "Continue reading" %}</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <IMG src= "{% static 'assets/logo/loginlogo.png' %}" width="200">
+                        <IMG class="bd-placeholder-img" src= "https://icdn.lenta.ru/images/2023/03/07/15/20230307150402543/wide_4_3_5fa60f562e5750f4dc97d650c3af2633.jpeg">
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <strong class="d-inline-block mb-2 text-success">{% trans "Most commited" %}</strong>
+                        <strong class="d-inline-block mb-2 text-success">{% trans "Most committed" %}</strong>
                         {% most_commented as mc %}
-                        <h4 class="mb-0">{{ mc.title |censor }}</h4>
+                        <h5 class="mb-0">{{ mc.title |censor }}</h5>
                         <div class="mb-1 text-muted">{{ mc.post_date }}</div>
                         <p class="mb-auto">{{ mc.preview |censor }}</p>
                         <a href="{{mc.id}}" class="stretched-link">{% trans "Continue reading" %}</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                        </svg>
+                        <IMG class="bd-placeholder-img" src= "{% static 'assets/logo/loginlogo.png' %}">
                     </div>
                 </div>
             </div>
@@ -173,7 +165,7 @@
         {% endblock %}
 
         <div class="row g-5">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <article class="blog-post">
                     {% block content %} {% endblock content %}
                 </article>
@@ -183,7 +175,7 @@
                 {% if page_obj.paginator.num_pages > 1 %}
                     {# Информация о предыдущих страницах #}
                     {% if page_obj.has_previous %}
-                        <a class="btn btn-outline-primary rounded-pill" href="?{% url_replace page=1 %}">1</a>
+                        <a class="btn btn-outline-secondary rounded-pill" href="?{% url_replace page=1 %}">1</a>
                             {% if page_obj.previous_page_number != 1 %}
                                 <a class="btn btn-outline-secondary rounded-pill"
                                    href="?{% url_replace page=page_obj.previous_page_number %}">
@@ -200,7 +192,7 @@
                            href="?{% url_replace page=page_obj.next_page_number %}">
                             {{ page_obj.next_page_number }}</a>
                             {% if paginator.num_pages != page_obj.next_page_number %}
-                                <a class="btn btn-outline-primary rounded-pill"
+                                <a class="btn btn-outline-secondary rounded-pill"
                                    href="?{% url_replace page=page_obj.paginator.num_pages %}">
                                     {{ page_obj.paginator.num_pages }}</a>
                             {% endif %}
@@ -208,7 +200,7 @@
                 {% endif %}
                 </nav>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="p-4 mb-3 bg-light rounded">
                         {# проверяем права на создание постов #}
@@ -220,9 +212,11 @@
                         {% endif %}
                         {% cache 300 archive %}
 
-                        <h4 class="fst-italic">{% trans "Arhive" %}</h4>
-                        <li><a class="mb-0" href="">_</a></li>
-                        <li><a class="mb-0" href="">_</a></li>
+                        <h4 class="fst-italic">{% trans "Archive" %}</h4>
+                        <ul class="list-unstyled mb-0">
+                            <li><a class="mb-0" href="">_</a></li>
+                            <li><a class="mb-0" href="">_</a></li>
+                        </ul>
                     </div>
                     <div class="p-4">
                         <h4 class="fst-italic"></h4>
@@ -238,8 +232,10 @@
     </main>
     {% cache 300 footer %}
     <footer class="blog-footer">
-        <p>{% trans "Blog template built for" %} <a href="https://getbootstrap.com/">Bootstrap</a> {% trans "by" %} <a href="https://twitter.com/mdo">@mdo</a>.</p>
-        <p> <a href="#">{% trans "Back to top" %}</a> </p>
+        <nav>
+            <a href="{% url 'posts' %}" class="text-center link-secondary text-decoration-none">{% trans "News Portal" %}</a>
+            <a href="#" class="text-center link-secondary text-decoration-none">&copy; 2023</a>
+        </nav>
     </footer>
     {% endcache footer %}
 </body>

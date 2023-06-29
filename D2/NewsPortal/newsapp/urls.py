@@ -12,7 +12,7 @@ urlpatterns = [
    # а Django ожидает функцию, нам надо представить этот класс в виде view.
    # Для этого вызываем метод as_view.
    # path('', home),
-
+   path('', HomeView.as_view(), name='home'),
    path('news/', PostsList.as_view(), name='posts'),
    path('news/<int:pk>', PostDetail.as_view(), name='post'),
    path('news/<int:pk>/comment/', CommentCreate.as_view(), name='create_comment'),

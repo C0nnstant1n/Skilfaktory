@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+{% load i18n static %}
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet">
+        <!-- Custom styles for this template -->
+    <link href="{% static 'assets/css/sign-in.css' %}" rel="stylesheet">
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body class="text-center">
+      <main class="form-signin w-100 m-auto">
+        <img class="mb-4" src="{% static 'assets/logo/newspaper-clipart.png' %}"
+             alt="News" width="200" height="200">
+        {% block body %}
+
+        {% if messages %}
+        <div>
+          <strong>{% trans "Messages:" %}</strong>
+          <ul class="list-unstyled mb-0">
+            {% for message in messages %}
+            <li >{{message}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% endblock body %}
+
+        {% block content %}
+        {% endblock content %}
+
+        {% block extra_body %}
+        {% endblock %}
+      </main>
+      <footer class="modal-footer">
+        <br>
+        <br>
+        <a href="{% url 'posts' %}" class="text-center link-secondary">{% trans "News Portal" %}</a>
+        <h6>&copy; 2023</h6>
+      </footer>
+  </body>
+</html>

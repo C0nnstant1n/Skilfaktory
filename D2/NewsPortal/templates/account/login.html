@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+{% load static i18n account socialaccount %}
+  <head>
+    <meta charset="utf-8">
+    <title>{% trans "Вход" %}</title>
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'assets/css/sign-in.css' %}" rel="stylesheet">
+  </head>
+  <body class="text-center">
+  {% get_providers as socialaccount_providers %}
+    <main class="form-signin w-100 m-auto">
+
+      <img class="mb-4" src="{% static 'assets/logo/newspaper-clipart.png' %}" alt="News" width="200" height="200">
+      <h1 class="h5 mb-3 fw-normal">{% trans "Войдите" %}</h1>
+
+      <form method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {% if form.errors %}
+          <p>{% trans "Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру." %}</p>
+          <a class="link-primary text-decoration-none" href="{% url 'account_reset_password' %}">{% trans "Забыли пароль?" %}</a>
+        {% endif %}
+
+        <div class="form-floating">
+          <input class="form-control" type="email" name="login" id="id_username"
+                 placeholder="name@example.com">
+          <label for="id_username">{% trans "Ваш email" %}</label>
+        </div>
+
+        <div class="form-floating">
+          <input class="form-control" type="password" name="password" id="id_password"
+                 placeholder="Password">
+          <label for="id_username">{% trans "Пароль" %}</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit" value="login">{% trans "Войти" %}</button>
+      </form>
+
+      <br>
+      <a class="link-primary text-decoration-none" href="{{ signup_url }}">{% trans "или зарегистрируйтесь" %}</a>
+
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+        <div>
+          <hr>
+          <h6 style="font-size: 85%"> войти с помощью </h6>
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+            <li>
+              <a href="{% provider_login_url 'yandex' %}" class="d-block link-dark text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://avatars.mds.yandex.net/get-lpc/1364677/210f6a87-c8ab-4709-b0ad-1346e30eac9a/orig" alt="{% trans 'Yandex' %}" width="32" height="32" class="rounded-circle">
+              </a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+    </main>
+      <footer class="modal-footer">
+        <br>
+        <br>
+        <a href="{% url 'posts' %}" class="text-center link-secondary">{% trans "News Portal" %}</a>
+        <h6>&copy; 2023</h6>
+      </footer>
+  </body>
+</html>

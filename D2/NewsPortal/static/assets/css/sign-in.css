@@ -9,6 +9,7 @@ body {
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #f5f5f5;
+  flex-direction: column;
 }
 
 .form-signin {
@@ -30,4 +31,8 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+p {
+  text-align: justify;
 }

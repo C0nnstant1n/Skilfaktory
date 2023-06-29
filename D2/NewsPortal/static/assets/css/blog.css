@@ -1,5 +1,11 @@
 /* stylelint-disable selector-list-comma-newline-after */
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 .blog-header {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -24,6 +30,13 @@ h1, h2, h3, h4, h5, h6 {
   .display-4 {
     font-size: 3rem;
   }
+}
+
+.bd-placeholder-img {
+    margin: 0;
+    height: 260px;
+    object-fit: cover;
+    width: 200px;
 }
 
 .flex-auto {
@@ -58,7 +71,9 @@ h1, h2, h3, h4, h5, h6 {
  * Footer
  */
 .blog-footer {
-  padding: 2.5rem 0;
+  height: 100px;
+  margin-top: auto;
+  padding-top: 1rem;
   color: #727272;
   text-align: center;
   background-color: #f9f9f9;

@@ -19,9 +19,11 @@
     {% block content %}
         {% block search %}{% endblock search %}
         {% for post in posts %}
-        <a href="{{post.id}}" class="blog-post-title"><i>{{ post.title |censor }}</i></a>
-        <p class="blog-post-meta">{{ post.post_date }}</p>
-        <p> {{ post.preview |censor }} </p>
+        <div class="bg-light rounded">
+            <a href="{{post.id}}" class="blog-post-title"><i>{{ post.title |censor }}</i></a>
+            <p class="blog-post-meta">{{ post.post_date }}</p>
+            <p> {{ post.preview |censor }} </p>
+        </div>
         {% endfor %}
 
         {% endblock content %}
