@@ -29,7 +29,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1']
 ADMINS = [('Konstantin', 'admin@123.ru')]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -152,7 +151,6 @@ STATICFILES_DIRS = [
     "static",
 ]
 
-
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
@@ -160,7 +158,6 @@ SESSION_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 LOGIN_REDIRECT_URL = "/news"
 LOGOUT_REDIRECT_URL = "/news"
@@ -190,9 +187,9 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 REST_FRAMEWORK = {
-   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-   'PAGE_SIZE': 5
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
 }
 
 # cache by files
@@ -351,9 +348,9 @@ LOGGING = {
             # 'level': 'INFO',
             'propagate': True,
         },
-            'newsapp': {
-                'handlers': ['newsapp'],
-                 'level': 'INFO',
-            },
+        'newsapp': {
+            'handlers': ['newsapp'],
+            'level': 'INFO',
+        },
     }
 }

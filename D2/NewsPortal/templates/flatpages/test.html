@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link href="{% static '/assets/css/style.css' %}" rel="stylesheet">
+    <title>Title</title>
+
+</head>
+<body>
+    <h1>XMLHttpRequest_2</h1>
+
+    <p>
+      <div>Механизм работы приложения</div>
+      <ol>
+        <li>Создаем функцию <em>useRequest</em>, которая будет осуществлять запрос</li>
+        <li>Создаем функцию <em>displayResult</em> для сборки карточек и вставки на страницу</li>
+        <li>Ищем элементы кнопки и блока с результатом</li>
+        <li>Вешаем обработчик <em>click</em> на кнопку, который делает запрос с помощью функции <em>useRequest</em>, результат запроса выводит на страницу с помощью функции <em>displayResult</em></li>
+      </ol>
+    </p>
+
+    <button class="btn j-btn-request">Запрашиваем данные</button>
+
+    <div class="result j-result">Здесь будет результат запроса</div>
+    <script src="{% static 'scripts/btn.js' %}"> </script>
+</body>
+</html>
