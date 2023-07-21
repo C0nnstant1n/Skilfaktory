@@ -1,4 +1,6 @@
 from django.urls import path
-from .views import LkView, HomeView
+from .views import index, LkView
 
-path('lk/', HomeView.as_view(), name='lk'),
+urlpatterns = [
+    path('lk/<int:pk>', LkView.as_view(), name='lk')
+]

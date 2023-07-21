@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class LkUser(models.Model):
     nick_name = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to="uploads/")
+    avatar = models.ImageField(upload_to="uploads/", default='uploads/default_avatar.png')
 
     def __str__(self):
         return f"{self.nick_name}"
