@@ -1,0 +1,19 @@
+{% extends 'lk/lk.html' %}
+
+{% block msg %}
+<h3>Редактирование</h3>
+{% endblock msg %}
+
+{% block avatar %}
+{% endblock avatar %}
+
+{% block name %}
+{% endblock name %}
+
+{% block edit%}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Сохранить</button>
+</form>
+{% endblock edit%}
