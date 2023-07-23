@@ -4,33 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="{% static 'style/lk/style.css' %}" />
-    <title>{% block title %} Личный кабинет {% endblock titile %}</title>
+    <title>{% block title %} Личный кабинет {% endblock title %}</title>
   </head>
   <body>
     <div class="wrapper">
       <header class="header"></header>
       <main class="main">
-        <h1>Личный кабинет</h1>
-        <div class="container">
-          <div class="avatar">
-            {% block avatar %}
-            <img src="{{ lk.avatar.url}}" alt="avatar" />
-            {% endblock avatar %}
-          </div>
-          <div class="content">
-            <div class="caption">
-              <h4>Ваш Никнейм:</h4>
-            </div>
-            <div class="value">
-              {% block name %}
-              <h4>{{ lk.nick_name }}</h4>
-              {% endblock name %}
-            </div>
-          </div>
-        </div>
-        <div class="buttons">
-          <button>Редактировать</button>
-        </div>
+        {% block content %}
+        {% endblock content%}
       </main>
       <footer class="footer"></footer>
     </div>

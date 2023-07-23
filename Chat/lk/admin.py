@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import LkUser
+from .models import UserAvatar
 
-admin.site.register(LkUser)
+admin.site.register(UserAvatar)
+

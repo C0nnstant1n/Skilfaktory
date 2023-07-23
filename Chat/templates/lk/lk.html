@@ -16,16 +16,22 @@
         <div class="container">
           <div class="avatar">
             {% block avatar %}
-            <img src="{{ lk.avatar.url}}" alt="avatar" />
+            <img src="{{ avatar.url }}" alt="avatar" />
             {% endblock avatar %}
           </div>
           <div class="content">
             <div class="caption">
-              <h4>Ваш Никнейм:</h4>
+              <h4>Никнейм:</h4>
+              <h4>Имя:</h4>
+              <h4>Фамилия:</h4>
+              <h4>Email:</h4>
             </div>
             <div class="value">
               {% block name %}
-              <h4>{{ lk.nick_name }}</h4>
+              <h4>{{ user.username }}</h4>
+              <h4>{{ user.first_name }}</h4>
+              <h4>{{ user.last_name }}</h4>
+              <h4>{{ user.email }}</h4>
               {% endblock name %}
             </div>
           </div>
