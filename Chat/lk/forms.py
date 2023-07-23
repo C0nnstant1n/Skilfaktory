@@ -23,6 +23,7 @@ class SignUpForm(UserCreationForm):
 class EditForm(UserChangeForm):
 
     class Meta:
+        model = User
         fields = {
             "username",
             "first_name",

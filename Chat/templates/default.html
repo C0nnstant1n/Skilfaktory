@@ -4,15 +4,26 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="{% static 'style/lk/style.css' %}" />
-    <title>{% block title %} Личный кабинет {% endblock title %}</title>
+    <title>{% block title %} Чат {% endblock title %}</title>
   </head>
   <body>
     <div class="wrapper">
-      <header class="header"></header>
-      <main class="main">
-        {% block content %}
-        {% endblock content%}
-      </main>
+      <header class="header">
+        <nav>
+          <ul class="topmenu">
+            <li><a href="/">Домой</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="lk/{{ user.id }}">{{ user }}</a></li>
+            <li><a href="accounts/logout">Выход</a></li>
+            {% else %}
+            <li><a href="signup">Зарегистрироваться</a></li>
+            <li><a href="accounts/login">Вход</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+      <main class="main">{% block content %} {% endblock content%}</main>
       <footer class="footer"></footer>
     </div>
   </body>
