@@ -30,8 +30,6 @@ class IndexView(TemplateView):
         if self.request.user.is_authenticated:
             if RoomMembers.objects.filter(user=self.request.user):
                 context['rooms'] = RoomMembers.objects.filter(user=self.request.user)
-                context['avatars'] = self.request.user.useravatar.avatar
-
         return context
 
 
