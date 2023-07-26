@@ -1,15 +1,5 @@
-from .models import Message, Room, User
+from .models import Message, Room, User, RoomMembers
 from rest_framework import serializers
-
-
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['username']
-
-    def create(self):
-        pass
 
 
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,10 +10,19 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'text', 'to', 'author']
 
 
-
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
-    author = UserSerializer()
+    author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    members = serializers.SlugRelatedField(read_only=True, many=True, slug_field='username')
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'members', 'author']
+        fields = ['id', 'author', 'name', 'members']
+
+
+class RoomMembersSerializer(serializers.HyperlinkedModelSerializer):
+    room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='name')
+    user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
+    class Meta:
+        model = RoomMembers
+        fields = ['room', 'user']

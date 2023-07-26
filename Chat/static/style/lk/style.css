@@ -38,7 +38,7 @@ body {
 }
 
 .header {
-  min-height: 50px;
+  min-height: 5lvh;
   background-color: darkkhaki;
 }
 
@@ -50,6 +50,90 @@ body {
 .main h1 {
   padding-top: 1rem;
   padding-left: 15%;
+}
+
+.avatar img{
+  border-radius: 250px;
+}
+
+.MainWrapper {
+  border-radius: 10px;
+  height: 83lvh;
+  margin: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+  background-color: burlywood;
+}
+
+.leftColumn {
+  padding-top: 1rem;
+  margin: 1rem;
+  border-radius: 10px;
+  background-color: bisque;
+  width: 20%;
+  text-align: center;
+}
+
+.leftColumn ul {
+  padding-top: 1rem;
+}
+
+.leftColumn li {
+  width: 150px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.leftColumn li:hover {
+  border-radius: 10px;
+  background-color: aqua;
+}
+
+.MiddleColumn {
+  padding-top: 1rem;
+  border-radius: 10px;
+  background-color: bisque;
+  margin: 1rem 0;
+  width: 50%;
+  text-align: center;
+}
+
+.RightColumn {
+  margin: 1rem;
+  padding-top: 1rem;
+  border-radius: 10px;
+  background-color: bisque;
+  margin: 1rem;
+  width: 20%;
+  text-align: center;
+}
+
+.RightColumn ul {
+  padding-top: 1rem;
+}
+
+.RightColumn img {
+  border-radius: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.RightColumn p {
+  padding-left: 1rem;
+  padding-top: 5px;
+}
+
+.RightColumn li {
+  margin-top: 6px;
+  margin-left: 10%;
+  width: 150px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.RightColumn li:hover {
+  border-radius: 10px;
+  background-color: aqua;
 }
 
 .avatar img {
@@ -78,6 +162,6 @@ button {
 }
 
 .footer {
-  min-height: 50px;
+  min-height: 5lvh;
   background-color: darkkhaki;
 }

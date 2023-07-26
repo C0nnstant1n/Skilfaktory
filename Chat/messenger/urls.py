@@ -5,10 +5,11 @@ from .views import *
 router = routers.DefaultRouter()
 router.register(r'message', MessageViewset)
 router.register(r'room', RoomViewset)
+router.register(r'RoomMembers', RoomMembersViewset)
 
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('create/', CreateMessage.as_view(), name='create'),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))

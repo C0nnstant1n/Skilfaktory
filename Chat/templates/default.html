@@ -13,17 +13,47 @@
           <ul class="topmenu">
             <li><a href="/">Домой</a></li>
             {% if user.is_authenticated %}
-            <li><a href="lk/{{ user.id }}">{{ user }}</a></li>
-            <li><a href="accounts/logout">Выход</a></li>
+            <li><a href="/accounts/{{ user.id }}">{{ user }}</a></li>
+            <li><a href="/accounts/logout">Выход</a></li>
             {% else %}
-            <li><a href="signup">Зарегистрироваться</a></li>
-            <li><a href="accounts/login">Вход</a></li>
+            <li><a href="/accounts/signup">Зарегистрироваться</a></li>
+            <li><a href="/accounts/login">Вход</a></li>
             {% endif %}
           </ul>
         </nav>
       </header>
-
-      <main class="main">{% block content %} {% endblock content%}</main>
+      <main class="main">
+        {% block content %}
+        <div class="MainWrapper">
+          <div class="leftColumn">
+            <h3>Чаты</h3>
+            {% if rooms %}
+            <ul class="users">
+              {% for room in rooms %}
+              <li class="user">{{ room }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          <div class="MiddleColumn">
+            <h3>Сообщения</h3>
+          </div>
+          <div class="RightColumn">
+            <h3>Пользователи</h3>
+            {% if users %}
+            <ul class="users">
+              {% for user in users %}
+              <li class="user">
+                <img src="{{ user.avatar.avatar.url }}" alt="avatar" />
+                <p>{{ user }}</p>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+        {% endblock content%}
+      </main>
       <footer class="footer"></footer>
     </div>
   </body>

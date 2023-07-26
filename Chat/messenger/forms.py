@@ -1,12 +1,11 @@
 from django.forms import ModelForm
-from .models import Message
+from .models import Room
 
 
 class CreateMessageForm(ModelForm):
     class Meta:
-        model = Message
+        model = Room
         fields = [
-            'text',
-            'author',
-            'to'
+            'name',
+            'members',
         ]
