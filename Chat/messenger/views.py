@@ -1,9 +1,25 @@
 from django.shortcuts import render
+
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .serializers import *
 from django.views.generic import CreateView, TemplateView
 from .forms import CreateMessageForm
 from .models import Room
+
+
+class CurrentUser(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CurrentUserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.filter(id=self.request.user.id)
+        return queryset
+
+
+class UsersViewset(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UsersSerializer
 
 
 class MessageViewset(viewsets.ModelViewSet):

@@ -2,6 +2,21 @@ from .models import Message, Room, User, RoomMembers
 from rest_framework import serializers
 
 
+class CurrentUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+
+
+class UsersSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+
+
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
@@ -25,4 +40,4 @@ class RoomMembersSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = RoomMembers
-        fields = ['room', 'user']
+        fields = ['id', 'room', 'user']
