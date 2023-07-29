@@ -13,7 +13,10 @@ class CurrentUser(viewsets.ReadOnlyModelViewSet):
     serializer_class = CurrentUserSerializer
 
     def get_queryset(self):
-        queryset = User.objects.filter(id=self.request.user.id)
+        if self.request.user.is_authenticated:
+            queryset = User.objects.filter(id=self.request.user.id)
+        else:
+            queryset = []
         return queryset
 
 
@@ -28,8 +31,15 @@ class MessageViewset(viewsets.ModelViewSet):
 
 
 class RoomViewset(viewsets.ModelViewSet):
-    queryset = Room.objects.all()
+    # queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            queryset = Room.objects.filter(members=self.request.user.id)
+        else:
+            queryset = []
+        return queryset
 
 
 class RoomMembersViewset(viewsets.ModelViewSet):
@@ -43,9 +53,6 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['users'] = User.objects.all()
-        if self.request.user.is_authenticated:
-            if RoomMembers.objects.filter(user=self.request.user):
-                context['rooms'] = RoomMembers.objects.filter(user=self.request.user)
         return context
 
 

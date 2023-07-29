@@ -25,16 +25,11 @@
       <main class="main">
         {% block content %}
         <div class="MainWrapper">
-          <div class="leftColumn">
+          <nav class="leftColumn">
             <h3>Чаты</h3>
-            {% if rooms %}
-            <ul class="users">
-              {% for room in rooms %}
-              <li class="user">{{ room }}</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </div>
+            <ul class="rooms">
+
+            </nav>
           <div class="MiddleColumn">
             <h3>Сообщения</h3>
           </div>

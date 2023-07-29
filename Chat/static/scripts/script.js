@@ -4,6 +4,7 @@ const users_url = "/api/users";
 const current_user = "/api/currentuser";
 const message = "/api/message";
 const room_members = "/api/RoomMembers";
+const rooms_Node = document.querySelector(".rooms");
 
 // Получаем текущего пользователя
 function getCurrentUser(url, callback) {
@@ -46,20 +47,21 @@ users.then(
   (error) => console.log("Rejected: " + error)
 );
 
-function displayResult(apiData) {
+function displayResult(apiData, cur_node) {
   let cards = "";
   // console.log("start cards", apiData);
 
   apiData.forEach((item) => {
     const cardBlock = `
-      <div class="card">    
-        <p>${item.id}</p>
+      <li id=${item.id}>    
         <p>${item.username}</p>
-      </div>
+      </li>
     `;
     cards = cards + cardBlock;
     console.log(cards);
   });
+  cur_node.innerHTML = cards;
 }
 
-getCurrentUser(current_user, displayResult);
+a = getCurrentUser(current_user, displayResult(rooms_Node));
+console.log(a);
