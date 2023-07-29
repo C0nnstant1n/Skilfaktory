@@ -11,10 +11,11 @@ class CurrentUserSerializer(serializers.ModelSerializer):
 
 class UsersSerializer(serializers.HyperlinkedModelSerializer):
     username = serializers.PrimaryKeyRelatedField(read_only=True)
+    avatar = serializers.StringRelatedField()
 
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'avatar']
 
 
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,7 +27,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
-    author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    author = serializers.SlugRelatedField(read_only=True, slug_field='username')
     members = serializers.SlugRelatedField(read_only=True, many=True, slug_field='username')
 
     class Meta:

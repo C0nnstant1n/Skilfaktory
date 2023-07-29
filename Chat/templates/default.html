@@ -37,12 +37,7 @@
             <h3>Пользователи</h3>
             {% if users %}
             <ul class="users">
-              {% for user in users %}
-              <li class="user">
-                <img src="{{ user.avatar.avatar.url }}" alt="avatar" />
-                <p>{{ user }}</p>
-              </li>
-              {% endfor %}
+
             </ul>
             {% endif %}
           </div>

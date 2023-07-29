@@ -1,8 +1,5 @@
-from django.shortcuts import render
-
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import permissions
 from .serializers import *
 from django.views.generic import CreateView, TemplateView
 from .forms import CreateMessageForm
@@ -20,19 +17,19 @@ class CurrentUser(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class UsersViewset(viewsets.ModelViewSet):
+class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 
 
-class MessageViewset(viewsets.ModelViewSet):
+class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
 
-class RoomViewset(viewsets.ModelViewSet):
-    # queryset = Room.objects.all()
+class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -41,8 +38,11 @@ class RoomViewset(viewsets.ModelViewSet):
             queryset = []
         return queryset
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-class RoomMembersViewset(viewsets.ModelViewSet):
+
+class RoomMembersViewSet(viewsets.ModelViewSet):
     queryset = RoomMembers.objects.all()
     serializer_class = RoomMembersSerializer
 

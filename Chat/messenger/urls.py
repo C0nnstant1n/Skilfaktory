@@ -3,11 +3,11 @@ from rest_framework import routers
 from .views import *
 
 router = routers.DefaultRouter()
-router.register(r'message', MessageViewset)
+router.register(r'message', MessageViewSet)
 router.register(r'currentuser', CurrentUser, basename='id')
-router.register(r'users', UsersViewset)
-router.register(r'room', RoomViewset, basename='members')
-router.register(r'RoomMembers', RoomMembersViewset)
+router.register(r'users', UsersViewSet, basename='users-list')
+router.register(r'room', RoomViewSet, basename='rooms')
+# router.register(r'RoomMembers', RoomMembersViewSet)
 
 
 urlpatterns = [

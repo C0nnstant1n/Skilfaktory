@@ -7,4 +7,4 @@ class Avatar(models.Model):
     avatar = models.ImageField(upload_to="avatar/", default='avatar/default_avatar.png')
 
     def __str__(self):
-        return f"{self.user.username}"
+        return f"{self.avatar}"

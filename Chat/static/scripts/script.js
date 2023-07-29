@@ -1,67 +1,110 @@
 // url`s my server
-const rooms_url = "/api/room";
-const users_url = "/api/users";
-const current_user = "/api/currentuser";
-const message = "/api/message";
-const room_members = "/api/RoomMembers";
+const rooms_url = "/api/room/";
+const users_url = "/api/users/";
+const current_user = "/api/currentuser/";
+const message = "/api/message/";
 const rooms_Node = document.querySelector(".rooms");
+const users_Node = document.querySelector(".users");
 
-// Получаем текущего пользователя
-function getCurrentUser(url, callback) {
-  const user = new XMLHttpRequest();
-  user.open("get", url, true);
-  user.onload = function () {
-    if (user.status != 200) {
-      console.log("Статус ответа: ", xhr.status);
-    } else {
-      const result = JSON.parse(user.response);
-      if (callback) {
-        callback(result);
-      }
-    }
-  };
-  user.onerror = function () {
-    console.log(`Ошибка запроса, Статус ответа:  ${xhr.status}`);
-  };
-  user.send();
+function getApiData(callback, url, node) {
+  fetch(url)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      callback(data, node);
+    });
 }
 
-// Получает чат комнаты
-const fetchRooms = async (url) => {
-  const response = await fetch(url);
-  const json = await response.json();
-  return json;
-};
-
-// Получаем чат комнаты
-const rooms = fetchRooms(rooms_url);
-rooms.then(
-  (result) => console.log("rooms:", result),
-  (error) => console.log("Rejected: " + error)
-);
-
-// Получаем пользователей
-const users = fetchRooms(users_url);
-users.then(
-  (result) => console.log("users:", result),
-  (error) => console.log("Rejected: " + error)
-);
-
-function displayResult(apiData, cur_node) {
-  let cards = "";
-  // console.log("start cards", apiData);
-
-  apiData.forEach((item) => {
-    const cardBlock = `
-      <li id=${item.id}>    
-        <p>${item.username}</p>
-      </li>
-    `;
-    cards = cards + cardBlock;
-    console.log(cards);
+function showRoomsData(apiData, node) {
+  let li = "";
+  apiData.forEach((element) => {
+    const li_block = `
+    <li ${(id = element.id)}>
+      ${element.name}
+    </li>`;
+    li = li + li_block;
   });
-  cur_node.innerHTML = cards;
+  node.innerHTML = li;
 }
 
-a = getCurrentUser(current_user, displayResult(rooms_Node));
-console.log(a);
+function showUsersData(apiData, node) {
+  let li = "";
+
+  apiData.forEach((element) => {
+    const li_block = `
+    <li id=${element.username} onclick="userId(id)">
+    <img src="/uploads/${element.avatar}" alt="avatar" />
+    <p>${element.username}</p>
+  </li>`;
+    li = li + li_block;
+  });
+  node.innerHTML = li;
+}
+
+getApiData(showRoomsData, rooms_url, rooms_Node);
+getApiData(showUsersData, users_url, users_Node);
+
+const crsftoken = getCookie("csrftoken");
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function userId(id) {
+  let put_data = {
+    name: id,
+  };
+  console.log(getRoomsUsers(id));
+  putApiData(put_data);
+}
+
+function getRoomsUsers(user) {
+  const rooms = new XMLHttpRequest();
+  rooms.onload = function () {
+    let data = JSON.parse(rooms.response);
+    data.forEach((item) => {
+      if (item.author == user) {
+        return true;
+      }
+      return false;
+    });
+
+    // if (user of rooms.response["author"]) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+  };
+  rooms.onerror = function () {
+    console.log("Ошибка запроса");
+  };
+  rooms.open("get", rooms_url);
+  rooms.send();
+}
+
+function putApiData(data) {
+  fetch(rooms_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      "X-CSRFTOKEN": crsftoken,
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    let result = response.json();
+    console.log(result.message);
+  });
+}
