@@ -26,6 +26,13 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
+    def get_queryset(self):
+        queryset = []
+        target = self.request.query_params.get('target')
+        if target is not None:
+            queryset = Message.objects.filter(target=target)
+        return queryset
+
 
 class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer

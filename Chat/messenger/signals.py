@@ -6,5 +6,5 @@ from .models import Room, RoomMembers
 @receiver(post_save, sender=Room)
 def user_created(instance, **kwargs):
     if kwargs['created']:
-        room_members = RoomMembers.objects.create(user=instance.author, room=instance)
+        room_members = RoomMembers.objects.create(member=instance.author, room=instance)
         print(room_members)
