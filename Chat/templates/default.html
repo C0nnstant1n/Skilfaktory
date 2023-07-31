@@ -33,6 +33,12 @@
           <div class="MiddleColumn">
             <h3>Сообщения</h3>
             <ul class="messages"></ul>
+            {% if user.is_authenticated %}  
+            <form id="form" class="message_form" action="/api/message/" method="post">
+              <input type="text" id="message_form" name="message" placeholder="Ваше сообщение" required>
+              <button type="submit">Отправить</button>
+            </form>
+            {% endif %}
           </div>
           <div class="RightColumn">
             <h3>Пользователи</h3>

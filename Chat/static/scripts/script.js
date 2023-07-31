@@ -8,6 +8,27 @@ const rooms_Node = document.querySelector(".rooms");
 const users_Node = document.querySelector(".users");
 const message_node = document.querySelector(".messages");
 
+function getCurrentUser() {
+  const xhr = new XMLHttpRequest();
+
+  xhr.onload = function () {
+    console.log(`Статус: ${xhr.status}`);
+  };
+
+  xhr.onerror = function () {
+    console.log("Ошибка запроса");
+  };
+
+  xhr.open("get", current_user, false);
+  xhr.send();
+
+  let result = JSON.parse(xhr.response);
+
+  return result;
+}
+const cur_user = getCurrentUser();
+console.log("Get current user:", cur_user);
+
 // Получаем данные с сервера
 function getApiData(callback, url, node) {
   fetch(url)
@@ -21,12 +42,21 @@ function getApiData(callback, url, node) {
 // Формируем список комнат
 function showRoomsData(apiData, node) {
   let li = "";
+
   apiData.forEach((element) => {
-    const li_block = `
-    <li id=${element.id} onclick="roomId(id)">
-      <p>${element.name}</p>
-    </li>`;
-    li = li + li_block;
+    if (element.name == cur_user[0].username) {
+      const li_block = `
+      <li id=${element.id} onclick="roomId(id)">
+        <p>${element.author}</p>
+      </li>`;
+      li = li + li_block;
+    } else {
+      const li_block = `
+      <li id=${element.id} onclick="roomId(id)">
+        <p>${element.name}</p>
+      </li>`;
+      li = li + li_block;
+    }
   });
   node.innerHTML = li;
 }
@@ -49,7 +79,7 @@ function showMessages(apiData, node) {
   apiData.forEach((element) => {
     const li_block = `
     <li id=${element.author}>
-    <h3>${element.author}</h3>
+    <h4>${element.author}</h4>
     <p>${element.text}</p>
   </li>`;
     li = li + li_block;
@@ -102,18 +132,18 @@ function userId(id) {
     member: id,
   };
 
-  // Проверяем есть ли уже такая комната
-  getApi(rooms_url).then((result) => {
-    if (roomExist(result, id)) {
-      console.log("Комната уже есть");
-    } else {
-      putApiData(room_data, rooms_url);
-      setTimeout(() => {
-        console.log("timer");
-        putApiData(member_data, member_url);
-      }, 100);
-    }
-  });
+  if (cur_user.length != 0) {
+    // Проверяем есть ли уже такая комната
+    getApi(rooms_url).then((result) => {
+      if (roomExist(result, id)) {
+        console.log("Комната уже есть");
+      } else {
+        putApiData(room_data, rooms_url);
+      }
+    });
+  } else {
+    alert("Войдите или зарегистрируйтесть, чтобы отправлять сообщения");
+  }
 }
 
 // Проверяем существует ли комната
@@ -142,19 +172,29 @@ function putApiData(data, url) {
   });
 }
 
+// let current_room = "";
+
 function roomId(id) {
-  clearMessages(message_node);
+  document.current_room = id;
   get_uri = message + "?target=" + id;
-  console.log(get_uri);
   getApiData(showMessages, get_uri, message_node);
-  console.log(id);
 }
 
-// getApi(current_user).then((user) => {
-//   if (user[0].username == id) {
-//     return true;
-//   } else {
-//     console.log("Нестоит писать самому себе");
-//     return false;
-//   }
-// })
+function logSubmit(event) {
+  console.log("room", document.current_room);
+
+  let submitter = event.submitter;
+
+  let my_form = new FormData(form);
+  my_form.append("crsftoken", crsftoken);
+  my_form.append("author", cur_user[0].username);
+  my_form.append("target", document.current_room);
+
+  for (let [name, value] of my_form) {
+    console.log(`${name} = ${value}`);
+  }
+  event.preventDefault();
+}
+
+let form = document.getElementById("form");
+form.addEventListener("submit", logSubmit);

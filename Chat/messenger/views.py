@@ -40,7 +40,7 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            queryset = Room.objects.filter(members=self.request.user.id)
+            queryset = set(Room.objects.filter(members=self.request.user.id))
         else:
             queryset = []
         return queryset

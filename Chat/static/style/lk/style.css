@@ -52,7 +52,7 @@ body {
   padding-left: 15%;
 }
 
-.avatar img{
+.avatar img {
   border-radius: 250px;
 }
 
@@ -159,6 +159,21 @@ button {
   margin: 10px 20px;
   padding: 5px;
   border-radius: 8px;
+}
+
+.messages li {
+  background-color: #f9f1e8;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.messages p {
+  font-style: italic;
+}
+
+.message_form {
+  position: sticky;
+  top: 80%;
 }
 
 .footer {
