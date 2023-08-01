@@ -63,7 +63,8 @@ class IndexView(TemplateView):
         return context
 
 
-class CreateMessage(CreateView):
-    model = Room
-    form_class = CreateMessageForm
-    template_name = 'messenger/create.html'
+class CreateRoomView(TemplateView):
+    template_name = 'messenger/create_room.html'
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)

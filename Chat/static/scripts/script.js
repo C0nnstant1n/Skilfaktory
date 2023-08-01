@@ -1,13 +1,16 @@
 // url`s my server
+// import "../style/lk/style.css";
 const rooms_url = "/api/room/";
 const users_url = "/api/users/";
 const current_user = "/api/currentuser/";
-const message = "/api/message/";
+const message = "/api/message/?target=";
 const member_url = "/api/member/";
 const rooms_Node = document.querySelector(".rooms");
 const users_Node = document.querySelector(".users");
 const message_node = document.querySelector(".messages");
+window.current_room = 0
 
+//  Получаем текущего пользователя
 function getCurrentUser() {
   const xhr = new XMLHttpRequest();
 
@@ -21,47 +24,47 @@ function getCurrentUser() {
 
   xhr.open("get", current_user, false);
   xhr.send();
-
-  let result = JSON.parse(xhr.response);
-
-  return result;
+  return JSON.parse(xhr.response)
 }
 const cur_user = getCurrentUser();
 console.log("Get current user:", cur_user);
 
 // Получаем данные с сервера
-function getApiData(callback, url, node) {
+function getApiData(callback, url) {
   fetch(url)
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      callback(data, node);
+      callback(data);
     });
+  return 0
 }
 // Формируем список комнат
-function showRoomsData(apiData, node) {
+function showRoomsData(apiData) {
   let li = "";
-
+  window.current_room = apiData[0].id
   apiData.forEach((element) => {
-    if (element.name == cur_user[0].username) {
+    if (element.name === cur_user[0].username) {
       const li_block = `
-      <li id=${element.id} onclick="roomId(id)">
+      <li id=${element.id} class="li-off" onclick="roomId(id)">
         <p>${element.author}</p>
       </li>`;
       li = li + li_block;
     } else {
       const li_block = `
-      <li id=${element.id} onclick="roomId(id)">
+      <li id=${element.id} class="li-off" onclick="roomId(id)">
         <p>${element.name}</p>
       </li>`;
       li = li + li_block;
     }
   });
-  node.innerHTML = li;
+  rooms_Node.innerHTML = li;
+  document.getElementById(window.current_room).className = "li-on"
+  showMessages(apiData)
 }
 // Формируем список пользователей на страничке
-function showUsersData(apiData, node) {
+function showUsersData(apiData) {
   let li = "";
   apiData.forEach((element) => {
     const li_block = `
@@ -71,10 +74,10 @@ function showUsersData(apiData, node) {
   </li>`;
     li = li + li_block;
   });
-  node.innerHTML = li;
+  users_Node.innerHTML = li;
 }
 
-function showMessages(apiData, node) {
+function showMessages(apiData) {
   let li = "";
   apiData.forEach((element) => {
     const li_block = `
@@ -84,42 +87,42 @@ function showMessages(apiData, node) {
   </li>`;
     li = li + li_block;
   });
-  node.innerHTML = li;
+  message_node.innerHTML = li;
 }
 
-function clearMessages(node) {
-  let li = "";
-  node.innerHTML = li;
-}
+// function clearMessages(node) {
+//   node.innerHTML = "";
+// }
 
 // Получаем список чат комнат и выводим на страничку
-getApiData(showRoomsData, rooms_url, rooms_Node);
+getApiData(showRoomsData, rooms_url)
 // Список всех пользователей
-getApiData(showUsersData, users_url, users_Node);
+getApiData(showUsersData, users_url);
+
+console.log("room2 =", window.current_room)
 
 // Получаем токен
-const crsftoken = getCookie("csrftoken");
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
   }
-  return "";
+  return cookieValue;
 }
+const csrftoken = getCookie('csrftoken');
 
 // Получаем какие нибудь данные от сервера
 async function getApi(url) {
   let response = await fetch(url);
-  let rooms = await response.json();
-  return rooms;
+  return await response.json();
 }
 
 // Создаем новую чат комнату
@@ -127,12 +130,12 @@ function userId(id) {
   let room_data = {
     name: id,
   };
-  let member_data = {
-    room: id,
-    member: id,
-  };
+  // let member_data = {
+  //   room: id,
+  //   member: id,
+  // };
 
-  if (cur_user.length != 0) {
+  if (cur_user.length !== 0) {
     // Проверяем есть ли уже такая комната
     getApi(rooms_url).then((result) => {
       if (roomExist(result, id)) {
@@ -148,7 +151,7 @@ function userId(id) {
 
 // Проверяем существует ли комната
 function roomExist(rooms, id) {
-  for (i of rooms) {
+  for (let i of rooms) {
     if (i.name === id) {
       return true;
     }
@@ -162,39 +165,37 @@ function putApiData(data, url) {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
-      "X-CSRFTOKEN": crsftoken,
+      "X-CSRFTOKEN": csrftoken,
     },
     body: JSON.stringify(data),
   }).then((response) => {
-    let result = response.json().then((result) => {
+    response.json().then((result) => {
       console.log(result);
     });
   });
 }
 
-// let current_room = "";
 
+// Переход в комнату
 function roomId(id) {
-  document.current_room = id;
-  get_uri = message + "?target=" + id;
-  getApiData(showMessages, get_uri, message_node);
+  document.getElementById(window.current_room).className = "li-off"
+  window.current_room = id;
+  document.getElementById(window.current_room).className = "li-on"
+  getApiData(showMessages, (message + id));
 }
 
-function logSubmit(event) {
-  console.log("room", document.current_room);
-
-  let submitter = event.submitter;
-
-  let my_form = new FormData(form);
-  my_form.append("crsftoken", crsftoken);
-  my_form.append("author", cur_user[0].username);
-  my_form.append("target", document.current_room);
-
-  for (let [name, value] of my_form) {
-    console.log(`${name} = ${value}`);
-  }
-  event.preventDefault();
-}
-
+// Отправляем сообщение
 let form = document.getElementById("form");
-form.addEventListener("submit", logSubmit);
+form.onsubmit = async (e) => {
+  e.preventDefault();
+  let my_form = new FormData(form);
+
+  my_form.append("target", window.current_room);
+  my_form.append("author", cur_user[0].username);
+
+  let response = await fetch(message, {
+    method: 'POST',
+    body: my_form
+  });
+  console.log(response)
+};

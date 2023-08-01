@@ -1,0 +1,38 @@
+{% extends 'default.html' %}
+{% load static %}
+
+{% block title %}
+Создать комнату
+{% endblock title %}
+{% block content %}
+<h1 align="center">Создать комнату</h1>
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="{% static 'style/messenger/itc-custom-select.css' %}" />
+<div class="MainWrapper">
+    <form method="post" action="/api/room/" class="form">
+        {% csrf_token %}
+        <div class="column">
+            <input class="itc-select__toggle" type="text" name="name">
+        </div>
+        <div class="column">
+            <div class="itc-select" id="select-1">
+                <!-- Кнопка для открытия выпадающего списка -->
+                <button type="button" class="itc-select__toggle" name="members" value="" data-select="toggle" data-index="-1">Выберите из списка</button>
+                <!-- Выпадающий список -->
+                <div class="itc-select__dropdown">
+                    <ul class="itc-select__options">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <input class="itc-select__toggle" type="submit" value="Создать">
+        </div>
+    </form>
+    <script type="module" src="{% static 'scripts/create_room.js' %}"></script>
+</div>
+{% else %}
+<h2 align="center">Войдите или зарегистрируйтесь</h2>
+{% endif%}
+
+{% endblock %}

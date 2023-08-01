@@ -48,8 +48,8 @@ body {
 }
 
 .main h1 {
-  padding-top: 1rem;
-  padding-left: 15%;
+  padding: 1rem;
+  text-align: center;
 }
 
 .avatar img {
@@ -63,6 +63,16 @@ body {
   display: flex;
   justify-content: space-around;
   background-color: burlywood;
+}
+
+.MainWrapper form {
+  display: flex;
+  justify-content: space-around;
+}
+
+.column {
+  margin: 1rem;
+  width: 30%;
 }
 
 .leftColumn {
@@ -87,6 +97,11 @@ body {
 .leftColumn li:hover {
   border-radius: 10px;
   background-color: aqua;
+}
+
+.room-button {
+  position: sticky;
+  top: 80%;
 }
 
 .MiddleColumn {
@@ -162,8 +177,9 @@ button {
 }
 
 .messages li {
+  margin: 4px;
   background-color: #f9f1e8;
-  width: 300px;
+  max-width: 300px;
   border-radius: 10px;
 }
 
@@ -179,4 +195,12 @@ button {
 .footer {
   min-height: 5lvh;
   background-color: darkkhaki;
+}
+
+.li-off {
+  background-color: bisque;
+}
+
+.li-on {
+  background-color: #a6ecc9;
 }
