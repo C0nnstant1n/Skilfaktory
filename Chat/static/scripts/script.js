@@ -12,22 +12,21 @@ window.current_room = 0
 
 //  Получаем текущего пользователя
 function getCurrentUser() {
-  const xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest()
 
   xhr.onload = function () {
-    console.log(`Статус: ${xhr.status}`);
-  };
+    console.log(`Статус: ${xhr.status}`)
+  }
 
   xhr.onerror = function () {
-    console.log("Ошибка запроса");
-  };
+    console.log("Ошибка запроса")
+  }
 
-  xhr.open("get", current_user, false);
-  xhr.send();
+  xhr.open("get", current_user, false)
+  xhr.send()
   return JSON.parse(xhr.response)
 }
 const cur_user = getCurrentUser();
-console.log("Get current user:", cur_user);
 
 // Получаем данные с сервера
 function getApiData(callback, url) {
@@ -43,6 +42,7 @@ function getApiData(callback, url) {
 // Формируем список комнат
 function showRoomsData(apiData) {
   let li = "";
+  if (apiData.length >0){
   window.current_room = apiData[0].id
   apiData.forEach((element) => {
     if (element.name === cur_user[0].username) {
@@ -58,7 +58,7 @@ function showRoomsData(apiData) {
       </li>`;
       li = li + li_block;
     }
-  });
+  });}else {return}
   rooms_Node.innerHTML = li;
   document.getElementById(window.current_room).className = "li-on"
   showMessages(apiData)
@@ -78,6 +78,7 @@ function showUsersData(apiData) {
 }
 
 function showMessages(apiData) {
+  console.log(apiData)
   let li = "";
   apiData.forEach((element) => {
     const li_block = `
@@ -90,16 +91,14 @@ function showMessages(apiData) {
   message_node.innerHTML = li;
 }
 
-// function clearMessages(node) {
-//   node.innerHTML = "";
-// }
+function clearMessages(node) {
+  node.innerHTML = "";
+}
 
 // Получаем список чат комнат и выводим на страничку
 getApiData(showRoomsData, rooms_url)
 // Список всех пользователей
 getApiData(showUsersData, users_url);
-
-console.log("room2 =", window.current_room)
 
 // Получаем токен
 function getCookie(name) {
@@ -130,10 +129,6 @@ function userId(id) {
   let room_data = {
     name: id,
   };
-  // let member_data = {
-  //   room: id,
-  //   member: id,
-  // };
 
   if (cur_user.length !== 0) {
     // Проверяем есть ли уже такая комната
@@ -186,6 +181,7 @@ function roomId(id) {
 
 // Отправляем сообщение
 let form = document.getElementById("form");
+if (form !== null){
 form.onsubmit = async (e) => {
   e.preventDefault();
   let my_form = new FormData(form);
@@ -198,4 +194,4 @@ form.onsubmit = async (e) => {
     body: my_form
   });
   console.log(response)
-};
+};}
