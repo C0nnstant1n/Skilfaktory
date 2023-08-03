@@ -1,4 +1,4 @@
-import {ItcCustomSelect} from "./itc-custom-select.js"
+import { ItcCustomSelect } from "./itc-custom-select.js";
 
 (async() => {
     const response = await fetch("/api/users/")
@@ -12,6 +12,10 @@ import {ItcCustomSelect} from "./itc-custom-select.js"
         document.select = new ItcCustomSelect('#select-1');
         document.querySelector('.itc-select__toggle').disabled = false;
     }
+    console.log(values);
+    new ItcCustomSelect("#select-1");
+    document.querySelector(".itc-select__toggle").disabled = false;
+  }
 })();
 
 // Отправляем форму

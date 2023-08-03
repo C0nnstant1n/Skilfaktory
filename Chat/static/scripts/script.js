@@ -8,7 +8,7 @@ const member_url = "/api/member/";
 const rooms_Node = document.querySelector(".rooms");
 const users_Node = document.querySelector(".users");
 const message_node = document.querySelector(".messages");
-window.current_room = 0
+window.current_room = 0;
 
 //  Получаем текущего пользователя
 function getCurrentUser() {
@@ -37,7 +37,7 @@ function getApiData(callback, url) {
     .then((data) => {
       callback(data);
     });
-  return 0
+  return 0;
 }
 // Формируем список комнат
 function showRoomsData(apiData) {
@@ -60,8 +60,8 @@ function showRoomsData(apiData) {
     }
   });}else {return}
   rooms_Node.innerHTML = li;
-  document.getElementById(window.current_room).className = "li-on"
-  showMessages(apiData)
+  document.getElementById(window.current_room).className = "li-on";
+  showMessages(apiData);
 }
 // Формируем список пользователей на страничке
 function showUsersData(apiData) {
@@ -96,19 +96,19 @@ function clearMessages(node) {
 }
 
 // Получаем список чат комнат и выводим на страничку
-getApiData(showRoomsData, rooms_url)
+getApiData(showRoomsData, rooms_url);
 // Список всех пользователей
 getApiData(showUsersData, users_url);
 
 // Получаем токен
 function getCookie(name) {
   let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
       // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+      if (cookie.substring(0, name.length + 1) === name + "=") {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
@@ -116,7 +116,7 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-const csrftoken = getCookie('csrftoken');
+const csrftoken = getCookie("csrftoken");
 
 // Получаем какие нибудь данные от сервера
 async function getApi(url) {
@@ -170,13 +170,12 @@ function putApiData(data, url) {
   });
 }
 
-
 // Переход в комнату
 function roomId(id) {
-  document.getElementById(window.current_room).className = "li-off"
+  document.getElementById(window.current_room).className = "li-off";
   window.current_room = id;
-  document.getElementById(window.current_room).className = "li-on"
-  getApiData(showMessages, (message + id));
+  document.getElementById(window.current_room).className = "li-on";
+  getApiData(showMessages, message + id);
 }
 
 // Отправляем сообщение
@@ -190,8 +189,8 @@ form.onsubmit = async (e) => {
   my_form.append("author", cur_user[0].username);
 
   let response = await fetch(message, {
-    method: 'POST',
-    body: my_form
+    method: "POST",
+    body: my_form,
   });
   console.log(response)
 };}

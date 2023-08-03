@@ -1,13 +1,11 @@
-{% extends 'default.html' %}
-{% load static %}
-
-{% block title %}
-Создать комнату
-{% endblock title %}
-{% block content %}
+{% extends 'default.html' %} {% load static %} {% block title %} Создать комнату
+{% endblock title %} {% block content %}
 <h1 align="center">Создать комнату</h1>
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'style/messenger/itc-custom-select.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'style/messenger/itc-custom-select.css' %}"
+/>
 <div class="MainWrapper">
     <form id="create_room" method="post" action="/api/room/" class="form">
         {% csrf_token %}
@@ -22,6 +20,4 @@
 </div>
 {% else %}
 <h2 align="center">Войдите или зарегистрируйтесь</h2>
-{% endif%}
-
-{% endblock %}
+{% endif%} {% endblock %}

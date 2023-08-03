@@ -28,9 +28,9 @@
           <nav class="leftColumn">
             <h3>Чаты</h3>
             <ul class="rooms"></ul>
-          {% if user.is_authenticated %}
-          <a class="room-button" href="/create">Создать</a>
-          {% endif %}
+            {% if user.is_authenticated %}
+            <a class="room-button" href="/create">Создать</a>
+            {% endif %}
           </nav>
           <div class="MiddleColumn">
             <h3>Сообщения</h3>
@@ -38,8 +38,7 @@
           </div>
           <div class="RightColumn">
             <h3>Пользователи</h3>
-            <ul class="users">
-            </ul>
+            <ul class="users"></ul>
           </div>
         </div>
         <script src="{% static 'scripts/script.js' %}"></script>
