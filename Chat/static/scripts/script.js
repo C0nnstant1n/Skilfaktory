@@ -61,7 +61,8 @@ function showRoomsData(apiData) {
   });}else {return}
   rooms_Node.innerHTML = li;
   document.getElementById(window.current_room).className = "li-on";
-  showMessages(apiData);
+  // console.log(apiData)
+  getApiData(showMessages, message + window.current_room);
 }
 // Формируем список пользователей на страничке
 function showUsersData(apiData) {
@@ -78,7 +79,6 @@ function showUsersData(apiData) {
 }
 
 function showMessages(apiData) {
-  console.log(apiData)
   let li = "";
   apiData.forEach((element) => {
     const li_block = `

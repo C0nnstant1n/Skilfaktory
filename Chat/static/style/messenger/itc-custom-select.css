@@ -3,7 +3,12 @@
     width: 100%;
 }
 
-.itc-select__toggle {
+button {
+    margin: 0;
+}
+
+.itc-select__toggle, .selector, .submit-button {
+    margin: 1rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -17,6 +22,7 @@
     border-radius: 0.3125rem;
     cursor: pointer;
     user-select: none;
+    text-align: center;
 }
 
 .itc-select__toggle::after {

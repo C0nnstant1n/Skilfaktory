@@ -20,5 +20,6 @@ def user_created(instance, **kwargs):
                         member=User.objects.get(username=instance.name),
                         room=Room.objects.get(name=instance)
                     )
-                except members.Error as e:
+                except BaseException as e:
                     print(e)
+                    print('Пользователя с таким именем не существует')
