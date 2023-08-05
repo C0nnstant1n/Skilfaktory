@@ -23,3 +23,4 @@ def user_created(instance, **kwargs):
                 except BaseException as e:
                     print(e)
                     print('Пользователя с таким именем не существует')
+

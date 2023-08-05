@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Room(models.Model):
     author = models.ForeignKey(User, related_name='admin', on_delete=models.CASCADE)
-    name = models.CharField(max_length=64, unique=False)
+    name = models.CharField(max_length=64, unique=True)
     members = models.ManyToManyField(User, through='RoomMembers')
 
     def __str__(self):

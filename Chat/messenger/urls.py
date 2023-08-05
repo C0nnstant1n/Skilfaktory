@@ -4,10 +4,10 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register(r'message', MessageViewSet)
-router.register(r'currentuser', CurrentUser, basename='id')
+router.register(r'current_user', CurrentUser, basename='id')
 router.register(r'users', UsersViewSet, basename='users-list')
 router.register(r'room', RoomViewSet, basename='rooms')
-router.register(r'member', RoomMembersViewSet, basename='members')
+router.register(r'members', RoomMembersViewSet, basename='members')
 
 
 urlpatterns = [
