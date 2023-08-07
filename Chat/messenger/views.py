@@ -1,5 +1,5 @@
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, mixins, permissions, generics
+from rest_framework.views import APIView
 from .serializers import *
 from django.views.generic import CreateView, TemplateView
 from .forms import CreateMessageForm
@@ -47,6 +47,11 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class RoomDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
 
 
 class RoomMembersViewSet(viewsets.ModelViewSet):

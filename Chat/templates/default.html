@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="{% static 'style/lk/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'style/messenger/itc-custom-select.css' %}"/>
     <title>{% block title %} Чат {% endblock title %}</title>
 </head>
 <body>
@@ -26,7 +27,11 @@
         {% block content %}
             <div class="MainWrapper">
                 <nav class="leftColumn">
-                    <h3>Чаты</h3>
+                    <h3>Комнаты</h3>
+                    <script type="module">
+                        import {roomId} from "{% static './scripts/script.js' %}";
+                        window.roomId = roomId
+                    </script>
                     <ul class="rooms">
                     </ul>
                     {% if user.is_authenticated %}
@@ -36,16 +41,28 @@
                 <div class="MiddleColumn">
                     <h3>Сообщения</h3>
                     <ul class="messages"></ul>
+                    <form id="message-form" action="" >
+                         {% csrf_token %}
+                        <label for="message">
+                            <input id="message" type="text" name="text" class="itc-select__toggle">
+                        </label>
+                        <label for="send-message">
+                            <button id="send-message" class="selector">Отправить</button>
+                        </label>
+                    </form>
+
                 </div>
                 <div class="RightColumn">
                     <h3>Пользователи</h3>
+                    <script type="module">
+                        import {userId} from "{% static './scripts/script.js' %}";
+
+                        window.userId = userId
+                    </script>
                     <ul class="users"></ul>
                 </div>
             </div>
-            <script type="module" src="{% static 'scripts/script.js' %}">
-            </script>
-
-{#            <script type="module" src="{% static 'scripts/room.js' %}"></script>#}
+            <script type="module" src="{% static 'scripts/script.js' %}"></script>
         {% endblock content %}
     </main>
     <footer class="footer"></footer>

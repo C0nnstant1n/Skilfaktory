@@ -4,7 +4,7 @@ const urls = {
     MESSAGES: "/api/message/",
     CURRENT:"/api/current_user/",
     MESSAGE: "/api/message/?target=",
-    MEMBER: "/api/member/",
+    MEMBER: "/api/members/",
 }
 
 const nodes = {

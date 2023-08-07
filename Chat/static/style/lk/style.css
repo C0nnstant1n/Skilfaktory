@@ -1,211 +1,218 @@
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  height: 100%;
-  font-family: sans-serif;
+    height: 100%;
+    font-family: sans-serif;
 }
 
 .wrapper {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .topmenu {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .topmenu li {
-  padding: 1rem;
-  display: flex;
+    padding: 1rem;
+    display: flex;
 }
 
 .topmenu a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .container {
-  max-width: 1000px;
-  padding: 2rem 1rem;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-around;
+    max-width: 1000px;
+    padding: 2rem 1rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
 }
 
 .header {
-  min-height: 5lvh;
-  background-color: darkkhaki;
+    min-height: 5lvh;
+    background-color: darkkhaki;
 }
 
 .main {
-  background-color: bisque;
-  flex-grow: 1;
+    background-color: bisque;
+    flex-grow: 1;
 }
 
 .main h1 {
-  padding: 1rem;
-  text-align: center;
+    padding: 1rem;
+    text-align: center;
 }
 
 .avatar img {
-  border-radius: 250px;
+    border-radius: 250px;
 }
 
 .MainWrapper {
-  border-radius: 10px;
-  height: 83lvh;
-  margin: 0.5rem;
-  display: flex;
-  justify-content: space-around;
-  background-color: burlywood;
-}
-
-.MainWrapper form {
-  display: flex;
-  justify-content: space-around;
+    border-radius: 10px;
+    height: 83lvh;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+    background-color: burlywood;
 }
 
 .column {
-  margin: 1rem;
-  width: 33%;
+    margin: 1rem;
+    width: 33%;
 }
 
 .leftColumn {
-  padding-top: 1rem;
-  margin: 1rem;
-  border-radius: 10px;
-  background-color: bisque;
-  width: 20%;
-  text-align: center;
+    padding-top: 1rem;
+    margin: 1rem;
+    border-radius: 10px;
+    background-color: bisque;
+    width: 20%;
+    text-align: center;
 }
 
 .leftColumn ul {
-  padding-top: 1rem;
+    padding-top: 1rem;
 }
 
 .leftColumn li {
-  width: 150px;
-  display: flex;
-  justify-content: space-evenly;
+    margin-top: 6px;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.leftColumn p {
+    padding-top: 5px;
 }
 
 .leftColumn li:hover {
-  border-radius: 10px;
-  background-color: aqua;
+    border-radius: 10px;
+    background-color: aqua;
 }
 
 .room-button {
-  position: sticky;
-  top: 80%;
+    position: sticky;
+    top: 80%;
 }
 
 .MiddleColumn {
-  padding-top: 1rem;
-  border-radius: 10px;
-  background-color: bisque;
-  margin: 1rem 0;
-  width: 50%;
-  text-align: center;
+    padding-top: 1rem;
+    border-radius: 10px;
+    background-color: bisque;
+    margin: 1rem 0;
+    width: 50%;
+    text-align: center;
+}
+
+.MiddleColumn form {
+    display: flex;
+    justify-content: space-around;
+    position: sticky;
+    top: 80%;
 }
 
 .RightColumn {
-  margin: 1rem;
-  padding-top: 1rem;
-  border-radius: 10px;
-  background-color: bisque;
-  margin: 1rem;
-  width: 20%;
-  text-align: center;
+    margin: 1rem;
+    padding-top: 1rem;
+    border-radius: 10px;
+    background-color: bisque;
+    width: 20%;
+    text-align: center;
 }
 
 .RightColumn ul {
-  padding-top: 1rem;
+    padding-top: 1rem;
 }
 
 .RightColumn img {
-  border-radius: 40px;
-  width: 40px;
-  height: 40px;
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
 }
 
 .RightColumn p {
-  padding-left: 1rem;
-  padding-top: 5px;
+    padding-left: 1rem;
+    padding-top: 5px;
 }
 
 .RightColumn li {
-  margin-top: 6px;
-  margin-left: 10%;
-  width: 150px;
-  display: flex;
-  justify-content: flex-start;
+    margin-top: 6px;
+    margin-left: 10%;
+    width: 150px;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .RightColumn li:hover {
-  border-radius: 10px;
-  background-color: aqua;
+    border-radius: 10px;
+    background-color: aqua;
 }
 
 .avatar img {
-  width: 250px;
+    width: 250px;
 }
 
 .content {
-  min-width: 60%;
-  display: flex;
+    min-width: 60%;
+    display: flex;
 }
 
 .caption {
-  padding-right: 3rem;
+    padding-right: 3rem;
 }
 
 .buttons {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 15%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15%;
 }
 
 button {
-  margin: 10px 20px;
-  padding: 5px;
-  border-radius: 8px;
+    margin: 10px 20px;
+    padding: 5px;
+    border-radius: 8px;
 }
 
 .messages li {
-  margin: 4px;
-  background-color: #f9f1e8;
-  max-width: 300px;
-  border-radius: 10px;
+    margin: 4px;
+    background-color: #f9f1e8;
+    max-width: 300px;
+    border-radius: 10px;
 }
 
 .messages p {
-  font-style: italic;
+    font-style: italic;
 }
 
 .message_form {
-  position: sticky;
-  top: 80%;
+    position: sticky;
+    top: 80%;
 }
 
 .footer {
-  min-height: 5lvh;
-  background-color: darkkhaki;
+    min-height: 5lvh;
+    background-color: darkkhaki;
 }
 
 .li-off {
-  background-color: bisque;
+    background-color: bisque;
 }
 
 .li-on {
-  background-color: #a6ecc9;
+    background-color: #a6ecc9;
 }
 
 label {
-  margin: 0.8rem 0;
+    margin: 0.8rem 0;
 
 }

@@ -1,83 +1,63 @@
-import {getData, putApiData} from "./get_post.js"
-import {urls, nodes} from "./consts.js";
+import {getApiData, putApiData} from "./get_post.js"
+import {nodes, urls} from "./consts.js";
 
 
 //  Получаем текущего пользователя
 async function getCurrentUser() {
-    const cur_user = await getData(urls.CURRENT)
+    const cur_user = await getApiData(urls.CURRENT)
     return cur_user[0].username
 }
 
-// Получаем JSON данные с сервера
-function getApiData(callback, url) {
-    getData(url).then((response) => {
-        return callback(response)
-    })
-}
-
 // Формируем список комнат
-function showRoomsData(apiData) {
+async function showRoomsData(apiData) {
     let li = "";
-    if (apiData.length > 0) {
-        window.current_room = apiData[0].id
-        apiData.forEach((element) => {
-            if (element.name === getCurrentUser()) {
-                const li_block = `
-              <li id=${element.id} class="li-off">
-                <p>${element.author}</p>
-                <script type="module">
-                import {roomId} from "./script";
-                const el = document.querySelector(id)
-                console.log(el)
-                el.addEventListener('click', () => {roomId(id)}
-                </script>
-              </li>`;
-                li = li + li_block;
-            } else {
-                const li_block =`
-                <li id=${element.id} class="li-off" onclick="roomId(${element.id})">
-                    <p>${element.name}</p>
-                    <script type="module">
-                    import {roomId} from "/static/scripts/script.js";
-                    window.roomId = roomId
-                    </script>
-                </li>`;
-                li = li + li_block;
-            }
-        });
+    const rooms = await apiData
+    if (rooms.length > 0) {
+        window.current_room = rooms[0].id
+
+        for (let room of rooms) {
+            const li_block = `
+            <li id=${room.id} class="li-off" onclick="roomId(${room.id})">
+                <p>${room.name}</p>
+            </li>`;
+            li = li + li_block;
+        }
     } else {
         return
     }
     nodes.rooms.innerHTML = li;
     document.getElementById(window.current_room).className = "li-on";
-    getApiData(showMessages, urls.MESSAGES);
+    await getApiData(showMessages, urls.MESSAGES + `?target=${window.current_room}`);
+    return document.getElementById(window.current_room)
 }
 
 
 // Формируем список пользователей на страничке
-function showUsersData(apiData) {
+async function showUsersData(apiData) {
     let li = "";
-    apiData.forEach((element) => {
+    const users = await apiData
+    for (let user of users) {
         const li_block = `
-    <li id=${element.username}">
-    <img src="/uploads/${element.avatar}" alt="avatar" />
-    <p>${element.username}</p>
-  </li>`;
+        <li id=${user.username} onclick="userId(id)">
+            <img src="/uploads/${user.avatar}" alt="avatar" />
+            <p>${user.username}</p>
+        </li>`;
         li = li + li_block;
-    });
+    }
     nodes.users.innerHTML = li;
 }
 
-function showMessages(apiData) {
+async function showMessages(apiData) {
     let li = "";
-    apiData.forEach((element) => {
+    const messages = await apiData
+    for (let message of messages) {
         const li_block = `
-    <li id=${element.author}>
-    <h4>${element.author}</h4>
-    <p>${element.text}</p>
+    <li id=${message.author}>
+    <h4>${message.author}</h4>
+    <p>${message.text}</p>
   </li>`;
         li = li + li_block;
-    });
+    }
     nodes.message.innerHTML = li;
 }
 
@@ -86,39 +66,38 @@ getApiData(showRoomsData, urls.ROOMS);
 // Список всех пользователей
 getApiData(showUsersData, urls.USERS);
 
-const qq = document.getElementById('qq')
-console.log(qq)
-// qq.onclick = () => alert("The native handler");
-// qq.addEventListener("click", console.log('clik'));
+//Создаем новую чат комнату
+async function userId(id) {
+    const rooms = await getApiData(urls.ROOMS)
+    let room_exist = await roomExist(rooms, id)
+    let room_data = {
+        name: id,
+    };//
 
-// Создаем новую чат комнату
-// function userId(id) {
-//   let room_data = {
-//     name: id,
-//   };
-
-//   if (getCurrentUser().length !== 0) {
-//     // Проверяем есть ли уже такая комната
-//     getApiData(urls.ROOMS).then((result) => {
-//       if (roomExist(result, id)) {
-//         console.log("Комната уже есть");
-//       } else {
-//         putApiData(room_data, urls.ROOMS).then((res) => {
-//           return res.json()
-//         }).then((r) => {
-//           console.log(r)})
-//       }
-//     });
-//   } else {
-//     alert("Войдите или зарегистрируйтесть, чтобы отправлять сообщения");
-//   }
-// }
+    if (getCurrentUser().length !== 0) {
+        // Проверяем есть ли уже такая комната
+        if (room_exist[1]) {
+            roomId(room_exist[0])
+        } else {
+            // создаем комнату
+            putApiData(room_data, urls.ROOMS).then((res) => {
+                return res.json()
+            }).then((room) => {
+                // Отображаем новую комнату
+                getApiData(showRoomsData, urls.ROOMS)
+            })
+        }
+    } else {
+        alert("Войдите или зарегистрируйтесь, чтобы отправлять сообщения");
+    }
+}
 
 // Проверяем существует ли комната
-function roomExist(rooms, id) {
-    for (let i of rooms) {
+async function roomExist(rooms, id) {
+    const response = await rooms
+    for (let i of response) {
         if (i.name === id) {
-            return true;
+            return [i.id, true]
         }
     }
     return false;
@@ -130,24 +109,33 @@ function roomId(id) {
     document.getElementById(window.current_room).className = "li-off";
     window.current_room = id;
     document.getElementById(window.current_room).className = "li-on";
-    getApiData(showMessages, message + id);
+    getApiData(showMessages, urls.MESSAGES + `?target=${id}`);
 }
 
-// Отправляем сообщение
-// let form = document.getElementById("form");
-// if (form !== null){
-// form.onsubmit = async (e) => {
-//   e.preventDefault();
-//   let my_form = new FormData(form);
-//
-//   my_form.append("target", window.current_room);
-//   my_form.append("author", cur_user[0].username);
-//
-//   let response = await fetch(message, {
-//     method: "POST",
-//     body: my_form,
-//   });
-//   console.log(response)
-// };}
 
-export {roomId}
+// Отправляем сообщение
+let form = document.getElementById("message-form");
+form.onsubmit = async (e) => {
+    e.preventDefault();
+    let my_form = new FormData(form);
+
+    my_form.append("target", window.current_room);
+    getCurrentUser().then((response) => {
+        return response
+    }).then((user) => {
+        let message = {
+            "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
+            "text": `${my_form.get("text")}`,
+            "author": user,
+            "target": my_form.get("target")
+        }
+        putApiData(message, urls.MESSAGES).then((response) => {
+            console.log(response.json())
+        })
+    })
+};
+
+export {roomId, userId}
+
+
+

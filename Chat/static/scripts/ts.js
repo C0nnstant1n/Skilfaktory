@@ -20,3 +20,12 @@ var keys = Object.keys(obj).map((key, value) =>{
     // console.log(index)
 });
 console.log('obj contains ' + keys.length + ' keys: '+  keys);
+
+function roomId(id) {
+    document.getElementById(window.current_room).className = "li-off";
+    window.current_room = id;
+    document.getElementById(window.current_room).className = "li-on";
+    getApiData(showMessages, message + id);
+}
+
+export {roomId}

@@ -1,74 +1,51 @@
+import {getApiData, putApiData} from "./get_post.js";
+import {urls} from "./consts.js";
+
 const option_Node = document.querySelector(".selector");
 
-// Получаем данные с сервера
-function getApiData(callback, url) {
-    fetch(url)
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            callback(data);
-        });
-    return 0;
-}
-
-function showUsersData(apiData) {
+async function showUsersData(apiData) {
     let option = "";
-    apiData.forEach((element) => {
+    const users = await apiData
+    for (let element of users) {
         const option_block = `
-    <option value=${element.username}>
-     ${element.username}
-    </option>`;
-        option = option_block + option;
-    });
+        <option value=${element.username}>
+           ${element.username}
+        </option>`;
+        option = option_block + option
+    }
     option_Node.innerHTML = option
 }
 
-console.log(option_Node)
-getApiData(showUsersData, "/api/users/")
+getApiData(showUsersData, urls.USERS)
 
 // Отправляем форму
 const form = document.getElementById("create_room");
-console.log("form")
 
-
-
-form.onsubmit = async (e) => {
+form.onsubmit = (e) => {
     e.preventDefault();
     let my_form = new FormData(form);
-    my_form.append("members", document.select.value)
     console.log('Обработка события')
-    console.log(document.select.value)
-    console.log(Array.from(my_form.entries()))
+    const members = my_form.getAll("members")
 
-    let response = await fetch("/api/room/", {
-        method: 'POST',
-        body: my_form
-    });
-    console.log(Array.from(my_form.entries()))
-    console.log(response)
+
+    // Создём комнату
+    let room_data = {
+        "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
+        "name": `${my_form.get("name")}`,
+    }
+    putApiData(room_data, urls.ROOMS).then((response) => {
+        return  response.json()}).then((room) => {
+        console.log(room)
+        for (let member of members) {
+            let member_data = {
+                "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
+                "room": room.name,
+                "member": member
+            }
+
+            putApiData(member_data, urls.MEMBER).then((response) =>{
+                console.log(response.statusText)
+            })
+        }
+    })
 }
-
-
-
-
-
-// import { ItcCustomSelect } from "./itc-custom-select.js";
-//
-// (async() => {
-//     const response = await fetch("/api/users/")
-//     if (response.ok) {
-//         const data= await response.json();
-//         const selector = document.querySelector('.itc-select__options').innerHTML
-//         const values = Object.keys(data).map((key, index) => {
-//             return `<li class="itc-select__option" data-select="option" data-value="${data[key].username}" data-index="${data[key].id}">${data[key].username}</li>`;
-//         });
-//         document.querySelector('.itc-select__options').innerHTML = values.join('');
-//         document.select = new ItcCustomSelect('#select-1');
-//         document.querySelector('.itc-select__toggle').disabled = false;
-//     }
-//     console.log(values);
-//     new ItcCustomSelect("#select-1");
-//     document.querySelector(".itc-select__toggle").disabled = false;
-//   }
-// })();

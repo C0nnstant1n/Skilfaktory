@@ -17,10 +17,16 @@ function getCookie(name) {
 const csrftoken = getCookie("csrftoken");
 
 // Получаем данные с сервера
-async function getData(url){
-    let response = await fetch(url)
+async function getApiData(callback, url) {
+  if (arguments.length > 1) {
+    fetch(url).then((response) => {
+      return callback(response.json())
+    })
+    } else {
+    const response = await fetch(callback)
     return response.json()
-}
+    }
+  }
 
 // Отправляем данные на сервер
 function putApiData(data, url) {
@@ -34,4 +40,4 @@ function putApiData(data, url) {
   })
 }
 
-export {getData, putApiData}
+export {getApiData, putApiData}
