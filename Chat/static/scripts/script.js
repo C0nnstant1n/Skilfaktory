@@ -1,5 +1,6 @@
 import {getApiData, putApiData} from "./get_post.js"
-import {nodes, urls} from "./consts.js";
+import {nodes, urls} from "./consts.js"
+import {ItcCustomSelect} from "./itc-custom-select.js"
 
 
 //  Получаем текущего пользователя
@@ -109,15 +110,33 @@ function roomId(id) {
     document.getElementById(window.current_room).className = "li-off";
     window.current_room = id;
     document.getElementById(window.current_room).className = "li-on";
+    getApiData(`room/${id}`).then((response) => {
+        const h = document.getElementById("room")
+        h.innerHTML = `Комната: ${response.name}`
+    })
     getApiData(showMessages, urls.MESSAGES + `?target=${id}`);
 }
 
+// Selector
+(async () => {
+    const response = await fetch(urls.USERS)
+    if (response.ok) {
+        const data = await response.json();
+        const values = Object.values(data).map((key, index) => {
+            return `<li class="itc-select__option" data-select="option" data-value="${key.username}" data-index="${index}">${data[index].username}</li>`;
+        });
+        document.querySelector('.itc-select__options').innerHTML = values.join('');
+        new ItcCustomSelect('#select-1');
+        document.querySelector('.itc-select__toggle').disabled = false;
+    }
+})();
+
 
 // Отправляем сообщение
-let form = document.getElementById("message-form");
-form.onsubmit = async (e) => {
+let message_form = document.getElementById("message-form");
+message_form.onsubmit = async (e) => {
     e.preventDefault();
-    let my_form = new FormData(form);
+    let my_form = new FormData(message_form);
 
     my_form.append("target", window.current_room);
     getCurrentUser().then((response) => {
@@ -130,10 +149,34 @@ form.onsubmit = async (e) => {
             "target": my_form.get("target")
         }
         putApiData(message, urls.MESSAGES).then((response) => {
+            document.getElementById("message").value = ''
             console.log(response.json())
+
         })
     })
 };
+
+// Изменяем комнату
+const room_form = document.getElementById("form-change-room");
+room_form.onsubmit = async (e) => {
+    e.preventDefault();
+    let my_form = new FormData(room_form)
+
+  const { elements } = room_form
+  const data = Array.from(elements)
+    .filter((item) => !!item.name)
+    .map((element) => {
+      const { name, value } = element
+
+      return { name, value }
+    })
+    let arr = {}
+    for (let i of data){
+        arr += `${i.name}: ${i.value}\n`
+    }
+    console.log(arr)
+    console.log(arr.json())
+}
 
 export {roomId, userId}
 

@@ -30,6 +30,7 @@
                     <h3>Комнаты</h3>
                     <script type="module">
                         import {roomId} from "{% static './scripts/script.js' %}";
+
                         window.roomId = roomId
                     </script>
                     <ul class="rooms">
@@ -39,16 +40,30 @@
                     {% endif %}
                 </nav>
                 <div class="MiddleColumn">
-                    <h3>Сообщения</h3>
+                    <h3 id="room">Сообщения</h3>
                     <ul class="messages"></ul>
-                    <form id="message-form" action="" >
-                         {% csrf_token %}
-                        <label for="message">
-                            <input id="message" type="text" name="text" class="itc-select__toggle">
-                        </label>
-                        <label for="send-message">
-                            <button id="send-message" class="selector">Отправить</button>
-                        </label>
+                    <div class="change-room">
+                        <p>Управление комнатой</p>
+                            <form id="form-change-room" action="" class="change-room-form">
+                                {% csrf_token %}
+                                <input id="change_room" type="text" name="name" class="selector" placeholder="Название комнаты">
+                                <div class="itc-select" id="select-1">
+                                    <!-- Кнопка для открытия выпадающего списка -->
+                                    <button type="button" class="itc-select__toggle" name="username" value=""
+                                            data-select="toggle" data-index="-1">Добавить пользователя
+                                    </button>
+                                    <!-- Выпадающий список -->
+                                    <div class="itc-select__dropdown">
+                                        <ul class="itc-select__options"></ul>
+                                    </div>
+                                </div>
+                                <button id="send-mess" class="selector">Сохранить</button>
+                            </form>
+                    </div>
+                    <form id="message-form" action="" class="message-form">
+                        {% csrf_token %}
+                        <input id="message" type="text" name="text" class="itc-select__toggle" placeholder="Сообщение">
+                        <button id="send-message" class="selector">Отправить</button>
                     </form>
 
                 </div>

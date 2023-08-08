@@ -114,7 +114,21 @@ body {
     text-align: center;
 }
 
-.MiddleColumn form {
+.change-room {
+    display: flex;
+    flex-direction: column;
+    border: 1px;
+    background-color: #f6c58a;
+    position: sticky;
+    top: 64%;
+    border-radius: 10px;
+}
+
+.change-room-form {
+        display: flex;
+}
+
+.message-form {
     display: flex;
     justify-content: space-around;
     position: sticky;
