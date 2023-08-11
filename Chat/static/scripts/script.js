@@ -1,4 +1,4 @@
-import {getApiData, putApiData} from "./get_post.js"
+import {getApiData, putApiData, updateApiData} from "./get_post.js"
 import {nodes, urls} from "./consts.js"
 import {ItcCustomSelect} from "./itc-custom-select.js"
 
@@ -48,6 +48,28 @@ async function showUsersData(apiData) {
     nodes.users.innerHTML = li;
 }
 
+// Показываем участников комнаты
+async function showMembersData(apiData) {
+    console.log(apiData)
+    let li = "";
+    const members = await apiData
+    for (let user of members) {
+        const li_block = `
+        <li id=${user.username} onclick="userId(id)">
+            <img src="/uploads/${user.avatar}" alt="avatar" />
+            <p>${user.username}</p>
+            <div class="user-btn" id=${user.username + user.id}>
+            <svg width="16" height="16" fill="currentColor" class="x-square" viewBox="0 0 16 16">
+  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+</svg>
+</div>
+        </li>`;
+        li = li + li_block;
+    }
+    nodes.users.innerHTML = li;
+}
+
 async function showMessages(apiData) {
     let li = "";
     const messages = await apiData
@@ -65,7 +87,8 @@ async function showMessages(apiData) {
 // Получаем список чат комнат и выводим на страничку
 getApiData(showRoomsData, urls.ROOMS);
 // Список всех пользователей
-getApiData(showUsersData, urls.USERS);
+// getApiData(showUsersData, urls.USERS);
+
 
 //Создаем новую чат комнату
 async function userId(id) {
@@ -110,11 +133,12 @@ function roomId(id) {
     document.getElementById(window.current_room).className = "li-off";
     window.current_room = id;
     document.getElementById(window.current_room).className = "li-on";
-    getApiData(`room/${id}`).then((response) => {
+    getApiData(urls.ROOMS+id+'/').then((response) => {
         const h = document.getElementById("room")
         h.innerHTML = `Комната: ${response.name}`
     })
     getApiData(showMessages, urls.MESSAGES + `?target=${id}`);
+    getApiData(showMembersData, urls.ROOMS+id+"/members")
 }
 
 // Selector
@@ -167,15 +191,19 @@ room_form.onsubmit = async (e) => {
     .filter((item) => !!item.name)
     .map((element) => {
       const { name, value } = element
-
       return { name, value }
     })
     let arr = {}
     for (let i of data){
-        arr += `${i.name}: ${i.value}\n`
+        arr[i.name] = i.value
     }
-    console.log(arr)
-    console.log(arr.json())
+    if (arr.name){
+        delete arr.username
+        console.log(arr.name)
+        await updateApiData(arr, urls.ROOMS+window.current_room+"/").then((response) =>{
+            console.log(response)}).then(() => {roomId(window.current_room)})
+    }else {
+        console.log("false", arr)}
 }
 
 export {roomId, userId}

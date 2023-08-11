@@ -145,7 +145,7 @@ body {
 }
 
 .RightColumn ul {
-    padding-top: 1rem;
+    padding-top: 0.5rem;
 }
 
 .RightColumn img {
@@ -155,14 +155,13 @@ body {
 }
 
 .RightColumn p {
-    padding-left: 1rem;
-    padding-top: 5px;
+padding: 10px;
 }
 
 .RightColumn li {
     margin-top: 6px;
-    margin-left: 10%;
-    width: 150px;
+    /*margin-left: 10%;*/
+    max-width: 150px;
     display: flex;
     justify-content: flex-start;
 }

@@ -1,9 +1,11 @@
-from rest_framework import viewsets, mixins, permissions, generics
-from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from .serializers import *
 from django.views.generic import CreateView, TemplateView
 from .forms import CreateMessageForm
 from .models import Room
+from django.http import HttpResponse, JsonResponse
 
 
 class CurrentUser(viewsets.ReadOnlyModelViewSet):
@@ -36,27 +38,38 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
-    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            queryset = set(Room.objects.filter(members=self.request.user.id))
+            # queryset = Room.objects.all()
+            queryset = Room.objects.filter(members=self.request.user.id)
         else:
             queryset = []
         return queryset
+
+    @action(detail=True)
+    def members(self, request, pk=None):
+        room = self.get_object()
+        members = room.members.all()
+        members_serializer = UsersSerializer(members, many=True)
+        return JsonResponse(members_serializer.data, safe=False)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
 
-class RoomDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
-
-
 class RoomMembersViewSet(viewsets.ModelViewSet):
     queryset = RoomMembers.objects.all()
     serializer_class = RoomMembersSerializer
+
+    # def get_queryset(self):
+    #     queryset = []
+    #     target = self.request.query_params.get('id')
+    #     if target is not None:
+    #         queryset = Room.objects.get(id=target).members.all()
+    #     return queryset
+
 
 
 class IndexView(TemplateView):
@@ -68,8 +81,8 @@ class IndexView(TemplateView):
         return context
 
 
-class CreateRoomView(TemplateView):
-    template_name = 'messenger/create_room.html'
+# class CreateRoomView(TemplateView):
+#     template_name = 'messenger/create_room.html'
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)

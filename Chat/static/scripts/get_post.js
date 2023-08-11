@@ -40,4 +40,15 @@ function putApiData(data, url) {
   })
 }
 
-export {getApiData, putApiData}
+function updateApiData(data, url) {
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      "X-CSRFTOKEN": csrftoken,
+    },
+    body: JSON.stringify(data)
+  })
+}
+
+export {getApiData, putApiData, updateApiData}
