@@ -30,6 +30,7 @@
                     <h3>Комнаты</h3>
                     <script type="module">
                         import {roomId} from "{% static './scripts/script.js' %}";
+
                         window.roomId = roomId
                     </script>
                     <ul class="rooms">
@@ -40,9 +41,10 @@
                 </nav>
                 <div class="MiddleColumn">
                     <h3>Сообщения</h3>
+
                     <ul class="messages"></ul>
-                    <form id="message-form" action="" >
-                         {% csrf_token %}
+                    <form id="message-form" action="">
+                        {% csrf_token %}
                         <label for="message">
                             <input id="message" type="text" name="text" class="itc-select__toggle">
                         </label>

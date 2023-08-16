@@ -6,7 +6,10 @@
 html,
 body {
     height: 100%;
-    font-family: sans-serif;
+}
+
+@font-face {
+    font-family: "Times New Roman", Georgia, sans-serif;
 }
 
 .wrapper {
@@ -81,14 +84,20 @@ body {
 
 .leftColumn ul {
     padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    flex-direction: column;
 }
 
 .leftColumn li {
     margin-top: 6px;
-    width: 150px;
+    min-width: 100px;
+    max-width: 200px;
     height: 40px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    border-radius: 10px;
 }
 
 .leftColumn p {
@@ -132,6 +141,10 @@ body {
 
 .RightColumn ul {
     padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    flex-direction: column;
 }
 
 .RightColumn img {
@@ -147,10 +160,11 @@ body {
 
 .RightColumn li {
     margin-top: 6px;
-    margin-left: 10%;
-    width: 150px;
+    min-width: 100px;
+    max-width: 200px;
     display: flex;
     justify-content: flex-start;
+    border-radius: 10px;
 }
 
 .RightColumn li:hover {
@@ -184,10 +198,16 @@ button {
 }
 
 .messages li {
+    padding: 0.3rem 2rem;
     margin: 4px;
     background-color: #f9f1e8;
-    max-width: 300px;
+    max-width: fit-content;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: stretch;
 }
 
 .messages p {
