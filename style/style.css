@@ -3,7 +3,8 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     background-color: #dfdfdf;
     color: #034769;
     height: 100%;
@@ -12,15 +13,20 @@ html, body {
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
-header h2, h3 {
+header h2,
+h3 {
     color: #FFCA40;
 }
 
 main {
-    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 'contacts experience' 'post experience' 'skills experience' 'educations experience';
+    gap: 1vw;
 }
 
 .page {
@@ -32,6 +38,9 @@ main {
 header {
     background-color: #3ca0d0;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .logo {
@@ -62,7 +71,6 @@ header {
     justify-content: center;
 }
 
-
 .popup-content img {
     border-radius: 0;
     width: auto;
@@ -81,7 +89,8 @@ header {
     left: 85vw;
 }
 
-.close:hover, .close:focus {
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -122,19 +131,24 @@ section {
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .collapsible:hover {
+.active,
+.collapsible:hover {
     background-color: #A67800;
     color: #ffd873;
 }
 
 .collapsible:after {
-    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    content: '\02795';
+
+    /* Unicode character for "plus" sign (+) */
     font-size: 1.5rem;
     float: right;
 }
 
 .active:after {
-    content: "\2796"; /* Unicode character for "minus" sign (-) */
+    content: "\2796";
+
+    /* Unicode character for "minus" sign (-) */
 }
 
 /* Style the collapsible content. Note: hidden by default */
@@ -143,8 +157,7 @@ section {
     display: grid;
     grid-template-columns: 1fr 3fr;
     grid-gap: 1vw;
-    grid-template-areas:
-        "name value"
+    grid-template-areas: "name value"
         "midlle midlle"
         "end end";
     overflow: hidden;
@@ -156,7 +169,7 @@ section {
 }
 
 .item {
-    grid-area: 1/1/2/3
+    grid-area: 1/1/2/3;
 }
 
 .item-3 {
@@ -168,21 +181,31 @@ section {
 }
 
 .item-5 {
-    grid-area: 2/3/2/2
+    grid-area: 2/3/2/2;
 }
 
 /* Container for skill bars */
 .skill-wrapper {
-    width: 100%; /* Full width */
-    background-color: #ddd; /* Grey background */
+    width: 100%;
+
+    /* Full width */
+    background-color: #ddd;
+
+    /* Grey background */
 }
 
 .skills {
     margin: 1vh 0;
     text-align: center;
-    padding-top: 10px; /* Add top padding */
-    padding-bottom: 10px; /* Add bottom padding */
-    color: #ffd873; /* text color */
+    padding-top: 10px;
+
+    /* Add top padding */
+    padding-bottom: 10px;
+
+    /* Add bottom padding */
+    color: #ffd873;
+
+    /* text color */
 }
 
 .python {
@@ -197,6 +220,7 @@ section {
 
 .sql {
     width: 70%;
+    color: #115F85;
     background-color: #FFB800;
 }
 
@@ -231,7 +255,6 @@ footer {
 /* The actual timeline (the vertical ruler) */
 .timeline {
     position: relative;
-    max-width: 1200px;
     margin: 0 auto;
     grid-area: 1/1/2/3;
 }
@@ -244,7 +267,7 @@ footer {
     background-color: #FF6840;
     top: 0;
     bottom: 0;
-    left: 50%;
+    left: 10px;
     margin-left: -3px;
 }
 
@@ -253,7 +276,7 @@ footer {
     padding: 10px 40px;
     position: relative;
     background-color: inherit;
-    width: 45%;
+    width: 100%;
 }
 
 /* The circles on the timeline */
@@ -270,28 +293,9 @@ footer {
     z-index: 1;
 }
 
-/* Place the container to the left */
-.left {
-    left: 0;
-}
-
 /* Place the container to the right */
 .right {
-    left: 50%;
-}
-
-/* Add arrows to the left container (pointing right) */
-.left::before {
-    content: " ";
-    height: 0;
-    position: absolute;
-    top: 22px;
-    width: 0;
-    z-index: 1;
-    right: 30px;
-    border: medium solid white;
-    border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent white;
+    left: 2%;
 }
 
 /* Add arrows to the right container (pointing left) */
@@ -303,62 +307,65 @@ footer {
     width: 0;
     z-index: 1;
     left: 30px;
-    border: medium solid #cc2d2d;
+    border: medium solid white;
     border-width: 10px 10px 10px 0;
-    border-color: transparent #ea9e41 transparent transparent;
+    border-color: transparent #FF6840 transparent transparent;
 }
 
 /* Fix the circle for containers on the right side */
 .right::after {
-    left: -16px;
+    left: -11px;
 }
 
 /* The actual content */
 .timeline-content {
     padding: 20px 30px;
-    background-color: #c99965;
+    background-color: #ffe090;
     position: relative;
     border-radius: 6px;
+    margin-right: 0;
 }
 
 /* Media queries - Responsive timeline on screens less than 600px wide */
 @media (max-width: 600px) {
+    header {
+        flex-wrap: nowrap;
+    }
+
     header img {
         width: 100px;
         height: 100px;
     }
 
-    /* Place the timelime to the left */
-    .timeline::after {
-        left: 31px;
-    }
-
-    html, body {
+    html,
+    body {
         font-size: 12px;
     }
 
-    /* Full-width containers */
-    .container {
-        width: 100%;
-        padding-left: 70px;
-        padding-right: 25px;
+    main {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: 'contacts' 'post' 'experience' 'educations' 'skills';
     }
+}
 
-    /* Make sure that all arrows are pointing leftwards */
-    .container::before {
-        left: 60px;
-        border: medium solid white;
-        border-width: 10px 10px 10px 0;
-        border-color: transparent white transparent transparent;
-    }
+.contacts {
+    grid-area: contacts;
+}
 
-    /* Make sure all circles are at the same spot */
-    .left::after, .right::after {
-        left: 15px;
-    }
+.post {
+    grid-area: post;
+}
 
-    /* Make all right containers behave like the left ones */
-    .right {
-        left: 0%;
-    }
+.experience {
+    grid-area: experience;
+}
+
+.education {
+    grid-area: educations;
+}
+
+.skills {
+    grid-area: skills;
 }

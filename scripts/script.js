@@ -1,12 +1,17 @@
 const coll = document.getElementsByClassName("collapsible");
 let i, n;
 const collapse = document.getElementsByClassName("content")
+const experience = document.getElementsByClassName('experience')
 
-console.log(window.screen.availWidth)
+console.log(window.innerWidth)
 
 for (n of collapse) {
     n.style.display = "none"
 }
+
+if (window.innerWidth > 600) {experience.item(0).getElementsByTagName('button').item(0).classList.toggle('active')
+collapse[2].style.display = 'grid'}
+
 
 for (i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function () {
@@ -34,7 +39,7 @@ popup_close.onclick = function () {
 }
 
 window.onclick = function (e) {
-    if (e.target == popup_content) {
+    if (e.target === popup_content) {
         popup.style.display = "none"
     }
 }
