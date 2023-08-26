@@ -11,7 +11,7 @@ class CurrentUser(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            queryset = User.objects.filter(id=self.request.user.id)
+            queryset = User.objects.filter(id=self.request.user.id).distinct()
         else:
             queryset = []
         return queryset
@@ -30,7 +30,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         queryset = []
         target = self.request.query_params.get('target')
         if target is not None:
-            queryset = Message.objects.filter(target=target)
+            queryset = Message.objects.filter(target=target).distinct()
         return queryset
 
 
@@ -40,7 +40,10 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            queryset = set(Room.objects.filter(members=self.request.user.id))
+            query = Room.objects.filter(members=self.request.user.id).distinct()
+            print(type(query))
+            queryset = query
+            print(queryset)
         else:
             queryset = []
         return queryset

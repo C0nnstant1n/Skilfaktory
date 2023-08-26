@@ -33,19 +33,22 @@ form.onsubmit = (e) => {
         "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
         "name": `${my_form.get("name")}`,
     }
+
     putApiData(room_data, urls.ROOMS).then((response) => {
-        return  response.json()}).then((room) => {
+        return response.json()
+    }).then((room) => {
         console.log(room)
         for (let member of members) {
             let member_data = {
                 "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
-                "room": room.name,
+                "room": room.id,
                 "member": member
             }
-
-            putApiData(member_data, urls.MEMBER).then((response) =>{
-                console.log(response.statusText)
+            putApiData(member_data, urls.MEMBER).then((response) => {
             })
         }
+    }).then(() => {
+        e.target.reset()
+        window.location.href = "http://127.0.0.1:8000/"
     })
 }

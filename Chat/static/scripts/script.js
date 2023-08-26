@@ -5,15 +5,27 @@ import {nodes, urls} from "./consts.js";
 //  Получаем текущего пользователя
 async function getCurrentUser() {
     const cur_user = await getApiData(urls.CURRENT)
-    return cur_user[0].username
+    return cur_user[0]
 }
+
+const current_user = await getCurrentUser()
+
+async function getCurrentRoom() {
+    const cur_room = await getApiData(urls.ROOMS)
+    return cur_room[0]
+}
+
+let current_room = await getCurrentRoom()
+
+console.log(current_user.username, current_room)
+
 
 // Формируем список комнат
 async function showRoomsData(apiData) {
     let li = "";
     const rooms = await apiData
     if (rooms.length > 0) {
-        window.current_room = rooms[0].id
+        current_room.id = rooms[0].id
 
         for (let room of rooms) {
             const li_block = `
@@ -26,9 +38,9 @@ async function showRoomsData(apiData) {
         return
     }
     nodes.rooms.innerHTML = li;
-    document.getElementById(window.current_room).className = "li-on";
-    await getApiData(showMessages, urls.MESSAGES + `?target=${window.current_room}`);
-    return document.getElementById(window.current_room)
+    document.getElementById(current_room.id).className = "li-on";
+    await getApiData(showMessages, urls.MESSAGES + `?target=${current_room.id}`);
+    return document.getElementById(current_room.id)
 }
 
 
@@ -47,6 +59,25 @@ async function showUsersData(apiData) {
     nodes.users.innerHTML = li;
 }
 
+// Формируем список участников в комнате
+async function showRoomMembers(apiData) {
+    let li = ""
+    const room = await apiData
+    for (let user of room.members) {
+        if (user.id != current_user.id) {
+            const li_block = `
+        <li id=${user.username}>
+            <img src="/uploads/${user.avatar}" alt="avatar" />
+            <p>${user.username}</p>
+        </li>`;
+            li = li + li_block;
+        }
+    }
+    nodes.users.innerHTML = li;
+
+
+}
+
 async function showMessages(apiData) {
     let li = "";
     const messages = await apiData
@@ -63,8 +94,13 @@ async function showMessages(apiData) {
 
 // Получаем список чат комнат и выводим на страничку
 getApiData(showRoomsData, urls.ROOMS);
+// Спиок участников комнаты
+if (typeof current_room !== 'undefined') {
+    getApiData(showRoomMembers, urls.ROOMS + current_room.id)
+}
+
 // Список всех пользователей
-getApiData(showUsersData, urls.USERS);
+// getApiData(showUsersData, urls.USERS);
 
 //Создаем новую чат комнату
 async function userId(id) {
@@ -106,9 +142,10 @@ async function roomExist(rooms, id) {
 
 // Переход в комнату
 function roomId(id) {
-    document.getElementById(window.current_room).className = "li-off";
-    window.current_room = id;
-    document.getElementById(window.current_room).className = "li-on";
+    document.getElementById(current_room.id).className = "li-off";
+    current_room.id = id;
+    document.getElementById(current_room.id).className = "li-on";
+    getApiData(showRoomMembers, urls.ROOMS + current_room.id)
     getApiData(showMessages, urls.MESSAGES + `?target=${id}`);
 }
 
@@ -119,7 +156,7 @@ form.onsubmit = async (e) => {
     e.preventDefault();
     let my_form = new FormData(form);
 
-    my_form.append("target", window.current_room);
+    my_form.append("target", current_room.id);
     getCurrentUser().then((response) => {
         return response
     }).then((user) => {
