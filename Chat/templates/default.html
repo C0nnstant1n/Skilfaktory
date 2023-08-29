@@ -30,12 +30,23 @@
                     <h3>Комнаты</h3>
                     <script type="module">
                         import {roomId} from "{% static './scripts/script.js' %}";
+
                         window.roomId = roomId
                     </script>
                     <ul class="rooms">
                     </ul>
                     {% if user.is_authenticated %}
-                        <a class="room-button" href="/create">Создать</a>
+                        <div class="itc-select" id="select-1">
+                            <!-- Кнопка для открытия выпадающего списка -->
+                            <button id="add-user" type="button" class="itc-select__toggle" name="member" value=""
+                                    data-select="toggle" data-index="-1">Добавить участника
+                            </button>
+                            <!-- Выпадающий список -->
+                            <div class="itc-select__dropdown">
+                                <ul class="itc-select__options"></ul>
+                            </div>
+                        </div>
+                        <a class="room-button" href="/create">Создать комнату</a>
                     {% endif %}
                 </nav>
                 <div class="MiddleColumn">
@@ -60,7 +71,9 @@
 
                         window.userId = userId
                     </script>
-                    <ul class="users"></ul>
+                    <ul class="users">
+                        <li></li>
+                    </ul>
                 </div>
             </div>
             <script type="module" src="{% static 'scripts/script.js' %}"></script>

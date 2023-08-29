@@ -40,10 +40,7 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            query = Room.objects.filter(members=self.request.user.id).distinct()
-            print(type(query))
-            queryset = query
-            print(queryset)
+            queryset = Room.objects.filter(members=self.request.user.id).distinct()
         else:
             queryset = []
         return queryset
