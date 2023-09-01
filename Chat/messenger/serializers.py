@@ -39,7 +39,7 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
 
 class RoomMembersSerializer(serializers.HyperlinkedModelSerializer):
     room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='id')
-    member = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    member = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='id')
 
     class Meta:
         model = RoomMembers

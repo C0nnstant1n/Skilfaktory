@@ -1,4 +1,4 @@
-import {getApiData, putApiData} from "./get_post.js"
+import {getApiData, putApiData, csrftoken} from "./get_post.js"
 import {ItcCustomSelect} from "./itc-custom-select.js";
 import {nodes, urls} from "./consts.js";
 
@@ -7,17 +7,23 @@ async function getCurrentUser() {
     const cur_user = await getApiData(urls.CURRENT)
     return cur_user[0]
 }
+
 const current_user = await getCurrentUser()
 
 // Получаем список комнат участником которых являемся
 async function getRooms() {
     return await getApiData(urls.ROOMS)
 }
-const rooms = await getRooms()
+
+let rooms = await getRooms()
 
 // Устанавливаем текущую комнату (Первую из списка доступных)
-let current_room = {"id": 0 , "name": ' '};
-current_room.id = rooms[0].id
+let current_room = {"id": 0, "name": ' '};
+if (rooms.length > 0) {
+    current_room.id = rooms[0].id
+    current_room.name = rooms[0].name
+    current_room.members = rooms[0].members
+}
 
 // Отображаем участников комнаты(кроме себя)
 showRoomMembers(current_room.id)
@@ -35,7 +41,9 @@ if (rooms.length > 0) {
     }
 }
 nodes.rooms.innerHTML = li;
-document.getElementById(current_room.id).className = "li-on";
+if (current_room.id !== 0) {
+    document.getElementById(current_room.id).className = "li-on"
+}
 
 // Отображаем сообщения в комнате
 await getApiData(showMessages, urls.MESSAGES + `?target=${current_room.id}`);
@@ -57,23 +65,27 @@ async function showUsersData(apiData) {
 
 // Формируем список участников в комнате
 function showRoomMembers(id) {
-    nodes.users.innerHTML = "";
-    let li = ''
-    for (let room of rooms) {
-        if (room.id === id) {
-            for (let user of room.members) {
-                if (user.id !== current_user.id) {
-                    const li_block = `
+    getRooms().then((result) => {
+        rooms = result
+        nodes.users.innerHTML = "";
+        let li = ''
+        for (let room of rooms) {
+            if (room.id === id) {
+                for (let user of room.members) {
+                    if (user.id !== current_user.id) {
+                        const li_block = `
                     <li id=${user.username}>
                         <img src="/uploads/${user.avatar}" alt="avatar" />
                         <p>${user.username}</p>
                     </li>`;
-                    li = li + li_block;
+                        li = li + li_block;
+                    }
                 }
+                nodes.users.innerHTML = li;
             }
-            nodes.users.innerHTML = li;
         }
-    }
+    })
+
 
 }
 
@@ -150,21 +162,23 @@ form.onsubmit = async (e) => {
     let my_form = new FormData(form);
 
     my_form.append("target", current_room.id);
-    let message = {
-        "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
-        "text": `${my_form.get("text")}`,
-        "author": current_user.username,
-        "target": my_form.get("target")
+    if ((my_form.get('target') != '0') && (my_form.get('text') != '')) {
+        let message = {
+            "csrfmiddlewaretoken": `${my_form.get("csrfmiddlewaretoken")}`,
+            "text": `${my_form.get("text")}`,
+            "author": current_user.username,
+            "target": my_form.get("target")
+        }
+        putApiData(message, urls.MESSAGES).then((response) => {
+            console.log(response.json())
+        })
     }
-    putApiData(message, urls.MESSAGES).then((response) => {
-        console.log(response.json())
-    })
     e.target.reset()
 };
 
 
 // Кнопка добавить участника
-(async () => {
+async function addButton() {
     const response = await fetch(urls.USERS)
     if (response.ok) {
         const data = await response.json();
@@ -172,27 +186,39 @@ form.onsubmit = async (e) => {
             return `<li class="itc-select__option" data-select="option" data-value="${data[key].id}" data-index="${index}">${data[key].username}</li>`;
         });
         document.querySelector('.itc-select__options').innerHTML = values.join('');
-        new ItcCustomSelect('#select-1')
+        document.ITC = new ItcCustomSelect('#select-1')
         document.querySelector('.itc-select__toggle').disabled = false;
     }
-})();
-// document.querySelector('#select-1').addEventListener('itc.select.change', (e) => {
-//   const btn = e.target.querySelector('.itc-select__toggle');
-//   // выбранное значение
-//   console.log(`Выбранное значение: ${btn.value}`);
-//     // индекс выбранной опции
-//   console.log(`Индекс выбранной опции: ${btn.dataset.index}`);
-//   // выбранный текст опции
-//   const selected = e.target.querySelector('.itc-select__option_selected');
-//   const text = selected ? selected.textContent : '';
-//   console.log(`Выбранный текст опции: ${text}`);
-//
-//     console.log(btn.value)
-//     btn.dataset.index = -1
-//     console.log(btn.value)
-//     console.log(btn)
-//
-// });
+};
 
-console.log(document.querySelector('#select-1').selectedIndex)
+addButton();
+
+document.querySelector('#select-1').addEventListener('itc.select.change', (e) => {
+    const btn = e.target.querySelector('.itc-select__toggle');
+
+    const data = {
+        'csrfmiddlewaretoken': csrftoken,
+        'room': current_room.id,
+        'member': btn.value
+    }
+    if (rooms.length > 0) {
+        for (let user of current_room.members) {
+            if (btn.value == user.id) {
+                alert('Этот пользователь уже есть в этой комнате')
+                break
+            } else {
+                putApiData(data, urls.MEMBER).then((response) => {
+                    console.log('Пользователь добавлен: ',response.json())
+                    showRoomMembers(current_room.id)
+                })
+                break
+            }
+        }
+    } else {
+        alert('Создйте комнату')
+    }
+    btn.dataset.index = -1
+    btn.textContent = 'Добавить участника'
+});
+
 export {roomId, userId}
