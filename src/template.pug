@@ -1,0 +1,40 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title Чат
+  body
+    .wrapper
+      header.header
+        nav
+          ul.topmenu
+            li
+              a(href='/') Домой
+            li
+              a(href='/accounts/logout') Выход
+      main.main
+        .MainWrapper
+          nav.leftColumn
+            h3 Комнаты
+            ul.rooms
+            #select-1.itc-select
+              // Кнопка для открытия выпадающего списка
+              button#add-user.itc-select__toggle(type='button' name='member' value='' data-select='toggle' data-index='-1')
+                | Добавить участника
+              // Выпадающий список
+              .itc-select__dropdown
+                ul.itc-select__options
+            a.room-button(href='/create') Создать комнату
+          .MiddleColumn
+            h3 Сообщения
+            ul.messages
+            form#message-form(action='')
+              label(for='message')
+                input#message.itc-select__toggle(type='text' name='text')
+              label(for='send-message')
+                button#send-message.selector Отправить
+          .RightColumn
+            h3 Участники
+            ul.users
+              li
+      footer.footer

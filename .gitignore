@@ -17,3 +17,4 @@ _pginfo
 pinegrow.json
 launch.json
 .vscode/
+node_modules/
