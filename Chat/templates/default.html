@@ -1,85 +1,89 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="ru">
-<head>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="{% static 'style/lk/style.css' %}"/>
-    <link rel="stylesheet" href="{% static 'style/messenger/itc-custom-select.css' %}"/>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{% static 'style/lk/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'style/messenger/itc-custom-select.css' %}"
+    />
     <title>{% block title %} Чат {% endblock title %}</title>
-</head>
-<body>
-<div class="wrapper">
-    <header class="header">
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
         <nav>
-            <ul class="topmenu">
-                <li><a href="/">Домой</a></li>
-                {% if user.is_authenticated %}
-                    <li id="user"><a href="/accounts/{{ user.id }}">{{ user }}</a></li>
-                    <li><a href="/accounts/logout">Выход</a></li>
-                {% else %}
-                    <li><a href="/accounts/signup">Зарегистрироваться</a></li>
-                    <li><a href="/accounts/login">Вход</a></li>
-                {% endif %}
-            </ul>
+          <ul class="topmenu">
+            <li><a href="/">Домой</a></li>
+            {% if user.is_authenticated %}
+            <li id="user"><a href="/accounts/{{ user.id }}">{{ user }}</a></li>
+            <li><a href="/accounts/logout">Выход</a></li>
+            {% else %}
+            <li><a href="/accounts/signup">Зарегистрироваться</a></li>
+            <li><a href="/accounts/login">Вход</a></li>
+            {% endif %}
+          </ul>
         </nav>
-    </header>
-    <main class="main">
+      </header>
+      <main class="main">
         {% block content %}
-            <div class="MainWrapper">
-                <nav class="leftColumn">
-                    <h3>Комнаты</h3>
-                    <script type="module">
-                        import {roomId} from "{% static './scripts/script.js' %}";
-
-                        window.roomId = roomId
-                    </script>
-                    <ul class="rooms">
-                    </ul>
-                    {% if user.is_authenticated %}
-                        <div class="itc-select" id="select-1">
-                            <!-- Кнопка для открытия выпадающего списка -->
-                            <button id="add-user" type="button" class="itc-select__toggle" name="member" value=""
-                                    data-select="toggle" data-index="-1">Добавить участника
-                            </button>
-                            <!-- Выпадающий список -->
-                            <div class="itc-select__dropdown">
-                                <ul class="itc-select__options"></ul>
-                            </div>
-                        </div>
-                        <a class="room-button" href="/create">Создать комнату</a>
-                    {% endif %}
-                </nav>
-                <div class="MiddleColumn">
-                    <h3>Сообщения</h3>
-
-                    <ul class="messages"></ul>
-                    <form id="message-form" action="">
-                        {% csrf_token %}
-                        <label for="message">
-                            <input id="message" type="text" name="text" class="itc-select__toggle">
-                        </label>
-                        <label for="send-message">
-                            <button id="send-message" class="selector">Отправить</button>
-                        </label>
-                    </form>
-
-                </div>
-                <div class="RightColumn">
-                    <h3>Участники</h3>
-                    <script type="module">
-                        import {userId} from "{% static './scripts/script.js' %}";
-
-                        window.userId = userId
-                    </script>
-                    <ul class="users">
-                        <li></li>
-                    </ul>
-                </div>
+        <div class="MainWrapper">
+          <nav class="leftColumn">
+            <h3>Комнаты</h3>
+            <ul class="rooms"></ul>
+            {% if user.is_authenticated %}
+            <div class="itc-select" id="select-1">
+              <!-- Кнопка для открытия выпадающего списка -->
+              <button
+                id="add-user"
+                type="button"
+                class="itc-select__toggle"
+                name="member"
+                value=""
+                data-select="toggle"
+                data-index="-1"
+              >
+                Добавить участника
+              </button>
+              <!-- Выпадающий список -->
+              <div class="itc-select__dropdown">
+                <ul class="itc-select__options"></ul>
+              </div>
             </div>
-            <script type="module" src="{% static 'scripts/script.js' %}"></script>
+            <a class="room-button" href="/create">Создать комнату</a>
+            {% endif %}
+          </nav>
+          <div class="MiddleColumn">
+            <h3>Сообщения</h3>
+
+            <ul class="messages"></ul>
+            <form id="message-form" action="">
+              {% csrf_token %}
+              <label for="message">
+                <input
+                  id="message"
+                  type="text"
+                  name="text"
+                  class="itc-select__toggle"
+                />
+              </label>
+              <label for="send-message">
+                <button id="send-message" class="selector">Отправить</button>
+              </label>
+            </form>
+          </div>
+          <div class="RightColumn">
+            <h3>Участники</h3>
+            <ul class="users">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+        <script type="module" src="{% static 'scripts/main.js' %}"></script>
         {% endblock content %}
-    </main>
-    <footer class="footer"></footer>
-</div>
-</body>
+      </main>
+      <footer class="footer"></footer>
+    </div>
+  </body>
 </html>
