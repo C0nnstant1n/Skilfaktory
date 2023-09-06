@@ -17,7 +17,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm dev",
+      "pre-commit": "npm run dev",
       "pre-push": "YOUR_COMMAND_HERE"
     }
   },
