@@ -13,7 +13,7 @@ module.exports = {
     static: "./dist",
     watchFiles: path.join(__dirname, "src"),
     hot: true,
-    port: 3000,
+    port: 3010,
   },
 
   module: {

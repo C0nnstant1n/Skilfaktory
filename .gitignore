@@ -18,3 +18,4 @@ pinegrow.json
 launch.json
 .vscode/
 node_modules/
+dist/

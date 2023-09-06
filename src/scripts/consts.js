@@ -1,10 +1,12 @@
+const HOST = "http://127.0.0.1:3000";
+
 const urls = {
-  ROOMS: "/api/room/",
-  USERS: "/api/users/",
-  MESSAGES: "/api/message/",
-  CURRENT: "/api/current_user/",
-  MESSAGE: "/api/message/?target=",
-  MEMBER: "/api/members/",
+  ROOMS: HOST + "/room/",
+  USERS: HOST + "/users/",
+  MESSAGES: HOST + "/message/",
+  CURRENT: HOST + "/current_user/",
+  MESSAGE: HOST + "/message/?target=",
+  MEMBER: HOST + "/members/",
 };
 
 const nodes = {

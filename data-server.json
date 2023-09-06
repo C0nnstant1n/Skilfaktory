@@ -5,5 +5,84 @@
       "username": "admin",
       "avatar": "none"
     }
+  ],
+  "room": [
+    {
+      "id": "1",
+      "author": "1",
+      "name": "one",
+      "members": [
+        {
+          "id": 2,
+          "username": "qq",
+          "avatar": "avatar"
+        },
+        {
+          "id": 1,
+          "username": "admin",
+          "avatar": "avatar"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "author": 2,
+      "name": "two",
+      "members": [
+        {
+          "id": 3,
+          "username": "ww",
+          "avatar": "avatar"
+        },
+        {
+          "id": 1,
+          "username": "admin",
+          "avatar": "avatar"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "avatar": "avatar"
+    },
+    {
+      "id": 2,
+      "username": "qq",
+      "avatar": "avatar"
+    }
+  ],
+  "members": [
+    {
+      "id": 1,
+      "room": 1,
+      "member": [
+        1,
+        2
+      ]
+    }
+  ],
+  "message": [
+    {
+      "id": "1",
+      "text": "Hi Peaple",
+      "target": "1",
+      "author": "1"
+    },
+    {
+      "id": "2",
+      "text": "Hi world",
+      "target": "1",
+      "author": "2"
+    },
+    {
+      "csrfmiddlewaretoken": "null",
+      "text": "sdfg",
+      "author": "admin",
+      "target": "2",
+      "id": "twXbLot"
+    }
   ]
 }

@@ -43,7 +43,6 @@ if (rooms.length > 0) {
 }
 nodes.rooms.innerHTML = li;
 
-console.log(document.querySelectorAll(".rooms li"));
 if (current_room.id !== 0) {
   document.getElementById(current_room.id).className = "li-on";
 }
