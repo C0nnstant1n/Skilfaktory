@@ -1,9 +1,14 @@
-export class ItcCustomSelect {
+class ItcCustomSelect {
   static EL = "itc-select";
+
   static EL_SHOW = "itc-select_show";
+
   static EL_OPTION = "itc-select__option";
+
   static EL_OPTION_SELECTED = "itc-select__option_selected";
+
   static DATA = "[data-select]";
+
   static DATA_TOGGLE = '[data-select="toggle"]';
 
   static template(params) {
@@ -39,17 +44,17 @@ export class ItcCustomSelect {
       }
     });
   }
+
   static create(target, params) {
-    this._el =
-      typeof target === "string" ? document.querySelector(target) : target;
+    this._el = typeof target === "string" ? document.querySelector(target) : target;
     if (this._el) {
       return new this(target, params);
     }
     return null;
   }
+
   constructor(target, params) {
-    this._el =
-      typeof target === "string" ? document.querySelector(target) : target;
+    this._el = typeof target === "string" ? document.querySelector(target) : target;
     this._params = params || {};
     this._onClickFn = this._onClick.bind(this);
     if (this._params.options) {
@@ -73,7 +78,7 @@ export class ItcCustomSelect {
   _updateOption(el) {
     const elOption = el.closest(`.${this.constructor.EL_OPTION}`);
     const elOptionSel = this._el.querySelector(
-      `.${this.constructor.EL_OPTION_SELECTED}`
+      `.${this.constructor.EL_OPTION_SELECTED}`,
     );
     if (elOptionSel) {
       elOptionSel.classList.remove(this.constructor.EL_OPTION_SELECTED);
@@ -89,7 +94,7 @@ export class ItcCustomSelect {
 
   _reset() {
     const selected = this._el.querySelector(
-      `.${this.constructor.EL_OPTION_SELECTED}`
+      `.${this.constructor.EL_OPTION_SELECTED}`,
     );
     if (selected) {
       selected.classList.remove(this.constructor.EL_OPTION_SELECTED);
@@ -154,7 +159,7 @@ export class ItcCustomSelect {
 
   set selectedIndex(index) {
     const option = this._el.querySelector(
-      `.select__option[data-index="${index}"]`
+      `.select__option[data-index="${index}"]`,
     );
     if (option) {
       this._updateOption(option);
