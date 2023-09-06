@@ -1,4 +1,4 @@
-class ItcCustomSelect {
+export class ItcCustomSelect {
   static EL = "itc-select";
 
   static EL_SHOW = "itc-select_show";
@@ -10,6 +10,18 @@ class ItcCustomSelect {
   static DATA = "[data-select]";
 
   static DATA_TOGGLE = '[data-select="toggle"]';
+
+  constructor(target, params) {
+    this._el = typeof target === "string" ? document.querySelector(target) : target;
+    this._params = params || {};
+    this._onClickFn = this._onClick.bind(this);
+    if (this._params.options) {
+      this._el.innerHTML = this.constructor.template(this._params);
+      this._el.classList.add(this.constructor.EL);
+    }
+    this._elToggle = this._el.querySelector(this.constructor.DATA_TOGGLE);
+    this._el.addEventListener("click", this._onClickFn);
+  }
 
   static template(params) {
     const { name, options, targetValue } = params;
@@ -53,18 +65,6 @@ class ItcCustomSelect {
     return null;
   }
 
-  constructor(target, params) {
-    this._el = typeof target === "string" ? document.querySelector(target) : target;
-    this._params = params || {};
-    this._onClickFn = this._onClick.bind(this);
-    if (this._params.options) {
-      this._el.innerHTML = this.constructor.template(this._params);
-      this._el.classList.add(this.constructor.EL);
-    }
-    this._elToggle = this._el.querySelector(this.constructor.DATA_TOGGLE);
-    this._el.addEventListener("click", this._onClickFn);
-  }
-
   _onClick(e) {
     const { target } = e;
     const type = target.closest(this.constructor.DATA).dataset.select;
@@ -77,9 +77,7 @@ class ItcCustomSelect {
 
   _updateOption(el) {
     const elOption = el.closest(`.${this.constructor.EL_OPTION}`);
-    const elOptionSel = this._el.querySelector(
-      `.${this.constructor.EL_OPTION_SELECTED}`,
-    );
+    const elOptionSel = this._el.querySelector(`.${this.constructor.EL_OPTION_SELECTED}`);
     if (elOptionSel) {
       elOptionSel.classList.remove(this.constructor.EL_OPTION_SELECTED);
     }
@@ -93,9 +91,7 @@ class ItcCustomSelect {
   }
 
   _reset() {
-    const selected = this._el.querySelector(
-      `.${this.constructor.EL_OPTION_SELECTED}`,
-    );
+    const selected = this._el.querySelector(`.${this.constructor.EL_OPTION_SELECTED}`);
     if (selected) {
       selected.classList.remove(this.constructor.EL_OPTION_SELECTED);
     }
@@ -127,9 +123,7 @@ class ItcCustomSelect {
   }
 
   toggle() {
-    this._el.classList.contains(this.constructor.EL_SHOW)
-      ? this.hide()
-      : this.show();
+    this._el.classList.contains(this.constructor.EL_SHOW) ? this.hide() : this.show();
   }
 
   dispose() {
@@ -158,9 +152,7 @@ class ItcCustomSelect {
   }
 
   set selectedIndex(index) {
-    const option = this._el.querySelector(
-      `.select__option[data-index="${index}"]`,
-    );
+    const option = this._el.querySelector(`.select__option[data-index="${index}"]`);
     if (option) {
       this._updateOption(option);
     }

@@ -1,7 +1,7 @@
 import "../style/main.scss";
-import { getApiData, putApiData, csrftoken } from "./get_post.js";
-import { ItcCustomSelect } from "./itc-custom-select.js";
-import { nodes, urls } from "./consts.js";
+import { getApiData, putApiData, csrftoken } from "./get_post";
+import { ItcCustomSelect } from "./itc-custom-select";
+import { nodes, urls } from "./consts";
 
 //  Получаем текущего пользователя
 async function getCurrentUser() {
@@ -19,7 +19,7 @@ async function getRooms() {
 let rooms = await getRooms();
 
 // Устанавливаем текущую комнату (Первую из списка доступных)
-const current_room = { id: 0, name: " " };
+const current_room = { id: 0, name: "", members: [] };
 if (rooms.length > 0) {
   current_room.id = rooms[0].id;
   current_room.name = rooms[0].name;
@@ -33,7 +33,7 @@ function showRoomMembers(id) {
     nodes.users.innerHTML = "";
     let li = "";
     for (const room of rooms) {
-      if (room.id == id) {
+      if (room.id === id) {
         for (const user of room.members) {
           if (user.id !== current_user.id) {
             const li_block = `
@@ -71,6 +71,21 @@ if (current_room.id !== 0) {
   document.getElementById(current_room.id).className = "li-on";
 }
 
+// Получаем сообщения с сервера
+async function showMessages(apiData) {
+  li = "";
+  const messages = await apiData;
+  for (const message of messages) {
+    const li_block = `
+    <li id=${message.author}>
+    <h4>${message.author}</h4>
+    <p>${message.text}</p>
+  </li>`;
+    li += li_block;
+  }
+  nodes.message.innerHTML = li;
+}
+
 // Отображаем сообщения в комнате
 await getApiData(showMessages, `${urls.MESSAGES}?target=${current_room.id}`);
 
@@ -89,21 +104,6 @@ await getApiData(showMessages, `${urls.MESSAGES}?target=${current_room.id}`);
 //   nodes.users.innerHTML = li;
 // }
 
-// Получаем сообщения с сервера
-async function showMessages(apiData) {
-  li = "";
-  const messages = await apiData;
-  for (const message of messages) {
-    const li_block = `
-    <li id=${message.author}>
-    <h4>${message.author}</h4>
-    <p>${message.text}</p>
-  </li>`;
-    li += li_block;
-  }
-  nodes.message.innerHTML = li;
-}
-
 // Список всех пользователей
 // getApiData(showUsersData, urls.USERS);
 
@@ -117,10 +117,20 @@ function roomExist(id) {
   return false;
 }
 
+// Переход в комнату
+function roomId(id) {
+  document.getElementById(current_room.id).className = "li-off";
+  current_room.id = id;
+  document.getElementById(current_room.id).className = "li-on";
+  nodes.users.innerHTML = "";
+  showRoomMembers(id);
+  getApiData(showMessages, `${urls.MESSAGES}?target=${id}`);
+}
+
 // Создаем новую чат комнату
 async function userId(id) {
   rooms = await getApiData(urls.ROOMS);
-  const room_exist = await roomExist(rooms, id);
+  const room_exist = roomExist(rooms, id);
   const room_data = {
     name: id,
   }; //
@@ -144,19 +154,9 @@ async function userId(id) {
   }
 }
 
-// Переход в комнату
-function roomId(id) {
-  document.getElementById(current_room.id).className = "li-off";
-  current_room.id = id;
-  document.getElementById(current_room.id).className = "li-on";
-  nodes.users.innerHTML = "";
-  showRoomMembers(id);
-  getApiData(showMessages, `${urls.MESSAGES}?target=${id}`);
-}
-
 document.querySelectorAll("ul li").forEach((click) => {
   click.addEventListener("click", function () {
-    roomId(this.id);
+    roomId(Number(this.id));
   });
 });
 
@@ -167,16 +167,14 @@ form.onsubmit = async (e) => {
   const my_form = new FormData(form);
 
   my_form.append("target", current_room.id);
-  if (my_form.get("target") != "0" && my_form.get("text") != "") {
+  if (my_form.get("target") !== "0" && my_form.get("text") !== "") {
     const message = {
       csrfmiddlewaretoken: `${my_form.get("csrfmiddlewaretoken")}`,
       text: `${my_form.get("text")}`,
       author: current_user.username,
       target: my_form.get("target"),
     };
-    putApiData(message, urls.MESSAGES).then((response) => {
-      console.log(response.json());
-    });
+    putApiData(message, urls.MESSAGES);
   }
   e.target.reset();
 };
@@ -199,34 +197,27 @@ async function addButton() {
 
 addButton();
 
-document
-  .querySelector("#select-1")
-  .addEventListener("itc.select.change", (e) => {
-    const btn = e.target.querySelector(".itc-select__toggle");
+document.querySelector("#select-1").addEventListener("itc.select.change", (e) => {
+  const btn = e.target.querySelector(".itc-select__toggle");
 
-    const data = {
-      csrfmiddlewaretoken: csrftoken,
-      room: current_room.id,
-      member: btn.value,
-    };
-    if (rooms.length > 0) {
-      for (const user of current_room.members) {
-        if (btn.value == user.id) {
-          alert("Этот пользователь уже есть в этой комнате");
-          break;
-        } else {
-          putApiData(data, urls.MEMBER).then((response) => {
-            console.log("Пользователь добавлен: ", response.json());
-            showRoomMembers(current_room.id);
-          });
-          break;
-        }
-      }
+  const data = {
+    csrfmiddlewaretoken: csrftoken,
+    room: current_room.id,
+    member: btn.value,
+  };
+  if (rooms.length > 0) {
+    if (current_room.members.some((o) => o.id === Number(btn.value))) {
+      alert("Этот пользователь уже тут");
     } else {
-      alert("Создйте комнату");
+      putApiData(data, urls.MEMBER).then(() => {
+        showRoomMembers(current_room.id);
+      });
     }
-    btn.dataset.index = -1;
-    btn.textContent = "Добавить участника";
-  });
+  } else {
+    alert("Создйте комнату");
+  }
+  btn.dataset.index = -1;
+  btn.textContent = "Добавить участника";
+});
 
 export { roomId, userId };

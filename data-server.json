@@ -8,18 +8,18 @@
   ],
   "room": [
     {
-      "id": "1",
-      "author": "1",
+      "id": 1,
+      "author": 1,
       "name": "one",
       "members": [
         {
-          "id": 2,
-          "username": "qq",
+          "id": 1,
+          "username": "admin",
           "avatar": "avatar"
         },
         {
-          "id": 1,
-          "username": "admin",
+          "id": 3,
+          "username": "ww",
           "avatar": "avatar"
         }
       ]
@@ -57,32 +57,54 @@
   "members": [
     {
       "id": 1,
+      "room": 1
+    },
+    {
+      "csrfmiddlewaretoken": null,
+      "room": 2,
+      "member": "2",
+      "id": 2
+    },
+    {
+      "csrfmiddlewaretoken": null,
       "room": 1,
-      "member": [
-        1,
-        2
-      ]
+      "member": "2",
+      "id": 3
+    },
+    {
+      "csrfmiddlewaretoken": null,
+      "room": 1,
+      "member": "2",
+      "id": 4
     }
   ],
   "message": [
     {
-      "id": "1",
+      "id": 1,
       "text": "Hi Peaple",
-      "target": "1",
-      "author": "1"
-    },
-    {
-      "id": "2",
-      "text": "Hi world",
-      "target": "1",
-      "author": "2"
+      "target": 1,
+      "author": "qq"
     },
     {
       "csrfmiddlewaretoken": "null",
-      "text": "sdfg",
+      "text": "hello",
+      "author": "admin",
+      "target": "1",
+      "id": 2
+    },
+    {
+      "csrfmiddlewaretoken": "null",
+      "text": "hi",
       "author": "admin",
       "target": "2",
-      "id": "twXbLot"
+      "id": 3
+    },
+    {
+      "csrfmiddlewaretoken": "null",
+      "text": "is somebody here",
+      "author": "admin",
+      "target": "2",
+      "id": 4
     }
   ]
 }
