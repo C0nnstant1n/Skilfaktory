@@ -17,7 +17,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint:write",
+      "pre-commit": "dev",
       "pre-push": "YOUR_COMMAND_HERE"
     }
   },
