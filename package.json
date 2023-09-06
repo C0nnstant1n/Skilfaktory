@@ -38,6 +38,7 @@
     "eslint-plugin-react": "^7.33.2",
     "filemanager-webpack-plugin": "^8.0.0",
     "html-webpack-plugin": "^5.5.3",
+    "husky": "^8.0.3",
     "mini-css-extract-plugin": "^2.7.6",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "^7.3.3",
