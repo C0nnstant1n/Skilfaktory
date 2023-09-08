@@ -76,6 +76,12 @@
       "room": 1,
       "member": "2",
       "id": 4
+    },
+    {
+      "csrfmiddlewaretoken": null,
+      "room": 1,
+      "member": "2",
+      "id": 5
     }
   ],
   "message": [
