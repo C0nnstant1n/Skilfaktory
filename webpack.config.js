@@ -15,6 +15,10 @@ module.exports = {
     hot: true,
     port: 3010,
   },
+  output: {
+    path: path.join(__dirname, "dist", "static", "scripts"),
+    filename: "main.js",
+  },
 
   module: {
     rules: [
@@ -22,6 +26,9 @@ module.exports = {
         test: /\.js$/,
         use: "babel-loader",
         exclude: /node_modules/,
+        generator: {
+          filename: path.join("static/script", "[name].[ext]"),
+        },
       },
       {
         test: /\.pug$/,
@@ -35,6 +42,20 @@ module.exports = {
           "postcss-loader",
           "sass-loader",
         ],
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: path.join("static/img", "[name].[ext]"),
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: "asset/resource",
+        generator: {
+          filename: path.join("static/icons", "[name].[contenthash][ext]"),
+        },
       },
     ],
   },
@@ -52,7 +73,7 @@ module.exports = {
       },
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
+      filename: "[name].css",
     }),
   ],
 
@@ -62,6 +83,6 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.[contenthash].js",
+    filename: "main.js",
   },
 };

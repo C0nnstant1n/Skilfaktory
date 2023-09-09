@@ -7,8 +7,7 @@
     "lint": "eslint --debug src/",
     "lint:write": "eslint --debug src/ --fix",
     "dev": "webpack --mode development",
-    "start:dev": "webpack serve --config webpackdev.config.js",
-    "start:prod": "webpack serve --config webpackprod.config.js",
+    "start:dev": "webpack serve --config webpack.config.js",
     "build": "webpack --mode production",
     "prepare": "husky install"
   },

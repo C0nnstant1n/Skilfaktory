@@ -1,0 +1,17 @@
+.header-panel__topmenu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  a {
+    text-decoration: none;
+  }
+  ul {
+    min-width: 50vw;
+    display: flex;
+    li {
+      font-size: 1.3rem;
+      padding: 1rem;
+      display: flex;
+    }
+  }
+}
