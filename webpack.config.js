@@ -15,10 +15,6 @@ module.exports = {
     hot: true,
     port: 3010,
   },
-  output: {
-    path: path.join(__dirname, "dist", "static", "scripts"),
-    filename: "main.js",
-  },
 
   module: {
     rules: [
@@ -42,6 +38,9 @@ module.exports = {
           "postcss-loader",
           "sass-loader",
         ],
+        generator: {
+          filename: path.join("static/css", "[name].[ext]"),
+        },
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/i,

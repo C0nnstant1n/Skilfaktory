@@ -1,0 +1,8 @@
+.rooms__room {
+  min-width: 13vw;
+  justify-content: center;
+  margin-top: 3px;
+  cursor: pointer;
+}
+@import "./rooms__room_li-on";
+@import "./rooms__room_li-off";

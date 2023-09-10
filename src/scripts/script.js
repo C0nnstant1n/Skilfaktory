@@ -1,6 +1,6 @@
 import "../style/main.scss";
 import { getApiData, putApiData, csrftoken } from "./get_post";
-import { ItcCustomSelect } from "./itc-custom-select";
+import { ItcCustomSelect } from "../main/mainWrapper/column/selector/itc-select/itc-custom-select";
 import { nodes, urls } from "./consts";
 
 //  Получаем текущего пользователя
@@ -37,9 +37,10 @@ function showRoomMembers(id) {
         for (const user of room.members) {
           if (user.id !== current_user.id) {
             const li_block = `
-                    <li id=${user.username}>
-                        <img src="/uploads/${user.avatar}" alt="avatar" />
+                    <li id=${user.username} class="users__user">
+                        <img class="users__user_avatar-img" src="static\\img\\photo..jpg" alt="avatar">
                         <p>${user.username}</p>
+                        <button class="users__user_delete">x</button>
                     </li>`;
             li += li_block;
           }
@@ -59,7 +60,7 @@ if (rooms.length > 0) {
   current_room.id = rooms[0].id;
   for (const room of rooms) {
     const li_block = `
-        <li id=${room.id} class="li-off">
+        <li id=${room.id} class="rooms__room rooms__room_li-off">
             <p>${room.name}</p>
         </li>`;
     li += li_block;
@@ -68,7 +69,8 @@ if (rooms.length > 0) {
 nodes.rooms.innerHTML = li;
 
 if (current_room.id !== 0) {
-  document.getElementById(current_room.id).className = "li-on";
+  document.getElementById(current_room.id).className =
+    "rooms__room rooms__room_li-on";
 }
 
 // Получаем сообщения с сервера
@@ -77,7 +79,7 @@ async function showMessages(apiData) {
   const messages = await apiData;
   for (const message of messages) {
     const li_block = `
-    <li id=${message.author}>
+    <li id=${message.author} class="messages__message">
     <h4>${message.author}</h4>
     <p>${message.text}</p>
   </li>`;
@@ -119,9 +121,11 @@ function roomExist(id) {
 
 // Переход в комнату
 function roomId(id) {
-  document.getElementById(current_room.id).className = "li-off";
+  document.getElementById(current_room.id).className =
+    "rooms__room rooms__room_li-off";
   current_room.id = id;
-  document.getElementById(current_room.id).className = "li-on";
+  document.getElementById(current_room.id).className =
+    "rooms__room rooms__room_li-on";
   nodes.users.innerHTML = "";
   showRoomMembers(id);
   getApiData(showMessages, `${urls.MESSAGES}?target=${id}`);
@@ -154,7 +158,7 @@ async function userId(id) {
   }
 }
 
-document.querySelectorAll("ul li").forEach((click) => {
+document.querySelectorAll(".rooms li").forEach((click) => {
   click.addEventListener("click", function () {
     roomId(Number(this.id));
   });
@@ -197,27 +201,29 @@ async function addButton() {
 
 addButton();
 
-document.querySelector("#select-1").addEventListener("itc.select.change", (e) => {
-  const btn = e.target.querySelector(".itc-select__toggle");
+document
+  .querySelector("#select-1")
+  .addEventListener("itc.select.change", (e) => {
+    const btn = e.target.querySelector(".itc-select__toggle");
 
-  const data = {
-    csrfmiddlewaretoken: csrftoken,
-    room: current_room.id,
-    member: btn.value,
-  };
-  if (rooms.length > 0) {
-    if (current_room.members.some((o) => o.id === Number(btn.value))) {
-      alert("Этот пользователь уже тут");
+    const data = {
+      csrfmiddlewaretoken: csrftoken,
+      room: current_room.id,
+      member: btn.value,
+    };
+    if (rooms.length > 0) {
+      if (current_room.members.some((o) => o.id === Number(btn.value))) {
+        alert("Этот пользователь уже тут");
+      } else {
+        putApiData(data, urls.MEMBER).then(() => {
+          showRoomMembers(current_room.id);
+        });
+      }
     } else {
-      putApiData(data, urls.MEMBER).then(() => {
-        showRoomMembers(current_room.id);
-      });
+      alert("Создйте комнату");
     }
-  } else {
-    alert("Создйте комнату");
-  }
-  btn.dataset.index = -1;
-  btn.textContent = "Добавить участника";
-});
+    btn.dataset.index = -1;
+    btn.textContent = "Добавить участника";
+  });
 
 export { roomId, userId };

@@ -1,0 +1,9 @@
+.selector {
+  max-width: 130px;
+  display: inline-block;
+  white-space: normal;
+  vertical-align: middle;
+  position: sticky;
+  top: 76%;
+  @import "./itc-select/itc-custom-select";
+}

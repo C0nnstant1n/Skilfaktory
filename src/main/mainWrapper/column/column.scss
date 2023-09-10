@@ -1,0 +1,29 @@
+.column {
+  margin: 1rem 0.5rem;
+  padding-top: 1rem;
+  border-radius: 10px;
+  background-color: bisque;
+  text-align: center;
+  ul {
+    padding-top: 1rem;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  li {
+    max-width: 250px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+  }
+  @import "./selector/selector";
+}
+@import "./column_left";
+@import "./rooms/rooms";
+@import "./__create-room-link/column__create-room-link";
+@import "./column_middle";
+@import "./messages/messages";
+@import "./message-form/message-form";
+@import "./column_right";
+@import "./users/users";

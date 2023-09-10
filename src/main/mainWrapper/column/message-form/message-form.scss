@@ -1,0 +1,11 @@
+.message-form {
+  display: flex;
+  justify-content: space-evenly;
+  position: sticky;
+  top: 90%;
+  label {
+    margin: 0.2rem;
+  }
+}
+@import "./__input/message-form__input";
+@import "./__send-button/message-form__send-button";
