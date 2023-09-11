@@ -1,0 +1,25 @@
+@import "variables";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  @import "./header/header.scss";
+  @import "./main/main";
+  @import "./main/mainWrapper/mainWrapper";
+  @import "./main/mainWrapper/column/column";
+  @import "./footer/footer";
+}
+
+@font-face {
+  font-family: "Times New Roman", Georgia, sans-serif;
+}

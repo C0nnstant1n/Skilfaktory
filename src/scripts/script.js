@@ -1,6 +1,7 @@
-import "../style/main.scss";
+import "../style.scss";
 import { getApiData, putApiData, csrftoken } from "./get_post";
-import { ItcCustomSelect } from "../main/mainWrapper/column/selector/itc-select/itc-custom-select";
+/*eslint max-len: ["error", { "ignoreStrings": true }]*/
+import { ItcCustomSelect } from "../main/mainWrapper/column/selector/__container/itc-select/itc-custom-select";
 import { nodes, urls } from "./consts";
 
 //  Получаем текущего пользователя
@@ -38,7 +39,8 @@ function showRoomMembers(id) {
           if (user.id !== current_user.id) {
             const li_block = `
                     <li id=${user.username} class="users__user">
-                        <img class="users__user_avatar-img" src="static\\img\\photo..jpg" alt="avatar">
+                        <img class="users__user_avatar-img"
+                         src="static\\img\\photo..jpg" alt="avatar">
                         <p>${user.username}</p>
                         <button class="users__user_delete">x</button>
                     </li>`;
@@ -223,7 +225,7 @@ document
       alert("Создйте комнату");
     }
     btn.dataset.index = -1;
-    btn.textContent = "Добавить участника";
+    btn.textContent = "Добавить";
   });
 
 export { roomId, userId };

@@ -47,7 +47,7 @@ button {
 
 .itc-select__dropdown {
   position: absolute;
-  top: 2.5rem;
+  top: -3.6rem;
   right: 0;
   left: 0;
   z-index: 2;

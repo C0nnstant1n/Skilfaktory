@@ -88,24 +88,6 @@
       "room": 1,
       "member": "2",
       "id": 6
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 7
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 8
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 2,
-      "member": "2",
-      "id": 9
     }
   ],
   "message": [
@@ -117,87 +99,10 @@
     },
     {
       "csrfmiddlewaretoken": "null",
-      "text": "hello",
+      "text": "sdfdsf",
       "author": "admin",
       "target": "1",
       "id": 2
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "hi",
-      "author": "admin",
-      "target": "2",
-      "id": 3
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "is somebody here",
-      "author": "admin",
-      "target": "2",
-      "id": 4
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfgdsfg",
-      "author": "admin",
-      "target": "1",
-      "id": 5
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfsdf",
-      "author": "admin",
-      "target": "1",
-      "id": 6
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfdsfsdf",
-      "author": "admin",
-      "target": "1",
-      "id": 7
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sadasdasdsad",
-      "author": "admin",
-      "target": "1",
-      "id": 8
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "dfsgsfdgdfgs",
-      "author": "admin",
-      "target": "1",
-      "id": 9
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfdsf",
-      "author": "admin",
-      "target": "1",
-      "id": 10
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfdsf",
-      "author": "admin",
-      "target": "1",
-      "id": 11
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "sdfadsfad fadsfasdfasd fassdfasdfasd safdasdfa sadfasdf asdfasdf sadf",
-      "author": "admin",
-      "target": "1",
-      "id": 12
-    },
-    {
-      "csrfmiddlewaretoken": "null",
-      "text": "Привет, тестируем сообщения в этом чате",
-      "author": "admin",
-      "target": "2",
-      "id": 13
     }
   ]
 }

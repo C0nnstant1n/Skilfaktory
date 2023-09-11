@@ -1,0 +1,10 @@
+.header {
+  height: 8lvh;
+  background-color: $hat_background_color;
+  .header-panel {
+    display: flex;
+    justify-content: space-between;
+    @import "../header/header-panel/__logo/header-panel__logo";
+    @import "../header/header-panel/__topmenu/header-panel__topmenu";
+  }
+}
