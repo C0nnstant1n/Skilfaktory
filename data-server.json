@@ -19,7 +19,12 @@
         },
         {
           "id": 3,
-          "username": "ww",
+          "username": "Kobula",
+          "avatar": "avatar"
+        },
+        {
+          "id": 2,
+          "username": "Zimogor",
           "avatar": "avatar"
         }
       ]
@@ -58,48 +63,18 @@
     {
       "id": 1,
       "room": 1
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 2,
-      "member": "2",
-      "id": 2
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 3
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 4
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 5
-    },
-    {
-      "csrfmiddlewaretoken": null,
-      "room": 1,
-      "member": "2",
-      "id": 6
     }
   ],
   "message": [
     {
       "id": 1,
-      "text": "Hi Peaple",
+      "text": "Hi Peaple, lorem",
       "target": 1,
       "author": "qq"
     },
     {
       "csrfmiddlewaretoken": "null",
-      "text": "sdfdsf",
+      "text": "Adipisicing commodo qui incididunt veniam. Anim commodo incididunt in officia duis culpa anim eiusmod tempor in occaecat do. Dolore officia anim ex nulla excepteur amet. Ipsum velit incididunt adipisicing dolore culpa cillum laboris in est ullamco consectetur aliqua sit magna. Fugiat quis magna nulla elit nisi nisi sint excepteur reprehenderit aliquip id. Non ex eiusmod deserunt occaecat fugiat fugiat.",
       "author": "admin",
       "target": "1",
       "id": 2
