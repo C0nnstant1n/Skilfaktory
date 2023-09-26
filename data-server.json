@@ -78,6 +78,13 @@
       "author": "admin",
       "target": "1",
       "id": 2
+    },
+    {
+      "csrfmiddlewaretoken": "null",
+      "text": "А тут что никого живого?",
+      "author": "admin",
+      "target": "2",
+      "id": 3
     }
   ]
 }

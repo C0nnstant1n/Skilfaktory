@@ -1,59 +1,46 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const TerserWebpackPlugin = require("terser-webpack-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const FileManagerPlugin = require("filemanager-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 module.exports = {
   mode: "development",
   entry: path.join(__dirname, "src/scripts", "script.js"),
-  devtool: "inline-source-map",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+    filename: "main.js",
+    assetModuleFilename: 'assets/[hash][ext][query]', // Все ассеты будут
+    // складываться в dist/assets
+  },
+  devtool: "source-map",
   devServer: {
     static: "./dist",
     watchFiles: path.join(__dirname, "src"),
-    hot: true,
-    port: 3010,
   },
 
   module: {
     rules: [
+      { 
+        test: /\.(html)$/,
+         use: ['html-loader'] }, // Добавляем загрузчик для html
       {
-        test: /\.js$/,
+        test: /\.(ts|js)x?$/i,
         use: "babel-loader",
         exclude: /node_modules/,
-        generator: {
-          filename: path.join("static/script", "[name].[ext]"),
-        },
-      },
-      {
-        test: /\.pug$/,
-        loader: "pug-loader",
       },
       {
         test: /\.(scss|css)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader",
-          "postcss-loader",
-          "sass-loader",
-        ],
-        generator: {
-          filename: path.join("static/css", "[name].[ext]"),
-        },
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
         type: "asset/resource",
-        generator: {
-          filename: path.join("static/img", "[name].[ext]"),
-        },
       },
       {
         test: /\.svg$/,
         type: "asset/resource",
         generator: {
-          filename: path.join("static/icons", "[name].[contenthash][ext]"),
+          filename: path.join("static/icons", "[name].[contenthash].[ext]"),
         },
       },
     ],
@@ -61,27 +48,8 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "template.pug"),
+      template: path.join(__dirname, "src", "template.html"),
       filename: "index.html",
     }),
-    new FileManagerPlugin({
-      events: {
-        onStart: {
-          delete: ["dist"],
-        },
-      },
-    }),
-    new MiniCssExtractPlugin({
-      filename: "[name].css",
-    }),
-  ],
-
-  optimization: {
-    minimizer: [new TerserWebpackPlugin({}), new OptimizeCssAssetsPlugin({})],
-  },
-
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
-  },
+  ]
 };

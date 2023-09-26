@@ -3,6 +3,7 @@ import { getApiData, putApiData, csrftoken } from "./get_post";
 /*eslint max-len: ["error", { "ignoreStrings": true }]*/
 import { ItcCustomSelect } from "../main/mainWrapper/column/selector/__container/itc-select/itc-custom-select";
 import { nodes, urls } from "./consts";
+import photo from "../img/photo.jpg"
 
 //  Получаем текущего пользователя
 async function getCurrentUser() {
@@ -40,7 +41,7 @@ function showRoomMembers(id) {
             const li_block = `
                     <li id=${user.username} class="users__user">
                         <img class="users__user_avatar-img"
-                         src="static\\img\\photo..jpg" alt="avatar">
+                         src=${photo} alt="avatar">
                         <p>${user.username}</p>
                         <button class="users__user_delete">x</button>
                     </li>`;

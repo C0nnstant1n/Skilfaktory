@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Чат</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-panel">
+        <div class="header-panel__logo">
+          <img
+            class="header-panel__logo-img"
+            src="./img/photo.jpg"
+            alt="Photo"
+          />
+        </div>
+        <nav class="header-panel__topmenu">
+          <ul>
+            <li class="topmenu__home"><a href="/">Домой</a></li>
+            <li class="topmenu__user" id="topmenu__user">
+              <a href="/accounts/{{ user.id }}">{{ user }}</a>
+            </li>
+            <li class="topmenu__sign"><a href="/accounts/logout">Выход</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <div class="mainWrapper">
+        <nav class="column column_left">
+          <h3>Комнаты</h3>
+          <ul class="rooms"></ul>
+          <a class="column__create-room-link" href="/create">Создать комнату</a>
+        </nav>
+        <nav class="column column_middle">
+          <h3>Сообщения</h3>
+          <ul class="messages"></ul>
+          <form class="message-form" id="message-form" action="">
+            <label class="message-form__label-message" for="message"
+              ><input
+                class="itc-select__toggle message-form__input"
+                id="message"
+                type="text"
+                name="text" /></label
+            ><label class="message-form__label-send" for="send-message"
+              ><button class="message-form__send-button" id="send-message">
+                Отправить
+              </button></label
+            >
+          </form>
+        </nav>
+        <nav class="column column_right">
+          <h3>Участники</h3>
+          <ul class="users">
+            <li></li>
+          </ul>
+          <div class="selector">
+            <container class="selector__container"
+              ><div class="itc-select" id="select-1">
+                <!-- Кнопка для открытия выпадающего списка--><button
+                  class="itc-select__toggle"
+                  id="add-user"
+                  type="button"
+                  name="member"
+                  value=""
+                  data-select="toggle"
+                  data-index="-1"
+                >
+                  Добавить</button
+                ><!-- Выпадающий список-->
+                <div class="itc-select__dropdown">
+                  <ul class="itc-select__options"></ul>
+                </div></div
+            ></container>
+          </div>
+        </nav>
+      </div>
+    </main>
+    <footer class="footer"></footer>
+</html>
